@@ -1,4 +1,4 @@
-name: Demo Workflow
+name: hello
 
 on:
   push:
@@ -7,9 +7,6 @@ on:
   pull_request:
     branches:
       - master
-
-env:  
-  VAR: 'This is global'
 
 jobs:
   build:
@@ -28,14 +25,4 @@ jobs:
       - name: run test
         run: pytest
 
-  job2:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: checkout the repo
-        uses: actions/checkout@v2
-      - name: setup python
-        uses: actions/setup-python@v2
-      - name: use of env
-        run: echo "this is $VAR"
-     
+ 

@@ -23,7 +23,7 @@ jobs:
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          file: ./workflow.yml
+          file: ./rev.tf
      
       - name: install pytest
         run: pip install pytest

@@ -38,9 +38,4 @@ jobs:
         uses: actions/setup-python@v2
       - name: use of env
         run: echo "this is $VAR"
-      - name: use of id and if
-        id: hy
-        run: echo "res=well" >> $GITHUB_OUTPUT
-      - name: use
-        run: echo "hy"
-        if: ${{ steps.hy.outputs.res == 'well' }}
+     

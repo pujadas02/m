@@ -1,27 +1,22 @@
-
-terraform {
-    # required_version = "1.0.0"
-    required_providers {
-    aws = {
-        source  = "hashicorp/aws"
-        version = "4.0.0"
-    }
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.0.0"
-    }
-  }
-}
-
- {
+provider "aws" {
   region = "us-east-1"
 }
 
-provider "azurerm" {
-  features {}
-}
-variable "example_list" {
-  description = "A list variable"
-  type        = list(string)
-  default     = ["item1", "item2", "item3"]
+resource "aws_security_group" "example" {
+  name        = "example-sg"
+  description = "Allow inbound traffic on port 80"
+
+  ingress {
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]  # Open to the world (this is insecure)
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }

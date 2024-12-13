@@ -23,10 +23,8 @@ jobs:
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: .
-      - name: Run Checkov on workflow.yml
-        run: |
-            checkov -f workflow.yml 
+          file: ./workflow.yml
+     
       - name: install pytest
         run: pip install pytest
       - name: run test

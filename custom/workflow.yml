@@ -18,7 +18,7 @@
 
 metadata:
   name: "Ensures app tag exists"
-  id: "m"
+  id: "CKV_AZURE_001"
   category: "tagging"
   severity: "HIGH"
   description: "Ensure that specific tag values are used."

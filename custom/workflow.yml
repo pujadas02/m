@@ -6,9 +6,9 @@ metadata:
   severity: "HIGH"
 scope: 
   provider: "azure" 
-block_type: "resource"
+# block_type: "resource"
 definition:
-    and:
+    or:
       - cond_type: "attribute"
         attribute: "tags.app"
         operator: "not_exists"
@@ -30,10 +30,11 @@ definition:
             - "azurerm_automation_runbook"
             - "azurerm_api_connection"
             - "azurerm_role_assignment"
-            - "azurerm_resource_group"
+            # - "azurerm_resource_group"
       - cond_type: "attribute"
         attribute: "tags.app"
         operator: "exists"
+        
 # the above code checks all actions from wrokflow if they have app tag or not
 
 

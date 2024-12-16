@@ -8,7 +8,7 @@ scope:
   provider: "azure" 
 block_type: "resource"
 definition:
-    and:
+    or:
       - cond_type: "filter"
         attribute: "resource_type"
         operator: "not_in"

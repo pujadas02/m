@@ -7,11 +7,6 @@ on:
   pull_request:
     branches:
       - master
-permissions:
-  contents: read  # Only read access to repository contents
-  pull-requests: write  # Write access to pull requests (if needed)
-  issues: write  # Write access to issues (if needed)
-  actions: read  # Read access to actions (for workflows)
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -24,6 +19,11 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
           directory: .
+
+          config_file: ./checkov-config.yaml
+      # - name: Run Checkov on workflow.yml
+      #   run: |
+      #       checkov -f workflow.yml 
       - name: install pytest
         run: pip install pytest
       - name: run test

@@ -61,7 +61,7 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
           directory: .
-          config_file: ${{ github.workspace }}/checkov-config.yaml
+          config_file: ${{ github.workspace }}/checkov-config.yml
 
       # Optional: Install pytest if you intend to run additional tests
       - name: Install pytest

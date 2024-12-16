@@ -5,9 +5,9 @@ metadata:
   category: "tagging"
   severity: "HIGH"
 
-check:
-  scope: 
-    provider: "azure" 
+
+scope: 
+  provider: "azure" 
 block_type: "resource"
 definition:
     cond_type: "attribute"

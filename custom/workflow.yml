@@ -1,18 +1,18 @@
+
 metadata:
   name: "ensures app tag exists"
   id: "CKV_AZURE_001"
   category: "tagging"
   severity: "HIGH"
 
-
-scope:
-  provider: "azure"
-  block_type: "resource"
-definition:
+check:
+  scope: 
+    provider: "azure" 
+    block_type: "resource"
+  definition:
     cond_type: "attribute"
     attribute: "tags.app"
     operator: "exists"
-
 
 
 # metadata:

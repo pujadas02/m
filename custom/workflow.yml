@@ -9,10 +9,10 @@ scope:
 block_type: "resource"
 definition:
     or:
-      - cond_type: "filter"
-        attribute: "resource_type"
-        operator: "not_equals"
-        value:
+      - cond_type: "attribute"
+        attribute: "tags.app"
+        operator: "not_exists"
+        resource_types:
             - "azurerm_virtual_machine_extension"
             - "azurerm_monitor_smart_detector_alert_rule"
             - "azurerm_monitor_action_group"

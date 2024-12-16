@@ -1,17 +1,32 @@
+# metadata:
+#   name: "ensures app tag exists"
+#   id: "Azure"
+#   category: "tagging"
+#   severity: "HIGH"
+
+# check:
+#   scope:
+#     provider: "azure"
+#     block_type: "resource"
+#   definition:
+#     - cond_type: "attribute"
+#       attribute: "tags.app"
+#       operator: "exists"
 metadata:
   name: "ensures app tag exists"
-  id: "Azure"
+  id: "CKV_AZURE_001"
   category: "tagging"
   severity: "HIGH"
+  type: "terraform"  # Specify it's for Terraform resources
 
 check:
   scope:
-    provider: "azure"
-    block_type: "resource"
+    provider: "azure"    # Specify the cloud provider as Azure
+    block_type: "resource"  # We're targeting resource blocks in Terraform
   definition:
-    - cond_type: "attribute"
-      attribute: "tags.app"
-      operator: "exists"
+    - cond_type: "attribute"  # Check an attribute (in this case, the "tags" attribute)
+      attribute: "tags.app"   # We're checking that the "app" tag exists
+      operator: "exists"      # The condition is that this attribute should exist
 
   # and:
     # - cond_type: "filter"

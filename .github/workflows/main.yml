@@ -1,4 +1,34 @@
+# name: Terraform Security Checks
 
+# on:
+#   push:
+#     branches:
+#       - master
+#   pull_request:
+#     branches:
+#       - master
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: checkout the repo
+#         uses: actions/checkout@v3
+#       - name: setup python
+#         uses: actions/setup-python@v2
+#       - name: Run Checkov
+#         uses: bridgecrewio/checkov-action@master
+#         with:
+#           directory: .
+
+#           config_file: ./checkov-config.yaml
+#       # - name: Run Checkov on workflow.yml
+#       #   run: |
+#       #       checkov -f workflow.yml 
+#       - name: install pytest
+#         run: pip install pytest
+#       - name: run test
+#         run: pytest
+name: Terraform Security Checks
 
 on:
   push:
@@ -7,26 +37,37 @@ on:
   pull_request:
     branches:
       - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: checkout the repo
-        uses: actions/checkout@v2
-      - name: setup python
-        uses: actions/setup-python@v2
+      # Step 1: Checkout the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+
+      # Debugging - List files to confirm the presence of the config file
+      - name: List directory contents
+        run: |
+          ls -la
+
+      # Step 3: Run Checkov with the correct path to the config
       - name: Run Checkov
-        uses: bridgecrewio/checkov-action@master
+        uses: bridgecrewio/checkov-action@v2
         with:
           directory: .
+          config_file: ${{ github.workspace }}/checkov-config.yaml
 
-          config_file: ./checkov-config.yaml
-      # - name: Run Checkov on workflow.yml
-      #   run: |
-      #       checkov -f workflow.yml 
-      - name: install pytest
+      # Optional: Install pytest if you intend to run additional tests
+      - name: Install pytest
         run: pip install pytest
-      - name: run test
+
+      - name: Run pytest
         run: pytest
 
  

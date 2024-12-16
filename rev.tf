@@ -19,3 +19,13 @@ resource "azurerm_network_security_group" "example" {
     a = "myApp"  # Add the "app" tag here as well
   }
 }
+resource "azurerm_monitor_action_group" "example" {
+  name                = "example-action-group"
+  resource_group_name = "example-resource-group"
+  short_name          = "exampleag"
+  
+  # Add tags here
+  tags = {
+    app = "myApp"  # Tag named "app" with value "myApp"
+  }
+}

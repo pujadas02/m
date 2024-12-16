@@ -51,17 +51,14 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
 
-      # Debugging - List files to confirm the presence of the config file
-      - name: List directory contents
-        run: |
-          ls -la
+     
 
       # Step 3: Run Checkov with the correct path to the config
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:
           directory: .
-          config_file: ${{ github.workspace }}/checkov-config.yml
+          config_file: ./checkov-config.yml
 
       # Optional: Install pytest if you intend to run additional tests
       - name: Install pytest

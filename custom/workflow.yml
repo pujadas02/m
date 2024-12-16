@@ -21,11 +21,9 @@ metadata:
   category: "tagging"
   severity: "HIGH"
   description: "Ensure that specific tag values are used."
-
-
 scope:
   provider: "azure"        # We're working with Azure resources
-block_type: "resource"   # We're checking resource blocks in Terraform files
+  block_type: "resource"   # We're checking resource blocks in Terraform files
 definition:
     cond_type: "attribute"  # We're checking an attribute in the resource block
     attribute: "tags.app"   # We're verifying that "tags.app" exists

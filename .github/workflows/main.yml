@@ -58,7 +58,7 @@ jobs:
 
       # Step 3: Run Checkov with the correct path to the config
       - name: Run Checkov
-        uses: bridgecrewio/checkov-action@v2
+        uses: bridgecrewio/checkov-action@master
         with:
           directory: .
           config_file: ${{ github.workspace }}/checkov-config.yaml

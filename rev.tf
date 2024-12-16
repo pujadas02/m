@@ -16,6 +16,6 @@ resource "azurerm_network_security_group" "example" {
   resource_group_name = azurerm_resource_group.example.name
 
   tags = {
-    app = "myApp"  # Add the "app" tag here as well
+    a = "myApp"  # Add the "app" tag here as well
   }
 }

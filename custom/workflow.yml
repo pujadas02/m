@@ -3,13 +3,15 @@ metadata:
   id: "Azure"
   category: "tagging"
   severity: "HIGH"
-scope:
-  provider: "azure"
-  block_type: "resource"  # This should be inside the scope block
-definition:
-  - cond_type: "attribute"
-    attribute: "tags.app"
-    operator: "exists"
+
+check:
+  scope:
+    provider: "azure"
+    block_type: "resource"
+  definition:
+    - cond_type: "attribute"
+      attribute: "tags.app"
+      operator: "exists"
 
   # and:
     # - cond_type: "filter"

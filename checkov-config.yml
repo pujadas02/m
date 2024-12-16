@@ -1,21 +1,35 @@
-block-list-secret-scan: []
-branch: checkov
+# block-list-secret-scan: []
+# branch: checkov
+# # check:
+# # - LOW
+# compact: false
+# download-external-modules: true
+# evaluate-variables: true
+# external-checks-dir:
+# - ./custom
+# external-modules-download-path: .external_modules
+# framework:
+# - all
+# mask: []
+# run-all-external-checks: true
+# secrets-history-timeout: 12h
+# secrets-scan-file-type: []
 # check:
-# - LOW
+#     - Azure
+# summary-position: bottom
+check:
+  - Azure  # Your cloud provider check (add more if needed)
 compact: false
 download-external-modules: true
 evaluate-variables: true
-external-checks-dir:
-- ./custom
+external-checks-dir: ./custom  # Ensure this path is correct for your custom checks
 external-modules-download-path: .external_modules
 framework:
-- all
+  - all
 mask: []
-run-all-external-checks: true
+run-all-external-checks: true  # Set to true to run all custom checks
 secrets-history-timeout: 12h
 secrets-scan-file-type: []
-check:
-    - Azure
 summary-position: bottom
 
 #config file

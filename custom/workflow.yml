@@ -4,9 +4,10 @@ metadata:
   id: "CKV_AZURE_001"
   category: "tagging"
   severity: "HIGH"
-scope: 
-  provider: "azure" 
-# block_type: "resource"
+check:
+  scope: 
+      provider: "azure" 
+     block_type: "resource"
 definition:
     or:
       - cond_type: "attribute"

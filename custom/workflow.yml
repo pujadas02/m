@@ -4,10 +4,10 @@ metadata:
   category: "tagging"
   severity: "HIGH"
 
-check:
-  scope:
-    provider: "azure"
-    block_type: "resource"
+
+scope:
+  provider: "azure"
+  block_type: "resource"
 definition:
     cond_type: "attribute"
     attribute: "tags.app"

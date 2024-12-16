@@ -1,5 +1,13 @@
-provider "aws" {
-  region = "us-east-1"
+provider "azurerm" {
+  features {}
 }
 
+resource "azurerm_resource_group" "example" {
+  name     = "example-resources"
+  location = "East US"
+
+  tags = {
+    me = "myapp"
+  }
+}
 

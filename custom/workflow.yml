@@ -1,18 +1,39 @@
 
-# metadata:
-#   name: "ensures app tag exists"
-#   id: "CKV_AZURE_001"
-#   category: "tagging"
-#   severity: "HIGH"
-
-# check:
-#   scope: 
-#     provider: "azure" 
-# block_type: "resource"
-# definition:
-#     cond_type: "attribute"
-#     attribute: "tags.app"
-#     operator: "exists"
+metadata:
+  name: "ensures app tag exists"
+  id: "CKV_AZURE_001"
+  category: "tagging"
+  severity: "HIGH"
+scope: 
+  provider: "azure" 
+block_type: "resource"
+definition:
+    and:
+      - cond_type: "filter"
+        attribute: "resource_type"
+        operator: "not_in"
+        value:
+           - "azurerm_virtual_machine_extension"
+           - "azurerm_monitor_smart_detector_alert_rule"
+           - "azurerm_monitor_action_group"
+           - "azurerm_security_center_automation"
+           - "azurerm_network_watcher"
+           - "azurerm_network_connection_monitor"
+           - "azurerm_network_watcher_flow_log"
+           - "azurerm_virtual_hub"
+           - "azurerm_management_group_template_deployment"
+           - "azurerm_resource_group_template_deployment"
+           - "azurerm_subscription_template_deployment"
+           - "azurerm_tenant_template_deployment"
+           - "azurerm_network_security_group"
+           - "azurerm_network_security_rule"
+           - "azurerm_automation_runbook"
+           - "azurerm_api_connection"
+           - "azurerm_role_assignment"
+           - "azurerm_resource_group"
+      - cond_type: "attribute"
+        attribute: "tags.app"
+        operator: "exists"
 # the above code checks all actions from wrokflow if they have app tag or not
 
 
@@ -30,11 +51,7 @@ definition:
     attribute: "tags.app"   
     operator: "exists"     
 
-  # and:
-    # - cond_type: "filter"
-    #   attribute: "resource_type"
-    #   operator: "not_in"
-    #   value:
+  
     #     - "azure_virtual_machine"
     #     - "Microsoft.Compute/virtualMachines/extensions"
     #     - "Microsoft.AlertsManagement/smartDetectorAlertRules"

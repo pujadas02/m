@@ -27,7 +27,7 @@ scope:
   provider: "azure"        # We're working with Azure resources
 block_type: "resource"   # We're checking resource blocks in Terraform files
 definition:
-  - cond_type: "attribute"  # We're checking an attribute in the resource block
+    cond_type: "attribute"  # We're checking an attribute in the resource block
     attribute: "tags.app"   # We're verifying that "tags.app" exists
     operator: "exists"      # The operator is "exists" (the attribute must be present)
 

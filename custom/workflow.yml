@@ -15,42 +15,42 @@
 
 
 
-# metadata:
-#   name: "Ensures app tag exists"
-#   id: "CKV_AZURE_001"
-#   category: "tagging"
-#   severity: "HIGH"
-#   type: "terraform"  # Correct type for Terraform custom policies
-
-# check:
-#   scope:
-#     provider: "azure"        # We're working with Azure resources
-#     block_type: "resource"   # We're checking resource blocks in Terraform files
-#   definition:
-#     - cond_type: "attribute"  # We're checking an attribute in the resource block
-#       attribute: "tags.app"   # We're verifying that "tags.app" exists
-#       operator: "exists"      # The operator is "exists" (the attribute must be present)
-
-
 metadata:
-  name: "Ensure snapshotlifetime tag exists. Valid Values are numbers from 0 to 30"
-  id: "CCOE_AZ2_2"
+  name: "Ensures app tag exists"
+  id: "CKV_AZURE_001"
   category: "tagging"
   severity: "HIGH"
   description: "Ensure that specific tag values are used."
+
+
 scope:
-  provider: "azure"
-block_type: "resource"
- 
+  provider: "azure"        # We're working with Azure resources
+block_type: "resource"   # We're checking resource blocks in Terraform files
 definition:
-  and:
-    - cond_type: "attribute"
-      attribute: "tags.snapshotlifetime"
-      operator: "exists"
-    - cond_type: "attribute"
-      attribute: "tags.snapshotlifetime"
-      operator: "less_than_or_equal"
-      value: 30
+  - cond_type: "attribute"  # We're checking an attribute in the resource block
+    attribute: "tags.app"   # We're verifying that "tags.app" exists
+    operator: "exists"      # The operator is "exists" (the attribute must be present)
+
+
+# metadata:
+#   name: "Ensure snapshotlifetime tag exists. Valid Values are numbers from 0 to 30"
+#   id: "CCOE_AZ2_2"
+#   category: "tagging"
+#   severity: "HIGH"
+#   description: "Ensure that specific tag values are used."
+# scope:
+#   provider: "azure"
+# block_type: "resource"
+ 
+# definition:
+#   and:
+#     - cond_type: "attribute"
+#       attribute: "tags.snapshotlifetime"
+#       operator: "exists"
+#     - cond_type: "attribute"
+#       attribute: "tags.snapshotlifetime"
+#       operator: "less_than_or_equal"
+#       value: 30
 
 
   # and:

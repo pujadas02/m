@@ -8,6 +8,7 @@ scope:
   # block_type: "resource"
 definition:
   cond_type: "attribute"
+  attribute: "subscription_id"
   operator: "not_in"
   resource_types:
     - "azurerm_private_dns_zone"

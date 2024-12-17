@@ -4,16 +4,17 @@ metadata:
   category: "Network"
   severity: "HIGH"
 scope: 
-  provider: "azure" 
+  provider: "azure"
+  block_type: "subcription" 
   # block_type: "resource"
 definition:
   cond_type: "attribute"
   attribute: "subscription_id"
-  operator: "not_equals"
-  resource_types:
-    - "azurerm_private_dns_zone"
+  operator: "equals"
+  # resource_types:
+  #   - "azurerm_private_dns_zone"
   value:
-    - ""your-allowed-subscription-id"" 
+    - "your-allowesubscription-id"
 
 
         

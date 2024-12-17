@@ -10,7 +10,7 @@ scope:
 definition:
   cond_type: "attribute"
   attribute: "subscription_id"
-  operator: "equals"
+  operator: "not_equals"
   resource_types:
     - "azurerm_private_dns_zone"
   value:

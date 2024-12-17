@@ -7,8 +7,8 @@ scope:
   provider: "azure" 
   # block_type: "resource"
 definition:
-  cond_type: "attribute"
-  attribute: "subscription_id"
+  cond_type: "filter"
+  # attribute: "subscription_id"
   operator: "not_in"
   resource_types:
     - "azurerm_private_dns_zone"

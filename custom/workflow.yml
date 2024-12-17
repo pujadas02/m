@@ -14,7 +14,7 @@ definition:
           - "azurerm_private_dns_zone"
       
       - cond_type: "attribute"
-        attribute: "subscription_id"
+        attribute: "provider.azurerm.subscription_id"
         operator: "equals"
         value:
           - "yo"

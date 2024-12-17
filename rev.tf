@@ -19,13 +19,13 @@ resource "azurerm_network_security_group" "example" {
     a = "myApp" 
   }
 }
-resource "azurerm_monitor_action_group" "example" {
-  name                = "example-action-group"
-  resource_group_name = "example-resource-group"
-  short_name          = "exampleag"
+# resource "azurerm_monitor_action_group" "example" {
+#   name                = "example-action-group"
+#   resource_group_name = "example-resource-group"
+#   short_name          = "exampleag"
   
   
-  tags = {
-    app = "myApp" 
-  }
-}
+#   tags = {
+#     app = "myApp" 
+#   }
+# }

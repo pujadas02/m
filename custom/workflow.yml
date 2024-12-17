@@ -7,12 +7,13 @@ scope:
   provider: "azure" 
   # block_type: "resource"
 definition:
-    cond_type: "attribute"
-    operator: "not_in"
-    resource_types:
-      - "azurerm_private_dns_zone"
-    value:
-      - "yo"
+  cond_type: "attribute"
+  operator: "not_in"
+  resource_types:
+    - "azurerm_private_dns_zone"
+  value:
+    - "your-allowed-subscription-id"
+
 
         
 # metadata:

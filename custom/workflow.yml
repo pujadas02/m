@@ -5,7 +5,7 @@ metadata:
   severity: "HIGH"
 scope: 
   provider: "azure" 
-  # block_type: "resource"
+  block_type: "resource"
 definition:
     or:
       - cond_type: "resource"
@@ -14,7 +14,7 @@ definition:
           - "azurerm_private_dns_zone"
       
       - cond_type: "attribute"
-        attribute: "provider.azurerm.subscription_id"
+        attribute: "azurerm.subscription_id"
         operator: "equals"
         value:
           - "yo"

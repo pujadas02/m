@@ -5,7 +5,7 @@ metadata:
   severity: "HIGH"
 scope: 
   provider: "azure" 
-  block_type: "resource"
+  # block_type: "resource"
 definition:
     and:
       - cond_type: "resource"

@@ -14,7 +14,7 @@ definition:
   resource_types:
     - "azurerm_private_dns_zone"
   value:
-    - "your-allowed-subscription-id"
+    - "your"
 
 
         

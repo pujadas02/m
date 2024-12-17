@@ -1,4 +1,24 @@
+metadata:
+  name: "Deny the creation of private DNS"
+  id: "CKV_AZURE_001"
+  category: "Network"
+  severity: "HIGH"
+scope: 
+  provider: "azure" 
+definition:
+    or:
+      - cond_type: "resource"
+        operator: "not_exists"
+        resource_types:
+          - "azurerm_private_dns_zone"
+      
+      - cond_type: "attribute"
+        attribute: "subscription_id"
+        operator: "equals"
+        value:
+          - "your-allowed-subscription-id"
 
+        
 # metadata:
 #   name: "ensures app tag exists"
 #   id: "CKV_AZURE_001"
@@ -6,7 +26,7 @@
 #   severity: "HIGH"
 
 # scope: 
-#   provider: "azure" 
+#       provider: "azure" 
 #      block_type: "resource"
 # definition:
 #     or:
@@ -74,18 +94,3 @@
     
 
   
-metadata:
-    name: "Not allowed resource types"
-    id: "CKV_AZURE_001"
-    category: "General"
-    severity: "MEDIUM"
-scope:
-  provider: "azure"
-  block_type: "resource"
-definition:
-    cond_type: "resource"
-    resource_types:
-      - "azurerm_virtual_wan"
-      - "azurerm_virtual_network_gateway"
-      - "azurerm_express_route_circuit"
-    operator: "not_exists"

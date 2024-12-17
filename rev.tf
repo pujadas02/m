@@ -1,3 +1,17 @@
+provider "azurerm" {
+  features {}
+  subscription_id = "your-allowed-subscription-id"
+}
+
+# Example to create a Private DNS Zone only in the allowed subscription
+resource "azurerm_private_dns_zone" "dns_zone" {
+  name                = "privatedns.example.com"
+  resource_group_name = "example-rg"
+}
+
+
+
+
 # provider "azurerm" {
 #   features {}
 # }
@@ -33,20 +47,20 @@
 
 
 
-provider "azurerm" {
-  features {}
-}
+# # provider "azurerm" {
+# #   features {}
+# # }
 
-# Create Resource Group
-resource "azurerm_resource_group" "vwan_rg" {
-  name     = "vwan-deployment-rg"
-  location = "East US"
-}
+# # # Create Resource Group
+# # resource "azurerm_resource_group" "vwan_rg" {
+# #   name     = "vwan-deployment-rg"
+# #   location = "East US"
+# # }
 
-# Create Virtual WAN
-resource "azurerm_virtual_wan" "vwan" {
-  name                = "example-vwan"
-  location            = azurerm_resource_group.vwan_rg.location
-  resource_group_name = azurerm_resource_group.vwan_rg.name
-}
+# # # Create Virtual WAN
+# # resource "azurerm_virtual_wan" "vwan" {
+# #   name                = "example-vwan"
+# #   location            = azurerm_resource_group.vwan_rg.location
+# #   resource_group_name = azurerm_resource_group.vwan_rg.name
+# # }
 

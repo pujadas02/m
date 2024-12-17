@@ -75,16 +75,15 @@
 
   
 metadata:
-    name: "Not allowed resource types"
+    name: "Deny public ip"
     id: "CKV_AZURE_001"
     category: "General"
-    severity: "MEDIUM"
+    severity: "HIGH"
 scope:
   provider: "azure"
   block_type: "resource"
 definition:
     cond_type: "resource"
     resource_types:
-      - "azurerm_monitor_action_group"
-      - "resource2"
+      - "azurerm_public_ip"
     operator: "not_exists"

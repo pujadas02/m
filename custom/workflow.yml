@@ -16,7 +16,7 @@ definition:
         attribute: "subscription_id"
         operator: "equals"
         value:
-          - "your-allowed-subscription-id"
+          - "your-allowed--id"
 
         
 # metadata:

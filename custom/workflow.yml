@@ -20,7 +20,7 @@ metadata:
 
 scope:
   provider: "azure"
-
+  block_type: "resource"
 definition:
     cond_type: "resource"
     operator: "exists"

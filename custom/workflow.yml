@@ -46,7 +46,7 @@ definition:
       - "azurerm_key_vault"
       - "azurerm_image"
       - "azurerm_application_security_group"
-    operator: "exists"  
+    operator: "contains"  
 
         
 # metadata:

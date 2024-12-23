@@ -89,7 +89,7 @@ resource "azurerm_public_ip" "example" {
   location            = "East US"
   resource_group_name = "Basic"
   allocation_method   = "Dynamic"  # Or "Static" for a fixed IP
-  sku                  = "Basi"
+  sku                  = "Basic"
 }
 
 

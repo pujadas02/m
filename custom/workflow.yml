@@ -63,7 +63,7 @@ definition:
     cond_type: "attribute"
     resource_types:
       - "azurerm_public_ip"
-    attribute: "sku"
+    # attribute: "sku"
     operator: "not_equals"
     value: "Basic"
 

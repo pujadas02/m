@@ -23,7 +23,6 @@ scope:
   block_type: "resource"
 definition:
     cond_type: "resource"
-    operator: "exists"
     resource_types: 
       - "azurerm_managed_disk"
       - "azurerm_network_interface"
@@ -48,7 +47,7 @@ definition:
       - "azurerm_key_vault"
       - "azurerm_image"
       - "azurerm_application_security_group"
-      
+    operator: "exists"  
 
         
 # metadata:

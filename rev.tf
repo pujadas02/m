@@ -1,26 +1,12 @@
-# provider "azurerm" {
-#   features {}
-#   subscription_id = "your-allowed-subscription-id"
-# }
-
-# # Example to create a Private DNS Zone only in the allowed subscription
-# resource "azurerm_private_dns_zone" "dns_zone" {
-#   name                = "privatedns.example.com"
-#   resource_group_name = "example-rg"
-# }
-
-
-
-
 provider "azurerm" {
   features {}
 }
 
-# Resource Group
-resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "East US"
-}
+# # Resource Group
+# resource "azurerm_resource_group" "example" {
+#   name     = "example-resources"
+#   location = "East US"
+# }
 
 # Managed Disk
 resource "azurerm_managed_disk" "example_disk" {
@@ -80,6 +66,16 @@ resource "azurerm_sql_server" "example_sql_server" {
 
 
 
+# provider "azurerm" {
+#   features {}
+#   subscription_id = "your-allowed-subscription-id"
+# }
+
+# # Example to create a Private DNS Zone only in the allowed subscription
+# resource "azurerm_private_dns_zone" "dns_zone" {
+#   name                = "privatedns.example.com"
+#   resource_group_name = "example-rg"
+# }
 
 
 

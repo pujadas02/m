@@ -87,7 +87,7 @@ provider "azurerm" {
 resource "azurerm_public_ip" "example" {
   name                = "myBasicPublicIP"
   location            = "East US"
-  resource_group_name = "myResourceGroup"
+  resource_group_name = "Basic"
   allocation_method   = "Dynamic"  # Or "Static" for a fixed IP
   sku                  = "Basi"
 }

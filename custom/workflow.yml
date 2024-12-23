@@ -19,7 +19,7 @@ metadata:
     severity: "HIGH"
 
 scope:
-  provider: "azure"
+  provider: "azurerm"
 block_type: "resource"
 definition:
     cond_type: "resource"

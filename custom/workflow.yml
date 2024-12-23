@@ -11,12 +11,11 @@
 #   operator: "not_exists"
 #   resource_types:
 #     - "azurerm_private_dns_zone"
- 
 metadata:
-  name: "Allowed resource types"
-  id: "CKV_AZURE_001"
-  category: "General"
-  severity: "HIGH"
+    name: "Allowed resource types"
+    id: "CKV_AZURE_001"
+    category: "General"
+    severity: "HIGH"
 
 scope:
   provider: "azure"

@@ -28,8 +28,10 @@ jobs:
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          file: ./rev.tf
-          config_file: ./checkov-config.yml
+            working-directory: 'terraform/st/'
+
+          # file: ./rev.tf
+          # config_file: ./checkov-config.yml
 
       # Optional: Install pytest if you intend to run additional tests
       - name: Install pytest

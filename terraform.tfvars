@@ -1,2 +1,2 @@
 name     = "marsis"
-location     = "EastUS2"
+location     = "eastus2"

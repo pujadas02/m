@@ -6,7 +6,6 @@ resource "azurerm_monitor_diagnostic_setting" "example" {
   enabled_log {
     category = "AuditLogs"
   }
-
   metric {
     category = "AllMetrics"
   }

@@ -1,12 +1,8 @@
-resource "azurerm_monitor_diagnostic_setting" "example" {
-  name                       = "example-diagnostic-setting"
-  target_resource_id         = azurerm_virtual_machine.example.id
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.example.id
+provider "azurerm" {
+  features {}
+}
 
-  enabled_log {
-    category = "AuditLogs"
-  }
-  metric {
-    category = "AllMetrics"
-  }
+resource "azurerm_resource_group" "example" {
+  name     = "example-rg"
+  location = "East US"
 }

@@ -28,8 +28,8 @@ jobs:
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:
-           directory: '.'
-           config_file: ./checkov-config.yaml
+           directory: './main.tf'
+           config_file: './checkov-config.yaml'
 
           # file: ./rev.tf
          

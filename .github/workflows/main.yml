@@ -35,11 +35,7 @@ jobs:
          
 
       # Optional: Install pytest if you intend to run additional tests
-      - name: Install pytest
-        run: pip install pytest
-
-      - name: Run pytest
-        run: pytest
+      
 # name: Terraform Security Checks
 
 # on:

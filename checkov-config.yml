@@ -15,7 +15,7 @@ run-all-external-checks: true
 secrets-history-timeout: 12h
 secrets-scan-file-type: []
 check:
-    - "CCOE_AZ2_TAGS_5"
+- "CCOE_AZ2_TAGS_5"
     # - "CCOE_AZ2_16"
 summary-position: bottom
 

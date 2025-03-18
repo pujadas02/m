@@ -13,9 +13,6 @@ jobs:
     steps:
       - name: checkout the repo
         uses: actions/checkout@v3
-      # - name: Install dependencies
-      #   run: |
-      #     pip install -r requirements.txt  # Install dependencies if you have a requirements file
       - name: setup python
         uses: actions/setup-python@v4
       - name: Run Checkov
@@ -25,5 +22,3 @@ jobs:
           config_file: ./checkov-config.yml
       - name: install pytest
         run: pip install pytest
-     
- 

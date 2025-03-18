@@ -71,6 +71,10 @@ jobs:
       #     checkov -f ./main.tf --output sarif --config-file ./checkov-config.yml  # Adjust the path if needed
       # - name: setup python
       #   uses: actions/setup-python@v4
+      - name: Verify Checkov Installation
+        run: |
+          checkov --version  # This will print the installed version of Checkov
+
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:

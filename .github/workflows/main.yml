@@ -62,7 +62,7 @@ jobs:
         with:
           file: ./main.tf
 
-          config_file: ./checkov-config.yaml
+          config_file: ./checkov-config.yml
       # - name: Run Checkov on workflow.yml
       #   run: |
       #       checkov -f workflow.yml 

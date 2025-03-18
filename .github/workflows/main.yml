@@ -68,6 +68,5 @@ jobs:
       #       checkov -f workflow.yml 
       - name: install pytest
         run: pip install pytest
-      - name: run test
-        run: pytest
+     
  

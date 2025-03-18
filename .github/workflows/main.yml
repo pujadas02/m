@@ -1,4 +1,5 @@
 
+
 name: Terraform Security Checks
 
 on:
@@ -28,10 +29,50 @@ jobs:
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:
-           directory: .
+           working-directory: '.'
            config_file: ./checkov-config.yml
 
           # file: ./rev.tf
+         
+
+      # Optional: Install pytest if you intend to run additional tests
+      - name: Install pytest
+        run: pip install pytest
+
+
+# name: Terraform Security Checks
+
+# on:
+#   push:
+#     branches:
+#       - master
+#   pull_request:
+#     branches:
+#       - master
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       # Step 1: Checkout the repository
+#       - name: Checkout Repository
+#         uses: actions/checkout@v3
+
+#       # Step 2: Set up Python
+#       - name: Set up Python
+#         uses: actions/setup-python@v4
+
+     
+
+#       # Step 3: Run Checkov with the correct path to the config
+#       - name: Run Checkov
+#         uses: bridgecrewio/checkov-action@master
+#         with:
+#            directory: .
+#            config_file: ./checkov-config.yml
+
+#           # file: ./rev.tf
          
 
       # Optional: Install pytest if you intend to run additional tests

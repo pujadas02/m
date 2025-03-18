@@ -1,10 +1,12 @@
 
-# # Resource Group
-# resource "azurerm_resource_group" "example" {
-#   name     = "example-resources"
-#   location = "East US"
-# }
+provider "azurerm" {
+  features {}
+}
 
+resource "azurerm_resource_group" "example" {
+  name     = "example-rg"
+  location = "East US"
+}
 # Managed Disk
 resource "azurerm_managed_disk" "example_disk" {
   name                 = "example-managed-disk"

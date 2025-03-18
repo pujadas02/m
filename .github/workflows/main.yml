@@ -55,8 +55,22 @@ jobs:
     steps:
       - name: checkout the repo
         uses: actions/checkout@v3
-      - name: setup python
-        uses: actions/setup-python@v4
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Use any Python version you want
+
+      # Step 2: Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt  # Install dependencies if you have a requirements file
+
+      # Step 3: Run Checkov scan
+      # - name: Run Checkov scan
+      #   run: |
+      #     checkov -f ./main.tf --output sarif --config-file ./checkov-config.yml  # Adjust the path if needed
+      # - name: setup python
+      #   uses: actions/setup-python@v4
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:

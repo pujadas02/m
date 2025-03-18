@@ -79,8 +79,8 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
           file: ./main.tf
-
           config_file: ./checkov-config.yml
+          external_checks_dir: ./custom
       # - name: Run Checkov on workflow.yml
       #   run: |
       #       checkov -f workflow.yml 

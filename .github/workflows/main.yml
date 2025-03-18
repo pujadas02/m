@@ -66,9 +66,9 @@ jobs:
           pip install -r requirements.txt  # Install dependencies if you have a requirements file
       - name: setup python
         uses: actions/setup-python@v4
-      - name: Verify Checkov Installation
-        run: |
-          checkov --version  # This will print the installed version of Checkov
+      # - name: Verify Checkov Installation
+      #   run: |
+      #     checkov --version  # This will print the installed version of Checkov
 
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master

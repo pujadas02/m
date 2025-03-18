@@ -81,6 +81,8 @@ jobs:
           file: ./main.tf
           config_file: ./checkov-config.yml
           external_checks_dir: ./custom
+        env:
+           CHECKOV_DEBUG: 1
       # - name: Run Checkov on workflow.yml
       #   run: |
       #       checkov -f workflow.yml 

@@ -55,22 +55,17 @@ jobs:
     steps:
       - name: checkout the repo
         uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'  # Use any Python version you want
+      # - name: Set up Python 3.8
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: '3.8'  # Use any Python version you want
 
       # Step 2: Install dependencies
       - name: Install dependencies
         run: |
           pip install -r requirements.txt  # Install dependencies if you have a requirements file
-
-      # Step 3: Run Checkov scan
-      # - name: Run Checkov scan
-      #   run: |
-      #     checkov -f ./main.tf --output sarif --config-file ./checkov-config.yml  # Adjust the path if needed
-      # - name: setup python
-      #   uses: actions/setup-python@v4
+      - name: setup python
+        uses: actions/setup-python@v4
       - name: Verify Checkov Installation
         run: |
           checkov --version  # This will print the installed version of Checkov
@@ -80,12 +75,6 @@ jobs:
         with:
           file: ./main.tf
           config_file: ./checkov-config.yml
-          external_checks_dir: ./custom
-        env:
-           CHECKOV_DEBUG: 1
-      # - name: Run Checkov on workflow.yml
-      #   run: |
-      #       checkov -f workflow.yml 
       - name: install pytest
         run: pip install pytest
      

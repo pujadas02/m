@@ -1,53 +1,61 @@
-# metadata:
-#   name: "Deny the creation of private DNS"
-#   id: "CKV_AZURE_001"
-#   category: "Network"
-#   severity: "HIGH"
-# scope: 
-#   provider: "azure"
-#   # block_type: "resource"
-# definition:
-#   cond_type: "resource"
-#   operator: "not_exists"
-#   resource_types:
-#     - "azurerm_private_dns_zone"
 
 metadata:
-    name: "Allowed resource types"
-    id: "CKV_AZURE_001"
-    category: "General"
-    severity: "HIGH"
+  name: "Ensure resource groups are deployed only at allowed locations.(eastus2,centralus,westeurope,northeurope,southeastasia,eastasia,global,uksouth,westeurope)"
+  id: "CKV_AZURE_001"
+  category: "security"
+  severity: "HIGH"
+  description: "Ensure resources groups are deployed only at allowed locations."
 
-scope:
-  provider: "azure"
-block_type: "resource"
 definition:
-    cond_type: "resource"
-    resource_types: 
-      - "azurerm_managed_disk"
-      - "azurerm_network_interface"
-      - "azurerm_virtual_network"
-      - "azurerm_virtual_machine_extension"
-      - "azurerm_snapshot"
-      - "azurerm_route_table"
-      - "azurerm_network_security_group"
-      - "azurerm_sql_virtual_machine"
-      - "azurerm_private_endpoint"
-      - "azurerm_lb"
-      - "azurerm_virtual_network"
-      - "azurerm_network_watcher"
-      - "azurerm_availability_set"
-      - "azurerm_sql_server"
-      - "azurerm_sql_database"
-      - "azurerm_storage_account"
-      - "azurerm_proximity_placement_group"
-      - "azurerm_cosmosdb_account"
-      - "azurerm_public_ip"
-      - "azurerm_log_analytics_workspace"
-      - "azurerm_key_vault"
-      - "azurerm_image"
-      - "azurerm_application_security_group"
-    operator: "exists"  
+  cond_type: "attribute"
+  resource_types:
+    - "azurerm_resource_group"
+  attribute: "location"
+  operator: "within"
+  value: ["eastus2", "centralus", "westeurope", "northeurope", "southeastasia", "eastasia", "uksouth"]
+
+
+
+
+
+
+
+# metadata:
+#     name: "Allowed resource types"
+#     id: "CKV_AZURE_001"
+#     category: "General"
+#     severity: "HIGH"
+
+# scope:
+#   provider: "azure"
+# block_type: "resource"
+# definition:
+#     cond_type: "resource"
+#     resource_types: 
+#       - "azurerm_managed_disk"
+#       - "azurerm_network_interface"
+#       - "azurerm_virtual_network"
+#       - "azurerm_virtual_machine_extension"
+#       - "azurerm_snapshot"
+#       - "azurerm_route_table"
+#       - "azurerm_network_security_group"
+#       - "azurerm_sql_virtual_machine"
+#       - "azurerm_private_endpoint"
+#       - "azurerm_lb"
+#       - "azurerm_virtual_network"
+#       - "azurerm_network_watcher"
+#       - "azurerm_availability_set"
+#       - "azurerm_sql_server"
+#       - "azurerm_sql_database"
+#       - "azurerm_storage_account"
+#       - "azurerm_proximity_placement_group"
+#       - "azurerm_cosmosdb_account"
+#       - "azurerm_public_ip"
+#       - "azurerm_log_analytics_workspace"
+#       - "azurerm_key_vault"
+#       - "azurerm_image"
+#       - "azurerm_application_security_group"
+#     operator: "exists"  
 
 
         

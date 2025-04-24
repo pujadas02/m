@@ -1,7 +1,6 @@
-
 metadata:
-  name: "Ensure resource groups are deployed only at allowed locations.(eastus2,centralus,westeurope,northeurope,southeastasia,eastasia,global,uksouth,westeurope)"
-  id: "CKV_AZURE_001"
+  name: "Ensure resource groups are deployed only at allowed locations.(eastus2,centralus,westeurope,northeurope,southeastasia,eastasia,global,uksouth,westeurope,chinanorth3)"
+  id: "CCOE_AZ2_16"
   category: "security"
   severity: "HIGH"
   description: "Ensure resources groups are deployed only at allowed locations."
@@ -12,7 +11,41 @@ definition:
     - "azurerm_resource_group"
   attribute: "location"
   operator: "within"
-  value: ["eastus2", "centralus", "westeurope", "northeurope", "southeastasia", "eastasia", "uksouth"]
+  value: ["eastus2", "centralus", "westeurope", "northeurope", "southeastasia", "eastasia", "uksouth", "EastUS2", "CentralUS", "NorthEurope", "WestEurope", "SoutheastAsia", "EastAsia", "chinanorth3", "ChinaNorth3"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# metadata:
+#   name: "Ensure resource groups are deployed only at allowed locations.(eastus2,centralus,westeurope,northeurope,southeastasia,eastasia,global,uksouth,westeurope)"
+#   id: "CKV_AZURE_001"
+#   category: "security"
+#   severity: "HIGH"
+#   description: "Ensure resources groups are deployed only at allowed locations."
+
+# definition:
+#   cond_type: "attribute"
+#   resource_types:
+#     - "azurerm_resource_group"
+#   attribute: "location"
+#   operator: "within"
+#   value: ["eastus2", "centralus", "westeurope", "northeurope", "southeastasia", "eastasia", "uksouth"]
 
 
 

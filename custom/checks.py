@@ -14,8 +14,7 @@ class EnsureResourcesLocation(BaseResourceCheck):
 
     def scan_resource_conf(self, conf: dict[str, list[Any]]) -> CheckResult:
         excluded_resource_types = [
-            "azurerm_aadb2c_directory",
-            "azurerm_resource_group"
+            "azurerm_aadb2c_directory"
         ]
         resource_type = conf.get("__address__")
         if resource_type:

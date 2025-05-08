@@ -60,6 +60,8 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
 
         # Step 3: Check if current resource should be checked
         resource_address = conf.get("__address__")
+        
+        # Only proceed if the resource is in the list of Terraform resources
         if resource_address and any(r in resource_address for r in tf_resources):
             tags = conf.get("tags", [{}])[0]
             if isinstance(tags, dict):
@@ -74,9 +76,10 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
                 return CheckResult.FAILED
             return CheckResult.FAILED
 
-        return CheckResult.SKIPPED
+        return CheckResult.FAILED  # Return failed if the resource isn't found in tf_resources
 
 check = EnsureSnapshotLifetimeTagExistsCheck()
+
 
 
 

@@ -1,35 +1,117 @@
-from __future__ import annotations
-
+import requests
+import csv
+import os
+import re
+from io import StringIO
 from typing import Any
 from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
-class EnsureResourcesLocation(BaseResourceCheck):
+class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
     def __init__(self) -> None:
-        name = "Ensure resources are deployed only at allowed locations.(eastus2,centralus,westeurope,northeurope,southeastasia,eastasia,global,uksouth,chinanorth3)"
-        id = "CCOE_AZ2_LOCATION_1"
-        supported_resources = ['azurerm_*']
-        categories = [CheckCategories.BACKUP_AND_RECOVERY]
-        super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
+        super().__init__(
+            name="Ensure business_criticality tag exists",
+            id="CCOE_AZ2_TAGS_5",
+            categories=[CheckCategories.BACKUP_AND_RECOVERY],
+            supported_resources=['azurerm_*']
+        )
+
+    def fetch_supported_resources(self):
+        url = 'https://raw.githubusercontent.com/tfitzmac/resource-capabilities/refs/heads/main/tag-support.csv'
+        response = requests.get(url)
+        if response.status_code != 200:
+            return []
+        csv_data = StringIO(response.text)
+        return [
+            f"azurerm_{row[0].lower()}_{row[1].split('/')[-1].lower()}"
+            for row in csv.reader(csv_data)
+            if len(row) >= 3 and row[2] == "TRUE"
+        ]
+
+    def fetch_terraform_resources(self, included_resources):
+        DOCS_PATH = "website/docs/r"
+        IMPORT_LINE_REGEX = re.compile(r"terraform import (\S+)\s.*/providers/([^/]+/[^/]+)")
+        resources = []
+
+        for filename in os.listdir(DOCS_PATH):
+            if filename.endswith(".markdown"):
+                with open(os.path.join(DOCS_PATH, filename), "r", encoding="utf-8") as file:
+                    for line in file:
+                        match = IMPORT_LINE_REGEX.search(line)
+                        if match:
+                            tf_resource = match.group(1).split(".")[0]
+                            if tf_resource in included_resources:
+                                resources.append(tf_resource)
+                                break
+        return resources
 
     def scan_resource_conf(self, conf: dict[str, list[Any]]) -> CheckResult:
-        excluded_resource_types = [
-            "azurerm_aadb2c_directory"
-        ]
+        included = self.fetch_supported_resources()
+        mapped = self.fetch_terraform_resources(included)
         resource_type = conf.get("__address__")
-        if resource_type:
-            for excluded_type in excluded_resource_types:
-                if excluded_type in resource_type:
-                    return CheckResult.SKIPPED
-            location = conf.get("location")
-            if location and isinstance(location, list):
-                location = location[0]
-                if location is not None and location in ["eastus2", "centralus", "westeurope", "northeurope", "southeastasia", "eastasia", "global", "uksouth", "EastUS2", "CentralUS", "NorthEurope", "WestEurope", "SoutheastAsia", "EastAsia", "chinanorth3", "ChinaNorth3"]:
-                    return CheckResult.PASSED
-                else:
-                    return CheckResult.FAILED
 
-check = EnsureResourcesLocation()
+        if resource_type and any(r in resource_type for r in mapped):
+            tags = conf.get("tags", [{}])[0]
+            if isinstance(tags, dict):
+                val = tags.get("business_criticality")
+                if val in [
+                    "A+", "a+", "A", "a", "B", "b", "C", "c", "Z", "z",
+                    "Tier 0", "Tier0", "T0", "tier 0", "tier0", "t0",
+                    "Tier 1", "Tier1", "T1", "tier 1", "tier1", "t1",
+                    "N/A", "NA"
+                ]:
+                    return CheckResult.PASSED
+                return CheckResult.FAILED
+            return CheckResult.FAILED
+        return CheckResult.SKIPPED
+
+check = EnsureSnapshotLifetimeTagExistsCheck()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# from __future__ import annotations
+
+# from typing import Any
+# from checkov.common.models.enums import CheckResult, CheckCategories
+# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
+
+# class EnsureResourcesLocation(BaseResourceCheck):
+#     def __init__(self) -> None:
+#         name = "Ensure resources are deployed only at allowed locations.(eastus2,centralus,westeurope,northeurope,southeastasia,eastasia,global,uksouth,chinanorth3)"
+#         id = "CCOE_AZ2_LOCATION_1"
+#         supported_resources = ['azurerm_*']
+#         categories = [CheckCategories.BACKUP_AND_RECOVERY]
+#         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
+
+#     def scan_resource_conf(self, conf: dict[str, list[Any]]) -> CheckResult:
+#         excluded_resource_types = [
+#             "azurerm_aadb2c_directory"
+#         ]
+#         resource_type = conf.get("__address__")
+#         if resource_type:
+#             for excluded_type in excluded_resource_types:
+#                 if excluded_type in resource_type:
+#                     return CheckResult.SKIPPED
+#             location = conf.get("location")
+#             if location and isinstance(location, list):
+#                 location = location[0]
+#                 if location is not None and location in ["eastus2", "centralus", "westeurope", "northeurope", "southeastasia", "eastasia", "global", "uksouth", "EastUS2", "CentralUS", "NorthEurope", "WestEurope", "SoutheastAsia", "EastAsia", "chinanorth3", "ChinaNorth3"]:
+#                     return CheckResult.PASSED
+#                 else:
+#                     return CheckResult.FAILED
+
+# check = EnsureResourcesLocation()
 
 
 

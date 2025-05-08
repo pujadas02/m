@@ -38,20 +38,13 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
         for resource_type in supported_resource_types:
             file_guess = resource_type.split("/")[-1].lower() + ".markdown"
             try:
-                # Fetch .markdown file for the resource
                 url = base_url + file_guess
                 response = requests.get(url)
                 if response.status_code == 200:
-                    # If .markdown file exists, extract the Terraform resource name
-                    for line in response.text.splitlines():
-                        match = IMPORT_LINE_REGEX.search(line)
-                        if match:
-                            tf_resource = match.group(1).split(".")[0]  # azurerm_storage_account
-                            valid_resources.append(tf_resource)
-                            break  # Stop once we find the resource
+                    # If the .markdown file exists, we add it to valid_resources
+                    valid_resources.append(resource_type)
             except Exception:
-                continue  # Skip if resource does not have .markdown file or error occurs
-
+                continue
         return valid_resources
 
     def scan_resource_conf(self, conf: dict[str, list[Any]]) -> CheckResult:

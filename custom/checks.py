@@ -1,6 +1,6 @@
+from __future__ import annotations
 import requests
 import csv
-import os
 import re
 from io import StringIO
 from typing import Any
@@ -16,45 +16,55 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
             supported_resources=['azurerm_*']
         )
 
-    def fetch_supported_resources(self):
+    def fetch_supported_resources(self) -> list[str]:
+        """Fetches resources with supportsTags=TRUE from the public CSV."""
         url = 'https://raw.githubusercontent.com/tfitzmac/resource-capabilities/refs/heads/main/tag-support.csv'
         response = requests.get(url)
         if response.status_code != 200:
             return []
         csv_data = StringIO(response.text)
         return [
-            f"azurerm_{row[0].lower()}_{row[1].split('/')[-1].lower()}"
+            row[1]  # row[1] is the resourceType like "storageAccounts"
             for row in csv.reader(csv_data)
-            if len(row) >= 3 and row[2] == "TRUE"
+            if len(row) >= 3 and row[2].strip().upper() == "TRUE"
         ]
 
-    def fetch_terraform_resources(self, included_resources):
-        DOCS_PATH = "website/docs/r"
+    def fetch_tf_resource_names(self, supported_resource_types: list[str]) -> list[str]:
+        """Fetches Terraform resource names like azurerm_storage_account from .markdown docs."""
+        base_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
         IMPORT_LINE_REGEX = re.compile(r"terraform import (\S+)\s.*/providers/([^/]+/[^/]+)")
-        resources = []
+        matched_resources = []
 
-        for filename in os.listdir(DOCS_PATH):
-            if filename.endswith(".markdown"):
-                with open(os.path.join(DOCS_PATH, filename), "r", encoding="utf-8") as file:
-                    for line in file:
+        for resource_type in supported_resource_types:
+            file_guess = resource_type.split("/")[-1].lower() + ".markdown"
+            try:
+                url = base_url + file_guess
+                response = requests.get(url)
+                if response.status_code == 200:
+                    for line in response.text.splitlines():
                         match = IMPORT_LINE_REGEX.search(line)
                         if match:
-                            tf_resource = match.group(1).split(".")[0]
-                            if tf_resource in included_resources:
-                                resources.append(tf_resource)
-                                break
-        return resources
+                            tf_resource = match.group(1).split(".")[0]  # azurerm_storage_account
+                            matched_resources.append(tf_resource)
+                            break
+            except Exception:
+                continue
+        return matched_resources
 
     def scan_resource_conf(self, conf: dict[str, list[Any]]) -> CheckResult:
-        included = self.fetch_supported_resources()
-        mapped = self.fetch_terraform_resources(included)
-        resource_type = conf.get("__address__")
+        # Step 1: Fetch live supported resource types (taggable)
+        included_resources = self.fetch_supported_resources()
 
-        if resource_type and any(r in resource_type for r in mapped):
+        # Step 2: Fetch Terraform resource types based on .markdown docs (azurerm_*)
+        tf_resources = self.fetch_tf_resource_names(included_resources)
+
+        # Step 3: Check if current resource should be checked
+        resource_address = conf.get("__address__")
+        if resource_address and any(r in resource_address for r in tf_resources):
             tags = conf.get("tags", [{}])[0]
             if isinstance(tags, dict):
-                val = tags.get("business_criticality")
-                if val in [
+                value = tags.get("business_criticality")
+                if value in [
                     "A+", "a+", "A", "a", "B", "b", "C", "c", "Z", "z",
                     "Tier 0", "Tier0", "T0", "tier 0", "tier0", "t0",
                     "Tier 1", "Tier1", "T1", "tier 1", "tier1", "t1",
@@ -63,10 +73,10 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
                     return CheckResult.PASSED
                 return CheckResult.FAILED
             return CheckResult.FAILED
+
         return CheckResult.SKIPPED
 
 check = EnsureSnapshotLifetimeTagExistsCheck()
-
 
 
 

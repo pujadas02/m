@@ -20,5 +20,4 @@ jobs:
         with:
           file: ./main.tf
           config_file: ./checkov-config.yml
-      - name: install pytest
-        run: pip install pytest
+      

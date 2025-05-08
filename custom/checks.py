@@ -29,40 +29,41 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
             if len(row) >= 3 and row[2].strip().upper() == "TRUE"
         ]
 
-    def fetch_tf_resource_names(self, supported_resource_types: list[str]) -> list[str]:
-        """Fetches Terraform resource names like azurerm_storage_account from .markdown docs."""
+    def fetch_valid_resources_from_markdown(self, supported_resource_types: list[str]) -> list[str]:
+        """Fetch valid Terraform resource names from the .markdown docs."""
         base_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
         IMPORT_LINE_REGEX = re.compile(r"terraform import (\S+)\s.*/providers/([^/]+/[^/]+)")
-        matched_resources = []
+        valid_resources = []
 
         for resource_type in supported_resource_types:
             file_guess = resource_type.split("/")[-1].lower() + ".markdown"
             try:
+                # Fetch .markdown file for the resource
                 url = base_url + file_guess
                 response = requests.get(url)
                 if response.status_code == 200:
+                    # If .markdown file exists, extract the Terraform resource name
                     for line in response.text.splitlines():
                         match = IMPORT_LINE_REGEX.search(line)
                         if match:
                             tf_resource = match.group(1).split(".")[0]  # azurerm_storage_account
-                            matched_resources.append(tf_resource)
-                            break
+                            valid_resources.append(tf_resource)
+                            break  # Stop once we find the resource
             except Exception:
-                continue
-        return matched_resources
+                continue  # Skip if resource does not have .markdown file or error occurs
+
+        return valid_resources
 
     def scan_resource_conf(self, conf: dict[str, list[Any]]) -> CheckResult:
-        # Step 1: Fetch live supported resource types (taggable)
+        # Step 1: Fetch supported resource types from CSV (taggable)
         included_resources = self.fetch_supported_resources()
 
-        # Step 2: Fetch Terraform resource types based on .markdown docs (azurerm_*)
-        tf_resources = self.fetch_tf_resource_names(included_resources)
+        # Step 2: Fetch valid resources that have corresponding .markdown files
+        valid_resources = self.fetch_valid_resources_from_markdown(included_resources)
 
-        # Step 3: Check if current resource should be checked
+        # Step 3: Check the `business_criticality` tag for valid resources only
         resource_address = conf.get("__address__")
-        
-        # Only proceed if the resource is in the list of Terraform resources
-        if resource_address and any(r in resource_address for r in tf_resources):
+        if resource_address and any(r in resource_address for r in valid_resources):
             tags = conf.get("tags", [{}])[0]
             if isinstance(tags, dict):
                 value = tags.get("business_criticality")
@@ -76,11 +77,9 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
                 return CheckResult.FAILED
             return CheckResult.FAILED
 
-        return CheckResult.FAILED  # Return failed if the resource isn't found in tf_resources
+        return CheckResult.SKIPPED
 
 check = EnsureSnapshotLifetimeTagExistsCheck()
-
-
 
 
 

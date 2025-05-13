@@ -11,7 +11,7 @@ GITHUB_REPO = "terraform-provider-azurerm"
 MARKDOWN_PATH_PREFIX = "website/docs/r/"
 OUTPUT_FILE = "terraform_resources_with_tags.csv"
 CSV_URL = "https://raw.githubusercontent.com/tfitzmac/resource-capabilities/main/tag-support.csv"
-GITHUB_TOKEN = "YOUR_GITHUB_TOKEN"  # Replace with your GitHub token if needed for rate limiting
+GITHUB_TOKEN = "YOUR_GITHUB_TOKEN"  # **Replace this with your GitHub token**
 
 def fetch_supported_resources():
     """Fetch Azure resources that support tags from a public CSV."""
@@ -36,7 +36,7 @@ def get_markdown_files_from_git_tree():
     print("🔄 Fetching markdown files from GitHub...")
     api_url = f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/git/trees/main?recursive=1"
     
-    # Use GitHub token to authenticate
+    # Add token to authenticate requests
     headers = {}
     if GITHUB_TOKEN:
         headers['Authorization'] = f'token {GITHUB_TOKEN}'
@@ -47,7 +47,7 @@ def get_markdown_files_from_git_tree():
         print("❌ Rate limit exceeded! Try again later.")
         return []
     
-    response.raise_for_status()
+    response.raise_for_status()  # Raise an error for 4xx and 5xx status codes
     files = response.json()["tree"]
 
     markdown_files = []

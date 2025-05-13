@@ -11,7 +11,9 @@ GITHUB_REPO = "terraform-provider-azurerm"
 MARKDOWN_PATH_PREFIX = "website/docs/r/"
 OUTPUT_FILE = "terraform_resources_with_tags.csv"
 CSV_URL = "https://raw.githubusercontent.com/tfitzmac/resource-capabilities/main/tag-support.csv"
-GITHUB_TOKEN = "YOUR_GITHUB_TOKEN"  # **Replace this with your GitHub token**
+
+# Use the GitHub token from environment variables
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # Fetch token from environment variable
 
 def fetch_supported_resources():
     """Fetch Azure resources that support tags from a public CSV."""
@@ -70,7 +72,7 @@ def find_resource_matches(resource, markdown_files):
     for segment in segments[1:]:
         if not segment or ' ' in segment:
             return None
-        search_pattern += r'/[^/]+'
+        search_pattern += r'/[^/]+'  # match until a slash is found
 
     matches = []
     for md_file, content in markdown_files:
@@ -117,7 +119,6 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 
 # import os
 # import re

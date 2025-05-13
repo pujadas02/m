@@ -21,11 +21,13 @@ jobs:
 
       - name: Run Python script
         run: python p.py
-      - name: Upload output CSV
-        uses: actions/upload-artifact@v3
-        with:
-          name: terraform-resources
-          path: terraform_resources_with_tags.csv
+      - name: Run Python script
+        run: python p1.py
+      # - name: Upload output CSV
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: terraform-resources
+      #     path: terraform_resources_with_tags.csv
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:

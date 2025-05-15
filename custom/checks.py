@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import Any
 import requests
 from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck

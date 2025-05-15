@@ -1,5 +1,36 @@
+# from __future__ import annotations
+# from typing import Any
+# import requests
+# from checkov.common.models.enums import CheckResult, CheckCategories
+# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
+
+# class EnsureTagCheck(BaseResourceCheck):
+#     def __init__(self):
+#         name = "Check for required tag"
+#         id = "CUSTOM_TAG_CHECK"
+#         supported_resources = ['azurerm_*']
+#         super().__init__(name=name, id=id, categories=[CheckCategories.CONVENTION], supported_resources=supported_resources)
+#         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
+        
+#     def has_tags_support(self, resource_type):
+#         try:
+#             response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
+#             return response.status_code == 200 and "`tags`" in response.text
+#         except:
+#             return False
+
+#     def scan_resource_conf(self, conf):
+#         if not (address := conf.get("__address__", "")):
+#             return CheckResult.SKIPPED   
+#         resource_type = address.split(".")[0][8:]  # Remove 'azurerm_' prefix
+#         if not self.has_tags_support(resource_type):
+#             return CheckResult.SKIPPED    
+#         tags = conf.get("tags", [{}])[0]
+#         return CheckResult.PASSED if isinstance(tags, dict) and tags.get("business_criticality") else CheckResult.FAILED
+# check = EnsureTagCheck()
+
+
 from __future__ import annotations
-from typing import Any
 import requests
 from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
@@ -9,9 +40,34 @@ class EnsureTagCheck(BaseResourceCheck):
         name = "Check for required tag"
         id = "CUSTOM_TAG_CHECK"
         supported_resources = ['azurerm_*']
-        super().__init__(name=name, id=id, categories=[CheckCategories.CONVENTION], supported_resources=supported_resources)
+        super().__init__(name=name, id=id, 
+                        categories=[CheckCategories.CONVENTION],
+                        supported_resources=supported_resources)
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
         
+        # Static exclusion list (from your manager's requirements)
+        self.excluded_resources = [
+            "azurerm_virtual_machine_extension",
+            "azurerm_monitor_smart_detector_alert_rule",
+            "azurerm_monitor_action_group",
+            "azurerm_security_center_automation",
+            "azurerm_network_watcher",
+            "azurerm_network_connection_monitor",
+            "azurerm_network_watcher_flow_log",
+            "azurerm_virtual_hub",
+            "azurerm_management_group_template_deployment",
+            "azurerm_resource_group_template_deployment",
+            "azurerm_subscription_template_deployment",
+            "azurerm_tenant_template_deployment",
+            "azurerm_network_security_group",
+            "azurerm_network_security_rule",
+            "azurerm_automation_runbook",
+            "azurerm_api_connection",
+            "azurerm_role_assignment",
+            "azurerm_resource_group",
+            "azurerm_monitor_diagnostic_setting"
+        ]
+
     def has_tags_support(self, resource_type):
         try:
             response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
@@ -21,109 +77,24 @@ class EnsureTagCheck(BaseResourceCheck):
 
     def scan_resource_conf(self, conf):
         if not (address := conf.get("__address__", "")):
-            return CheckResult.SKIPPED   
-        resource_type = address.split(".")[0][8:]  # Remove 'azurerm_' prefix
+            return CheckResult.SKIPPED
+            
+        full_resource_type = address.split(".")[0]  # Get full type (azurerm_xxx)
+        
+        # First check static exclusions (manager's requirement)
+        if any(excluded in full_resource_type for excluded in self.excluded_resources):
+            return CheckResult.SKIPPED
+            
+        resource_type = full_resource_type[8:]  # Remove 'azurerm_' prefix
+        
+        # Then check dynamic tag support
         if not self.has_tags_support(resource_type):
-            return CheckResult.SKIPPED    
+            return CheckResult.SKIPPED
+            
         tags = conf.get("tags", [{}])[0]
         return CheckResult.PASSED if isinstance(tags, dict) and tags.get("business_criticality") else CheckResult.FAILED
+
 check = EnsureTagCheck()
-
-
-
-# from __future__ import annotations
-# import requests
-# import re
-# from typing import Any
-# from checkov.common.models.enums import CheckResult, CheckCategories
-# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
-
-# class EnsureBusinessCriticalityTagExistsCheck(BaseResourceCheck):
-#     def __init__(self) -> None:
-#         name = "Ensure business_criticality tag exists. Valid Values are [A+,a+,A,a,B,b,C,c,Z,z,Tier 0,Tier0,T0,,tier 0,tier0,t0,Tier 1,Tier1,T1,tier 1,tier1,t1,N/A,NA]"
-#         id = "CCOE_AZ2_TAGS_5"
-#         supported_resources = ['azurerm_*']
-#         categories = [CheckCategories.BACKUP_AND_RECOVERY]
-#         self.docs_base_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
-#         self.cache = {}  # Cache for resource tag support
-#         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
-
-#     def get_resource_name_from_address(self, address: str) -> str:
-#         """Extracts resource type from address (e.g., azurerm_virtual_machine.example -> virtual_machine)"""
-#         if not address:
-#             return ""
-        
-#         # Remove provider prefix and anything after the first dot
-#         resource_type = address.split(".")[0]
-#         if resource_type.startswith("azurerm_"):
-#             resource_type = resource_type[8:]  # Remove 'azurerm_' prefix
-        
-#         return resource_type
-
-#     def resource_supports_tags(self, resource_type: str) -> bool:
-#         """Checks if the resource supports tags by looking at its documentation"""
-#         if not resource_type:
-#             return False
-            
-#         # Check cache first
-#         if resource_type in self.cache:
-#             return self.cache[resource_type]
-            
-#         doc_url = f"{self.docs_base_url}{resource_type}.html.markdown"
-        
-#         try:
-#             response = requests.get(doc_url, timeout=5)
-#             if response.status_code == 200:
-#                 # Check if the documentation contains a tags section
-#                 has_tags = "`tags`" in response.text
-#                 self.cache[resource_type] = has_tags
-#                 return has_tags
-#             elif response.status_code == 404:
-#                 # Resource documentation not found - assume no tags support
-#                 self.cache[resource_type] = False
-#                 return False
-#             else:
-#                 # If there's an error accessing the doc, assume no tags support
-#                 self.cache[resource_type] = False
-#                 return False
-#         except Exception:
-#             # If there's any error, assume no tags support
-#             self.cache[resource_type] = False
-#             return False
-
-#     def scan_resource_conf(self, conf: dict[str, list[Any]]) -> CheckResult:
-#         resource_address = conf.get("__address__", "")
-#         resource_type = self.get_resource_name_from_address(resource_address)
-        
-#         # Skip if we can't determine resource type
-#         if not resource_type:
-#             return CheckResult.SKIPPED
-            
-#         # Check if resource supports tags
-#         if not self.resource_supports_tags(resource_type):
-#             return CheckResult.SKIPPED
-            
-#         # Check tags if resource supports them
-#         tags = conf.get("tags")
-#         if tags and isinstance(tags, list):
-#             tags = tags[0]
-#             if tags and isinstance(tags, dict):
-#                 business_criticality = tags.get("business_criticality")
-#                 if business_criticality is not None and business_criticality.lower() in [
-#                     "a+", "a", "b", "c", "z", 
-#                     "tier 0", "tier0", "t0", 
-#                     "tier 1", "tier1", "t1", 
-#                     "n/a", "na"
-#                 ]:
-#                     return CheckResult.PASSED 
-#                 else:
-#                     return CheckResult.FAILED
-                    
-#         return CheckResult.FAILED
-
-# check = EnsureBusinessCriticalityTagExistsCheck()
-
-
 
 
 

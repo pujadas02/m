@@ -31,6 +31,7 @@
 
 
 from __future__ import annotations
+from typing import Any
 import requests
 from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
@@ -45,7 +46,7 @@ class EnsureTagCheck(BaseResourceCheck):
                         supported_resources=supported_resources)
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
         
-        # Static exclusion list (from your manager's requirements)
+        # Static exclusion list 
         self.excluded_resources = [
             "azurerm_virtual_machine_extension",
             "azurerm_monitor_smart_detector_alert_rule",
@@ -81,7 +82,7 @@ class EnsureTagCheck(BaseResourceCheck):
             
         full_resource_type = address.split(".")[0]  # Get full type (azurerm_xxx)
         
-        # First check static exclusions (manager's requirement)
+        # First check static exclusions 
         if any(excluded in full_resource_type for excluded in self.excluded_resources):
             return CheckResult.SKIPPED
             
@@ -90,7 +91,7 @@ class EnsureTagCheck(BaseResourceCheck):
         # Then check dynamic tag support
         if not self.has_tags_support(resource_type):
             return CheckResult.SKIPPED
-            
+                
         tags = conf.get("tags", [{}])[0]
         return CheckResult.PASSED if isinstance(tags, dict) and tags.get("business_criticality") else CheckResult.FAILED
 

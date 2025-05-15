@@ -9,11 +9,9 @@ class EnsureTagCheck(BaseResourceCheck):
         name = "Check for required tag"
         id = "CUSTOM_TAG_CHECK"
         supported_resources = ['azurerm_*']
-        super().__init__(name=name, id=id, 
-                        categories=[CheckCategories.CONVENTION],
-                        supported_resources=supported_resources)
+        super().__init__(name=name, id=id, categories=[CheckCategories.CONVENTION], supported_resources=supported_resources)
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
-
+        
     def has_tags_support(self, resource_type):
         try:
             response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
@@ -23,16 +21,12 @@ class EnsureTagCheck(BaseResourceCheck):
 
     def scan_resource_conf(self, conf):
         if not (address := conf.get("__address__", "")):
-            return CheckResult.SKIPPED
-            
+            return CheckResult.SKIPPED   
         resource_type = address.split(".")[0][8:]  # Remove 'azurerm_' prefix
-        
         if not self.has_tags_support(resource_type):
-            return CheckResult.SKIPPED
-            
+            return CheckResult.SKIPPED    
         tags = conf.get("tags", [{}])[0]
         return CheckResult.PASSED if isinstance(tags, dict) and tags.get("business_criticality") else CheckResult.FAILED
-
 check = EnsureTagCheck()
 
 

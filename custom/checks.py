@@ -46,7 +46,6 @@ class EnsureTagCheck(BaseResourceCheck):
                         supported_resources=supported_resources)
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
         
-        # Static exclusion list 
         self.excluded_resources = [
             "azurerm_virtual_machine_extension",
             "azurerm_monitor_smart_detector_alert_rule",
@@ -80,15 +79,15 @@ class EnsureTagCheck(BaseResourceCheck):
         if not (address := conf.get("__address__", "")):
             return CheckResult.SKIPPED
             
-        full_resource_type = address.split(".")[0]  # Get full type (azurerm_xxx)
+        full_resource_type = address.split(".")[0]  
         
-        # First check static exclusions 
+   
         if any(excluded in full_resource_type for excluded in self.excluded_resources):
             return CheckResult.SKIPPED
             
-        resource_type = full_resource_type[8:]  # Remove 'azurerm_' prefix
+        resource_type = full_resource_type[8:]  
         
-        # Then check dynamic tag support
+
         if not self.has_tags_support(resource_type):
             return CheckResult.SKIPPED
                 

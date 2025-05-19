@@ -3,7 +3,6 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-      - master
       - tag_cvlt_backup
   pull_request:
     branches:

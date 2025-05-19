@@ -21,6 +21,6 @@ resource "azurerm_monitor_diagnostic_setting" "logic20" {
 resource "azurerm_dns_zone" "example-public" {
   name                = "mydomain.com"
   tags = {
-    cvlt_backup = "T1"
+    cvlt_backup = "cvlt_no_backup"
   }
 }

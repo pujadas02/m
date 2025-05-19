@@ -52,11 +52,11 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
             return CheckResult.SKIPPED
                 
         tags = conf.get("tags")
-            if tags and isinstance(tags, list):
-                tags = tags[0]
-                if tags and isinstance(tags, dict):
-                    data_classification = tags.get("data_classification")
-                    if data_classification is not None and data_classification in ["highly confidential", "Highly Confidential", "confidential", "Confidential", "internal use only", "internal", "nonconfidential", "Nonconfidential", "non confidential", "Non Confidential", "N/A", "NA"]:
+        if tags and isinstance(tags, list):
+            tags = tags[0]
+            if tags and isinstance(tags, dict):
+                data_classification = tags.get("data_classification")
+                if data_classification is not None and data_classification in ["highly confidential", "Highly Confidential", "confidential", "Confidential", "internal use only", "internal", "nonconfidential", "Nonconfidential", "non confidential", "Non Confidential", "N/A", "NA"]:
                     return CheckResult.PASSED
                 else:
                     return CheckResult.FAILED

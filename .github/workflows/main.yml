@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-      - master
+      - tag_data_classification
   pull_request:
     branches:
       - master

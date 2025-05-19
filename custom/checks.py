@@ -91,7 +91,7 @@ class EnsureTagCheck(BaseResourceCheck):
         if not self.has_tags_support(resource_type):
             return CheckResult.SKIPPED
                 
-         tags = conf.get("tags")
+        tags = conf.get("tags")
         if tags and isinstance(tags, list):
             tags = tags[0]
             if tags and isinstance(tags, dict):

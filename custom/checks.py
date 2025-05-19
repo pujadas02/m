@@ -34,14 +34,14 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
             "azurerm_resource_group",
             "azurerm_monitor_diagnostic_setting"
         ]
-        def has_tags_support(self, resource_type):
+    def has_tags_support(self, resource_type):
         try:
             response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
             return response.status_code == 200 and "`tags`" in response.text
         except:
             return False
                 
-        def scan_resource_conf(self, conf):
+    def scan_resource_conf(self, conf):
         if not (address := conf.get("__address__", "")):
             return CheckResult.SKIPPED
         full_resource_type = address.split(".")[0]

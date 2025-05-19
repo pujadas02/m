@@ -91,8 +91,22 @@ class EnsureTagCheck(BaseResourceCheck):
         if not self.has_tags_support(resource_type):
             return CheckResult.SKIPPED
                 
-        tags = conf.get("tags", [{}])[0]
-        return CheckResult.PASSED if isinstance(tags, dict) and tags.get("business_criticality") else CheckResult.FAILED
+         tags = conf.get("tags")
+        if tags and isinstance(tags, list):
+            tags = tags[0]
+            if tags and isinstance(tags, dict):
+                business_criticality = tags.get("business_criticality")
+                if business_criticality is not None and business_criticality in [
+                    "A+", "a+", "A", "a", "B", "b", "C", "c", "Z", "z",
+                    "Tier 0", "Tier0", "T0", "tier 0", "tier0", "t0",
+                    "Tier 1", "Tier1", "T1", "tier 1", "tier1", "t1",
+                    "N/A", "NA"
+                ]:
+                    return CheckResult.PASSED
+                else:
+                    return CheckResult.FAILED
+        return CheckResult.FAILED
+
 
 check = EnsureTagCheck()
 

@@ -38,9 +38,9 @@ from checkov.terraform.checks.resource.base_resource_check import BaseResourceCh
 class EnsureTagCheck(BaseResourceCheck):
     def __init__(self):
         name = "Ensure business_criticality tag exists. Valid Values are [A+,a+,A,a,B,b,C,c,Z,z,Tier 0,Tier0,T0,,tier 0,tier0,t0,Tier 1,Tier1,T1,tier 1,tier1,t1,N/A,NA]"
-        id = "CCOE_AZ2_TAGS_5"  # Matching your static policy ID
+        id = "CCOE_AZ2_TAGS_5"  
         supported_resources = ['azurerm_*']
-        categories = [CheckCategories.BACKUP_AND_RECOVERY]  # Same category as static
+        categories = [CheckCategories.BACKUP_AND_RECOVERY]  
         super().__init__(name=name, id=id, 
                         categories=categories,
                         supported_resources=supported_resources)

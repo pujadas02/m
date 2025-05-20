@@ -21,6 +21,10 @@ resource "azurerm_monitor_diagnostic_setting" "logic20" {
 resource "azurerm_dns_zone" "example-public" {
   name                = "mydomain.com"
   tags = {
-    business_criticality = "T1"
+    app = "T1",
+    app_owner_group = "tf",
+    ppm_io_cc = "j",
+    ppm_id_owner = "kk",
+    expert_centre = "hi"
   }
 }

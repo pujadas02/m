@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-      - master
+      - tag_snapshot_lifetime
   pull_request:
     branches:
       - master

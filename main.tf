@@ -27,14 +27,6 @@ resource "azurerm_dns_zone" "example-public" {
 resource "azurerm_dns_zone" "examplepublic" {
   name                = "mydomain.com"
   tags = {
-    app = "T1",
-    app_owner_group = "tf",
-    ppm_io_cc = "j",
-    ppm_id_owner = "kk",
-    expert_centre = "hi"
-  }
-}
-  tags = {
     common_tags = {
       app                  = "Litmus IoT Edge"
       ppm_id_owner         = "Reeves, Lee"
@@ -58,4 +50,6 @@ resource "azurerm_dns_zone" "examplepublic" {
         ppm_funding_source = "IO/CC"
       }
     }
-
+  }
+}
+  

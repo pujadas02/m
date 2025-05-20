@@ -24,8 +24,7 @@ resource "azurerm_dns_zone" "example-public" {
     app = "T1",
     app_owner_group = "tf",
     ppm_io_cc = "j",
-    ppm_id_owner = "kk",
-    expert_centre = "hi"
+    ppm_id_owner = "kk"
   }
 }
 

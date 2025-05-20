@@ -13,7 +13,6 @@ class EnsureMandatoryTagsExist(BaseResourceCheck):
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
         
-        # List of required tags
         self.required_tags = {
             "app",
             "app_owner_group",
@@ -29,42 +28,34 @@ class EnsureMandatoryTagsExist(BaseResourceCheck):
         except:
             return False
 
-    def get_tag_value(self, tags: Dict[str, Any], tag_name: str) -> Any:
-        """Recursively check for tag in merged structures"""
-        if tag_name in tags:
-            return tags[tag_name]
-        for value in tags.values():
-            if isinstance(value, dict):
-                found = self.get_tag_value(value, tag_name)
-                if found is not None:
-                    return found
-        return None
-
     def scan_resource_conf(self, conf: Dict[str, List[Any]]) -> CheckResult:
-        # Skip if no address
         if not (address := conf.get("__address__", "")):
             return CheckResult.SKIPPED
             
-        # Check tag support
         resource_type = address.split(".")[0][8:]
         if not self.has_tags_support(resource_type):
             return CheckResult.SKIPPED
             
-        # Get tags configuration
         tags_config = conf.get("tags")
         if not tags_config or not isinstance(tags_config, list):
             return CheckResult.FAILED
             
-        tags = tags_config[0]
-        if not isinstance(tags, dict):
-            return CheckResult.FAILED
-            
-        # Check for all required tags
-        missing_tags = []
-        for tag in self.required_tags:
-            if not self.get_tag_value(tags, tag):
-                missing_tags.append(tag)
+        # Handle both direct tags and merge() cases
+        tags = {}
+        if isinstance(tags_config[0], dict):
+            tags.update(tags_config[0])
+        elif isinstance(tags_config[0], str) and "merge(" in tags_config[0]:
+            # Extract the first dictionary from merge() if possible
+            try:
+                merge_content = tags_config[0].split("merge(")[1].split(")")[0]
+                first_dict = eval(merge_content.split(",")[0])  # Caution with eval
+                if isinstance(first_dict, dict):
+                    tags.update(first_dict)
+            except:
+                pass
                 
+        # Check required tags
+        missing_tags = [tag for tag in self.required_tags if tag not in tags]
         return CheckResult.PASSED if not missing_tags else CheckResult.FAILED
 
 check = EnsureMandatoryTagsExist()

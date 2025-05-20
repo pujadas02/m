@@ -24,3 +24,9 @@ resource "azurerm_dns_zone" "example-public" {
     snapshotlifetime = "4"
   }
 }
+resource "azurerm_dns_zone" "example-public" {
+  name                = "mydomain.com"
+  tags = {
+    snapshotlifetime = "34"
+  }
+}

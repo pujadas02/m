@@ -1,57 +1,73 @@
 from __future__ import annotations
 import requests
-from typing import Any
+from typing import Any, Dict, List
 from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
-class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
+class EnsureMandatoryTagsExist(BaseResourceCheck):
     def __init__(self) -> None:
-        name = "Ensure app,app_owner_group,ppm_io_cc,ppm_id_owner,expert_centre tag exists."
+        name = "Ensure required tags exist"
         id = "CCOE_AZ2_TAGS_6"
         supported_resources = ['azurerm_*']
-        categories = [CheckCategories.BACKUP_AND_RECOVERY]
+        categories = [CheckCategories.CONVENTION]
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
-            
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
+        
+        # List of required tags
+        self.required_tags = {
+            "app",
+            "app_owner_group",
+            "ppm_io_cc",
+            "ppm_id_owner",
+            "expert_centre"
+        }
 
-    def has_tags_support(self, resource_type):
+    def has_tags_support(self, resource_type: str) -> bool:
         try:
             response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
             return response.status_code == 200 and "`tags`" in response.text
         except:
             return False
-                
-    def scan_resource_conf(self, conf):
+
+    def get_tag_value(self, tags: Dict[str, Any], tag_name: str) -> Any:
+        """Recursively check for tag in merged structures"""
+        if tag_name in tags:
+            return tags[tag_name]
+        for value in tags.values():
+            if isinstance(value, dict):
+                found = self.get_tag_value(value, tag_name)
+                if found is not None:
+                    return found
+        return None
+
+    def scan_resource_conf(self, conf: Dict[str, List[Any]]) -> CheckResult:
+        # Skip if no address
         if not (address := conf.get("__address__", "")):
             return CheckResult.SKIPPED
             
+        # Check tag support
         resource_type = address.split(".")[0][8:]
-        
         if not self.has_tags_support(resource_type):
-            return CheckResult.SKIPPED    
-
-        # Get tags - handle case where tags is a list
-        tags = conf.get("tags", [])
-
-        # If tags is a list, use the first element (list of dictionaries)
-        if isinstance(tags, list) and tags:
-            tags = tags[0]
-
-        # Ensure tags is now a dictionary, if not, return FAILED
+            return CheckResult.SKIPPED
+            
+        # Get tags configuration
+        tags_config = conf.get("tags")
+        if not tags_config or not isinstance(tags_config, list):
+            return CheckResult.FAILED
+            
+        tags = tags_config[0]
         if not isinstance(tags, dict):
             return CheckResult.FAILED
+            
+        # Check for all required tags
+        missing_tags = []
+        for tag in self.required_tags:
+            if not self.get_tag_value(tags, tag):
+                missing_tags.append(tag)
+                
+        return CheckResult.PASSED if not missing_tags else CheckResult.FAILED
 
-        # Check that required tags exist in the dictionary
-        required_tags = ["app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"]
-        missing_tags = [tag for tag in required_tags if tags.get(tag) is None]
-
-        if not missing_tags:
-            return CheckResult.PASSED
-        else:
-            return CheckResult.FAILED
-
-# Create an instance of the check
-check = EnsureSnapshotLifetimeTagExistsCheck()
+check = EnsureMandatoryTagsExist()
 
 # from __future__ import annotations
 # import requests

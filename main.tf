@@ -24,7 +24,7 @@ resource "azurerm_dns_zone" "example-public" {
     app = "T1"
   }
 }
-resource "azurerm_dns_zone" "examplepublic" {
+resource "azurerm_resource_group" "rg_01" {
   name                = "mydomain.com"
   tags = {
     common_tags = {

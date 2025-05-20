@@ -82,112 +82,59 @@
 
 
 
+
+
+
+
+
+
+
+
+
 from __future__ import annotations
-from typing import Any
 import requests
+from typing import Any
 from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
-class EnsureTagCheck(BaseResourceCheck):
-    def __init__(self):
-        name = "Check for required tags (app, app_owner_group, ppm_io_cc, ppm_id_owner, expert_centre)"
-        id = "CUSTOM_TAG_CHECK"
+class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
+    def __init__(self) -> None:
+        name = "Ensure app,app_owner_group,ppm_io_cc,ppm_id_owner,expert_centre tag exists."
+        id = "CCOE_AZ2_TAGS_6"
         supported_resources = ['azurerm_*']
-        super().__init__(name=name, id=id, 
-                        categories=[CheckCategories.CONVENTION], 
-                        supported_resources=supported_resources)
+        categories = [CheckCategories.BACKUP_AND_RECOVERY]
+        super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
+            
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
-        
     def has_tags_support(self, resource_type):
         try:
             response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
             return response.status_code == 200 and "`tags`" in response.text
         except:
             return False
-
+                
     def scan_resource_conf(self, conf):
         if not (address := conf.get("__address__", "")):
             return CheckResult.SKIPPED
             
-        resource_type = address.split(".")[0][8:]  # Remove 'azurerm_' prefix
+        resource_type = address.split(".")[0][8:]
         
         if not self.has_tags_support(resource_type):
-            return CheckResult.SKIPPED
-            
-        tags = conf.get("tags", [{}])[0]
-        
-        # Check for all required tags
-        if isinstance(tags, dict):
-            required_tags = {
-                'app',
-                'app_owner_group',
-                'ppm_io_cc',
-                'ppm_id_owner',
-                'expert_centre'
-            }
-            if all(tag in tags for tag in required_tags):
-                return CheckResult.PASSED
+            return CheckResult.SKIPPED    
                 
+        tags = conf.get("tags")
+        if tags and isinstance(tags, list):
+            tags = tags[0]
+            if tags and isinstance(tags, dict):
+                app = tags.get("app")
+                app_owner_group = tags.get("app_owner_group")
+                ppm_io_cc = tags.get("ppm_io_cc")
+                ppm_id_owner = tags.get("ppm_id_owner")
+                expert_centre = tags.get("expert_centre")
+                if app is not None and app_owner_group is not None and ppm_io_cc is not None and ppm_id_owner is not None and expert_centre is not None:
+                    return CheckResult.PASSED
+                else:
+                    return CheckResult.FAILED
         return CheckResult.FAILED
 
-check = EnsureTagCheck()
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from __future__ import annotations
-# import requests
-# from typing import Any
-# from checkov.common.models.enums import CheckResult, CheckCategories
-# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
-
-# class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
-#     def __init__(self) -> None:
-#         name = "Ensure app,app_owner_group,ppm_io_cc,ppm_id_owner,expert_centre tag exists."
-#         id = "CCOE_AZ2_TAGS_6"
-#         supported_resources = ['azurerm_*']
-#         categories = [CheckCategories.BACKUP_AND_RECOVERY]
-#         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
-            
-#         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
-#     def has_tags_support(self, resource_type):
-#         try:
-#             response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
-#             return response.status_code == 200 and "`tags`" in response.text
-#         except:
-#             return False
-                
-#     def scan_resource_conf(self, conf):
-#         if not (address := conf.get("__address__", "")):
-#             return CheckResult.SKIPPED
-            
-#         resource_type = address.split(".")[0][8:]
-        
-#         if not self.has_tags_support(resource_type):
-#             return CheckResult.SKIPPED    
-                
-#         tags = conf.get("tags")
-#         if tags and isinstance(tags, list):
-#             tags = tags[0]
-#             if tags and isinstance(tags, dict):
-#                 app = tags.get("app")
-#                 app_owner_group = tags.get("app_owner_group")
-#                 ppm_io_cc = tags.get("ppm_io_cc")
-#                 ppm_id_owner = tags.get("ppm_id_owner")
-#                 expert_centre = tags.get("expert_centre")
-#                 if app is not None and app_owner_group is not None and ppm_io_cc is not None and ppm_id_owner is not None and expert_centre is not None:
-#                     return CheckResult.PASSED
-#                 else:
-#                     return CheckResult.FAILED
-#         return CheckResult.FAILED
-
-# check = EnsureSnapshotLifetimeTagExistsCheck()
+check = EnsureSnapshotLifetimeTagExistsCheck()

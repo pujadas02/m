@@ -24,7 +24,7 @@ resource "azurerm_dns_zone" "example-public" {
     app = "T1"
   }
 }
-resource "azurerm_dns_zone" "example-public" {
+resource "azurerm_dns_zone" "examplepublic" {
   name                = "mydomain.com"
   tags = {
     app = "T1",

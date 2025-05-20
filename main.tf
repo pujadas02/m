@@ -1,3 +1,5 @@
+
+
 provider "azurerm" {
   features {}
 }
@@ -19,8 +21,14 @@ resource "azurerm_monitor_diagnostic_setting" "logic20" {
 
 
 resource "azurerm_dns_zone" "example-public" {
-  name                = "mydomain.com"
+  name                = "mydomain.com"
   tags = {
-    environment = "production"
+    app = "T1"
   }
 }
+resource "azurerm_resource_group" "rg_01" {
+  name                = "mydomain.com"
+  tags     = merge(local.tags.common_tags, local.tags.cvlt_backup.non_iaas)
+
+}
+  

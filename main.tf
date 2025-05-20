@@ -17,11 +17,6 @@ resource "azurerm_monitor_diagnostic_setting" "logic20" {
   }
 }
 
-resource "azurerm_resource_group" "secondary" {
-  name     = "puja"
-  location = "j"
-  tags     = merge(local.tags, local.cvlt_backup.non_iaas)
-}
 
 resource "azurerm_dns_zone" "example-public" {
   name                = "mydomain.com"

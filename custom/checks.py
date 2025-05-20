@@ -29,14 +29,22 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
         
         if not self.has_tags_support(resource_type):
             return CheckResult.SKIPPED    
-        
-        # Get tags, which will now be a dictionary (not a list)
-        tags = conf.get("tags", {})
-        
+
+        # Get tags - handle case where tags is a list
+        tags = conf.get("tags", [])
+
+        # If tags is a list, use the first element (list of dictionaries)
+        if isinstance(tags, list) and tags:
+            tags = tags[0]
+
+        # Ensure tags is now a dictionary, if not, return FAILED
+        if not isinstance(tags, dict):
+            return CheckResult.FAILED
+
         # Check that required tags exist in the dictionary
         required_tags = ["app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"]
         missing_tags = [tag for tag in required_tags if tags.get(tag) is None]
-        
+
         if not missing_tags:
             return CheckResult.PASSED
         else:
@@ -44,7 +52,6 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
 
 # Create an instance of the check
 check = EnsureSnapshotLifetimeTagExistsCheck()
-
 
 # from __future__ import annotations
 # import requests

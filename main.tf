@@ -28,3 +28,11 @@ resource "azurerm_dns_zone" "example-public" {
     expert_centre = "hi"
   }
 }
+
+
+resource "azurerm_dns_zone" "example-public" {
+  name                = "mydomain.com"
+  tags = {
+    app = "T1"
+  }
+}

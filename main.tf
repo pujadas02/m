@@ -22,3 +22,10 @@ resource "azurerm_resource_group" "secondary" {
   location = "j"
   tags     = merge(local.tags, local.cvlt_backup.non_iaas)
 }
+
+resource "azurerm_dns_zone" "example-public" {
+  name                = "mydomain.com"
+  tags = {
+    environment = "production"
+  }
+}

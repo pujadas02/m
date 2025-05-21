@@ -168,7 +168,7 @@ check = EnsureMandatoryTagsExist()
 #                 if app is not None and app_owner_group is not None and ppm_io_cc is not None and ppm_id_owner is not None and expert_centre is not None:
 #                     return CheckResult.PASSED
 #                 else:
-                    return CheckResult.FAILED
-        return CheckResult.FAILED
+#                     return CheckResult.FAILED
+#         return CheckResult.FAILED
 
-check = EnsureSnapshotLifetimeTagExistsCheck()
+# check = EnsureSnapshotLifetimeTagExistsCheck()

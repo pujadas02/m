@@ -75,8 +75,7 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
             "azurerm_network_security_rule",
             "azurerm_automation_runbook",
             "azurerm_api_connection",
-            "azurerm_role_assignment",
-            "azurerm_resource_group"
+            "azurerm_role_assignment"
         ]
         resource_type = conf.get("__address__")
         if resource_type:

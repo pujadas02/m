@@ -23,7 +23,7 @@ resource "azurerm_monitor_diagnostic_setting" "logic20" {
 resource "azurerm_dns_zone" "example-public" {
   name                = "mydomain.com"
   tags = {
-    app = "T1"
+    environment = "dev"
   }
 }
 resource "azurerm_resource_group" "rg_01" {

@@ -1,0 +1,55 @@
+name: "Checkov Checks"
+description: "Generate Terraform plan for Checkov evaluation"
+inputs:
+  working-directory:
+    description: "The directory where the Terraform configuration is located."
+    required: true
+    default: .
+    
+runs:
+  using: "composite"
+  steps:
+    - name: checkout
+      uses: actions/checkout@v4
+      with:
+        repository: pujadas02/m
+        ref: main
+        token: ${{ env.USER_READONLY_TOKEN }}    
+    - name: Generate Terraform plan
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        terraform init
+        terraform plan -out=tfplan
+        terraform show -json tfplan > plan.json
+        
+   
+    - name: Run Checkov action
+      id: checkov
+      uses: bridgecrewio/checkov-action@master
+      with:
+        directory: ${{ inputs.working-directory }}
+        config_file: ./checkov-config.yaml
+        output_format: junitxml,sarif
+        output_file_path: ${{ github.workspace }}/ccoe/results.xml,console
+        github_pat: ${{ env.USER_READONLY_TOKEN }}
+        download_external_modules: true
+        quiet: true
+
+    - name: Setup Terraform
+      shell: bash
+      run: |
+        echo "Installing Terraform..."
+        curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+        sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+        sudo apt-get update && sudo apt-get install terraform
+        
+    - name: Generate Terraform plan
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        terraform init
+        terraform plan -out=tfplan
+        terraform show -json tfplan > plan.json
+        
+   

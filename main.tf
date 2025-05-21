@@ -1,5 +1,6 @@
 provider "azurerm" {
   features {}
+  skip_credentials_validation = true
 }
 resource "azurerm_resource_group" "primary" {
   name     = "hi"

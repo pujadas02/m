@@ -77,9 +77,8 @@
 
 # check = EnsureMandatoryTagsExist()
 
-
-
 from __future__ import annotations
+import requests
 import re
 from typing import Any, Dict
 from checkov.common.models.enums import CheckResult, CheckCategories
@@ -93,72 +92,17 @@ class EnsureTagsExist(BaseResourceCheck):
             categories=[CheckCategories.CONVENTION],
             supported_resources=['azurerm_*']
         )
-        self.required_tags = {
-            "app", "app_owner_group", "ppm_io_cc",
-            "ppm_id_owner", "expert_centre", "cvlt_backup"
-        }
+        self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
+        self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"}
 
     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
         tags_config = conf.get("tags", [{}])[0]
-        
         if isinstance(tags_config, dict):
             return tags_config
-            
         if isinstance(tags_config, str):
-            if tags_config.startswith("merge("):
-                return self._parse_merge_expression(tags_config)
-            return self._parse_dict_string(tags_config)
-            
+            return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config) 
+                   for k, v in [m.groups()]}
         return {}
-
-    def _parse_merge_expression(self, merge_expr: str) -> Dict[str, Any]:
-        """Parse merge(a,b,c) by checking each argument"""
-        tags = {}
-        # Extract content between merge( and )
-        inner = merge_expr[6:-1].strip()
-        
-        # Split arguments while handling nested commas
-        args = self._split_merge_arguments(inner)
-        
-        for arg in args:
-            arg = arg.strip()
-            # Check if argument matches dict pattern
-            tags.update(self._parse_dict_string(arg))
-            
-        return tags
-
-    def _split_merge_arguments(self, args_str: str) -> List[str]:
-        """Safely split merge arguments handling nested structures"""
-        args = []
-        current = ""
-        brace_level = 0
-        
-        for char in args_str:
-            if char == "," and brace_level == 0:
-                args.append(current.strip())
-                current = ""
-            else:
-                current += char
-                if char in "({[":
-                    brace_level += 1
-                elif char in ")}]":
-                    brace_level -= 1
-                    
-        if current:
-            args.append(current.strip())
-        return args
-
-    def _parse_dict_string(self, dict_str: str) -> Dict[str, str]:
-        """Parse both {'key':'value'} and {key = value} formats"""
-        tags = {}
-        for match in re.finditer(
-            r'([\'"]?)(\w+)\1\s*[:=]\s*([\'"]?)([^\'",}]+)\3',
-            dict_str
-        ):
-            key = match.group(2)
-            value = match.group(4).strip('\'" ')
-            tags[key] = value
-        return tags
 
     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
         if not conf.get("__address__"):
@@ -168,42 +112,6 @@ class EnsureTagsExist(BaseResourceCheck):
         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
 
 check = EnsureTagsExist()
-
-# from __future__ import annotations
-# import requests
-# import re
-# from typing import Any, Dict
-# from checkov.common.models.enums import CheckResult, CheckCategories
-# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
-
-# class EnsureTagsExist(BaseResourceCheck):
-#     def __init__(self) -> None:
-#         super().__init__(
-#             name="Ensure required tags exist",
-#             id="CCOE_AZ2_TAGS_6",
-#             categories=[CheckCategories.CONVENTION],
-#             supported_resources=['azurerm_*']
-#         )
-#         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
-#         self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"}
-
-#     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
-#         tags_config = conf.get("tags", [{}])[0]
-#         if isinstance(tags_config, dict):
-#             return tags_config
-#         if isinstance(tags_config, str):
-#             return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config) 
-#                    for k, v in [m.groups()]}
-#         return {}
-
-#     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
-#         if not conf.get("__address__"):
-#             return CheckResult.SKIPPED
-            
-#         tags = self.get_tags(conf)
-#         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
-
-# check = EnsureTagsExist()
 
 
 

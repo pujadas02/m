@@ -15,6 +15,7 @@ locals {
     cvlt_backup = {
       non_iaas = {
         cvlt_backup = "cvlt_no_backup"
+        expert_centre = "PNT-DATAINGESTION-GLOBAL"
       }
 
       app_server = {

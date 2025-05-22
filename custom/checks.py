@@ -119,7 +119,6 @@
 #         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
 
 # check = EnsureTagsExist()
-
 from __future__ import annotations
 import re
 from typing import Any, Dict
@@ -140,28 +139,45 @@ class EnsureTagsExist(BaseResourceCheck):
         }
 
     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
-        tags_config = conf.get("tags", [{}])[0]
+        """Safely extract tags from any configuration format"""
+        # Handle case where tags key doesn't exist
+        if "tags" not in conf:
+            return {}
+            
+        tags_config = conf["tags"]
         
+        # Handle list-wrapped tags (common in Checkov parsing)
+        if isinstance(tags_config, list):
+            if not tags_config:  # Empty list
+                return {}
+            tags_config = tags_config[0]
+            
+        # Handle direct dictionaries
         if isinstance(tags_config, dict):
             return tags_config
             
+        # Handle string expressions
         if isinstance(tags_config, str):
-            # Handle both direct tags and merge expressions
             if "merge(" in tags_config.lower():
-                # When merge() exists but we can't evaluate it, assume tags might be present
+                # When merge() exists, we can't be sure about tags - assume they might exist
                 return {tag: "exists" for tag in self.required_tags}
             return self._extract_dict_tags(tags_config)
             
         return {}
 
     def _extract_dict_tags(self, dict_str: str) -> Dict[str, str]:
-        """Extract tags from both {'key':'value'} and {key = value} formats"""
+        """Robust extraction of tags from string representations"""
         tags = {}
-        for match in re.finditer(
-            r'([\'"]?)(\w+)\1\s*[:=]\s*([\'"]?)([^\'",}]+)\3',
-            dict_str
-        ):
-            tags[match.group(2)] = match.group(4).strip('\'" ')
+        try:
+            for match in re.finditer(
+                r'([\'"]?)(\w+)\1\s*[:=]\s*([\'"]?)([^\'",}]+)\3',
+                dict_str
+            ):
+                key = match.group(2)
+                value = match.group(4).strip('\'" ')
+                tags[key] = value
+        except Exception:
+            pass
         return tags
 
     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
@@ -170,13 +186,75 @@ class EnsureTagsExist(BaseResourceCheck):
             
         tags = self.get_tags(conf)
         
-        # Special case: If merge() was used but we couldn't evaluate it
-        if isinstance(conf.get("tags", [""])[0], str) and "merge(" in conf["tags"][0].lower():
+        # If merge() was used, we can't be certain - pass conservatively
+        if isinstance(conf.get("tags"), str) and "merge(" in conf["tags"].lower():
             return CheckResult.PASSED
+            
+        # If no tags at all
+        if not tags:
+            return CheckResult.FAILED
             
         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
 
 check = EnsureTagsExist()
+# thi below in actions the resource is passed but some error
+# from __future__ import annotations
+# import re
+# from typing import Any, Dict
+# from checkov.common.models.enums import CheckResult, CheckCategories
+# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
+
+# class EnsureTagsExist(BaseResourceCheck):
+#     def __init__(self) -> None:
+#         super().__init__(
+#             name="Ensure required tags exist",
+#             id="CCOE_AZ2_TAGS_6",
+#             categories=[CheckCategories.CONVENTION],
+#             supported_resources=['azurerm_*']
+#         )
+#         self.required_tags = {
+#             "app", "app_owner_group", "ppm_io_cc",
+#             "ppm_id_owner", "expert_centre", "cvlt_backup"
+#         }
+
+#     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
+#         tags_config = conf.get("tags", [{}])[0]
+        
+#         if isinstance(tags_config, dict):
+#             return tags_config
+            
+#         if isinstance(tags_config, str):
+#             # Handle both direct tags and merge expressions
+#             if "merge(" in tags_config.lower():
+#                 # When merge() exists but we can't evaluate it, assume tags might be present
+#                 return {tag: "exists" for tag in self.required_tags}
+#             return self._extract_dict_tags(tags_config)
+            
+#         return {}
+
+#     def _extract_dict_tags(self, dict_str: str) -> Dict[str, str]:
+#         """Extract tags from both {'key':'value'} and {key = value} formats"""
+#         tags = {}
+#         for match in re.finditer(
+#             r'([\'"]?)(\w+)\1\s*[:=]\s*([\'"]?)([^\'",}]+)\3',
+#             dict_str
+#         ):
+#             tags[match.group(2)] = match.group(4).strip('\'" ')
+#         return tags
+
+#     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
+#         if not conf.get("__address__"):
+#             return CheckResult.SKIPPED
+            
+#         tags = self.get_tags(conf)
+        
+#         # Special case: If merge() was used but we couldn't evaluate it
+#         if isinstance(conf.get("tags", [""])[0], str) and "merge(" in conf["tags"][0].lower():
+#             return CheckResult.PASSED
+            
+#         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
+
+# check = EnsureTagsExist()
 
 
 # from __future__ import annotations

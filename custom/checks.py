@@ -235,7 +235,6 @@ class EnsureTagsExist(BaseResourceCheck):
 check = EnsureTagsExist()
 
 
-
 # from __future__ import annotations
 # import requests
 # from typing import Any

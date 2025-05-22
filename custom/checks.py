@@ -84,155 +84,43 @@
 
 
 
-# from __future__ import annotations
-# import requests
-# import re
-# from typing import Any, Dict
-# from checkov.common.models.enums import CheckResult, CheckCategories
-# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
-
-# class EnsureTagsExist(BaseResourceCheck):
-#     def __init__(self) -> None:
-#         super().__init__(
-#             name="Ensure required tags exist",
-#             id="CCOE_AZ2_TAGS_6",
-#             categories=[CheckCategories.CONVENTION],
-#             supported_resources=['azurerm_*']
-#         )
-#         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
-#         self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"}
-
-#     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
-#         tags_config = conf.get("tags", [{}])[0]
-#         if isinstance(tags_config, dict):
-#             return tags_config
-#         if isinstance(tags_config, str):
-#             return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config) 
-#                    for k, v in [m.groups()]}
-#         return {}
-
-#     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
-#         if not conf.get("__address__"):
-#             return CheckResult.SKIPPED
-            
-#         tags = self.get_tags(conf)
-#         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
-
-# check = EnsureTagsExist()
-
-
-import os
-import hcl2
-from typing import Dict, Any, List
-from checkov.common.models.enums import CheckResult
+from __future__ import annotations
+import requests
+import re
+from typing import Any, Dict
+from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
 class EnsureTagsExist(BaseResourceCheck):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             name="Ensure required tags exist",
             id="CCOE_AZ2_TAGS_6",
-            supported_resources=["azurerm_*"],
-            categories=["Convention"],
+            categories=[CheckCategories.CONVENTION],
+            supported_resources=['azurerm_*']
         )
-        self.required_tags = {
-            "app", "app_owner_group", "ppm_io_cc",
-            "ppm_id_owner", "expert_centre", "cvlt_backup"
-        }
-        self.locals_cache = {}  # Stores parsed locals from all .tf files
+        self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
+        self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"}
+
+    def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
+        tags_config = conf.get("tags", [{}])[0]
+        if isinstance(tags_config, dict):
+            return tags_config
+        if isinstance(tags_config, str):
+            return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config) 
+                   for k, v in [m.groups()]}
+        return {}
 
     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
         if not conf.get("__address__"):
             return CheckResult.SKIPPED
-
-        # Parse all .tf files to extract locals (once)
-        if not self.locals_cache:
-            self._parse_all_tf_files(os.path.dirname(conf["__file__"]))
-
-        tags = self._resolve_tags(conf.get("tags", [{}])[0])
+            
+        tags = self.get_tags(conf)
         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
 
-    def _parse_all_tf_files(self, dir_path: str):
-        """Extract all locals from Terraform files in a directory"""
-        for filename in os.listdir(dir_path):
-            if filename.endswith(".tf"):
-                with open(os.path.join(dir_path, filename), "r") as f:
-                    try:
-                        parsed = hcl2.load(f)
-                        if "locals" in parsed:
-                            for local_block in parsed["locals"]:
-                                self.locals_cache.update(local_block)
-                    except Exception:
-                        continue
-
-    def _resolve_tags(self, tags_config: Any) -> Dict[str, Any]:
-        """Resolve tags from direct dicts, strings, or merge()"""
-        if isinstance(tags_config, dict):
-            return tags_config
-        if isinstance(tags_config, str):
-            if tags_config.startswith("merge("):
-                return self._evaluate_merge(tags_config)
-            return self._parse_dict(tags_config)
-        return {}
-
-    def _evaluate_merge(self, merge_expr: str) -> Dict[str, Any]:
-        """Evaluate merge(local.x, local.y, {key=value}) by resolving all references"""
-        merged_tags = {}
-        # Extract arguments from merge(...)
-        args = self._extract_merge_args(merge_expr)
-        for arg in args:
-            if arg.startswith("local."):
-                # Resolve nested locals (e.g., local.tags.cvlt_backup.non_iaas)
-                parts = arg.split(".")[1:]  # Skip "local"
-                current = self.locals_cache
-                try:
-                    for part in parts:
-                        current = current[part]
-                    if isinstance(current, dict):
-                        merged_tags.update(current)
-                except KeyError:
-                    continue
-            elif arg.startswith("{"):
-                merged_tags.update(self._parse_dict(arg))
-        return merged_tags
-
-    def _extract_merge_args(self, merge_expr: str) -> List[str]:
-        """Split merge(a,b,c) into ["a", "b", "c"]"""
-        inner = merge_expr[6:-1]  # Remove "merge(" and ")"
-        args = []
-        current = ""
-        brace_level = 0
-        for char in inner:
-            if char == "," and brace_level == 0:
-                args.append(current.strip())
-                current = ""
-            else:
-                current += char
-                if char in "({[":
-                    brace_level += 1
-                elif char in ")}]":
-                    brace_level -= 1
-        if current:
-            args.append(current.strip())
-        return args
-
-    def _parse_dict(self, dict_str: str) -> Dict[str, str]:
-        """Parse {key="value"} or {'key':'value'} into a dict"""
-        tags = {}
-        try:
-            # Extract k=v pairs between {}
-            inner = dict_str[1:-1].strip()
-            if not inner:
-                return tags
-            for pair in re.split(r",\s*(?![^{}]*\})", inner):  # Split on commas not inside {}
-                if "=" in pair:
-                    k, v = map(str.strip, pair.split("=", 1))
-                    tags[k.strip('"\'')] = v.strip('"\'')
-        except Exception:
-            pass
-        return tags
-
 check = EnsureTagsExist()
+
+
 
 
 # from __future__ import annotations

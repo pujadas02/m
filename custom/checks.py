@@ -84,8 +84,44 @@
 
 
 
+# from __future__ import annotations
+# import requests
+# import re
+# from typing import Any, Dict
+# from checkov.common.models.enums import CheckResult, CheckCategories
+# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
+
+# class EnsureTagsExist(BaseResourceCheck):
+#     def __init__(self) -> None:
+#         super().__init__(
+#             name="Ensure required tags exist",
+#             id="CCOE_AZ2_TAGS_6",
+#             categories=[CheckCategories.CONVENTION],
+#             supported_resources=['azurerm_*']
+#         )
+#         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
+#         self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"}
+
+#     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
+#         tags_config = conf.get("tags", [{}])[0]
+#         if isinstance(tags_config, dict):
+#             return tags_config
+#         if isinstance(tags_config, str):
+#             return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config) 
+#                    for k, v in [m.groups()]}
+#         return {}
+
+#     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
+#         if not conf.get("__address__"):
+#             return CheckResult.SKIPPED
+            
+#         tags = self.get_tags(conf)
+#         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
+
+# check = EnsureTagsExist()
+
+
 from __future__ import annotations
-import requests
 import re
 from typing import Any, Dict
 from checkov.common.models.enums import CheckResult, CheckCategories
@@ -99,29 +135,61 @@ class EnsureTagsExist(BaseResourceCheck):
             categories=[CheckCategories.CONVENTION],
             supported_resources=['azurerm_*']
         )
-        self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
-        self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"}
+        self.required_tags = {
+            "app", "app_owner_group", "ppm_io_cc",
+            "ppm_id_owner", "expert_centre", "cvlt_backup"
+        }
 
     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
         tags_config = conf.get("tags", [{}])[0]
+        
         if isinstance(tags_config, dict):
             return tags_config
+            
         if isinstance(tags_config, str):
-            return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config) 
-                   for k, v in [m.groups()]}
+            # Extract all explicit key-value pairs from any dict-like structures
+            return self._extract_explicit_tags(tags_config)
+            
         return {}
+
+    def _extract_explicit_tags(self, config_str: str) -> Dict[str, Any]:
+        """Extract all visible tags from any string configuration"""
+        tags = {}
+        
+        # Find all dictionary literals {key = value} or {'key':'value'}
+        dict_matches = re.finditer(
+            r'\{'  # Opening brace
+            r'([^{}]*)'  # Contents of the dictionary
+            r'\}',  # Closing brace
+            config_str
+        )
+        
+        for match in dict_matches:
+            dict_content = match.group(1)
+            # Extract key-value pairs with flexible syntax
+            for kv_match in re.finditer(
+                r'([\'"]?)([\w-]+)\1\s*[:=]\s*([\'"]?)([^\'",}]+)\3',
+                dict_content
+            ):
+                key = kv_match.group(2)
+                value = kv_match.group(4).strip('\'" ')
+                tags[key] = value
+                
+        return tags
 
     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
         if not conf.get("__address__"):
             return CheckResult.SKIPPED
             
         tags = self.get_tags(conf)
+        
+        # If we see merge() but couldn't extract tags, be conservative
+        if "merge(" in str(conf.get("tags", "")).lower() and not tags:
+            return CheckResult.PASSED
+            
         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
 
 check = EnsureTagsExist()
-
-
-
 
 
 

@@ -81,6 +81,76 @@
 
 
 
+from __future__ import annotations
+import requests
+import re
+from typing import Any, Dict
+from checkov.common.models.enums import CheckResult, CheckCategories
+from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
+
+class EnsureTagsExist(BaseResourceCheck):
+    def __init__(self) -> None:
+        super().__init__(
+            name="Ensure required tags exist",
+            id="CCOE_AZ2_TAGS_6",
+            categories=[CheckCategories.CONVENTION],
+            supported_resources=['azurerm_*']
+        )
+        self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
+        self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"}
+
+    def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
+        tags_config = conf.get("tags", [{}])[0]
+
+        # Helper: Resolve local.tags.x.y from conf if locals are present in conf["locals"]
+        def resolve_reference(ref: str, conf: Dict[str, Any]) -> Dict[str, Any]:
+            if ref.startswith("local."):
+                parts = ref.split(".")[1:]  # ['tags', 'common_tags']
+                value = conf.get("locals", {})
+                for part in parts:
+                    if isinstance(value, dict) and part in value:
+                        value = value[part]
+                    else:
+                        return {}
+                return value if isinstance(value, dict) else {}
+            return {}
+
+        # Case 1: Already a resolved dictionary
+        if isinstance(tags_config, dict):
+            return tags_config
+
+        # Case 2: String expression with merge(...)
+        if isinstance(tags_config, str) and tags_config.strip().startswith("${merge("):
+            inner_expr = tags_config.strip()[len("${merge("):-2]
+            refs = [r.strip() for r in inner_expr.split(",")]
+
+            # Initialize an empty dictionary to hold all merged tags
+            merged_tags = {}
+
+            # Loop over the references and resolve each one
+            for ref in refs:
+                resolved = resolve_reference(ref, conf)
+                if resolved:
+                    merged_tags.update(resolved)
+
+            return merged_tags
+
+        # Case 3: Fallback regex parsing for literal string
+        if isinstance(tags_config, str):
+            return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config)
+                    for k, v in [m.groups()]}
+
+        return {}
+
+    def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
+        if not conf.get("__address__"):
+            return CheckResult.SKIPPED
+            
+        tags = self.get_tags(conf)
+        return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
+
+check = EnsureTagsExist()
+
 
 # from __future__ import annotations
 # import requests
@@ -102,88 +172,21 @@
 
 #     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
 #         tags_config = conf.get("tags", [{}])[0]
-
-#         # Helper: Resolve local.tags.x.y from conf if locals are present in conf["locals"]
-#         def resolve_reference(ref: str, conf: Dict[str, Any]) -> Dict[str, Any]:
-#             if ref.startswith("local."):
-#                 parts = ref.split(".")[1:]  # ['tags', 'common_tags']
-#                 value = conf.get("locals", {})
-#                 for part in parts:
-#                     if isinstance(value, dict) and part in value:
-#                         value = value[part]
-#                     else:
-#                         return {}
-#                 return value if isinstance(value, dict) else {}
-#             return {}
-
-#         # Case 1: Already a resolved dictionary
 #         if isinstance(tags_config, dict):
 #             return tags_config
-
-#         # Case 2: String expression with merge(...)
-#         if isinstance(tags_config, str) and tags_config.strip().startswith("${merge("):
-#             inner_expr = tags_config.strip()[len("${merge("):-2]
-#             refs = [r.strip() for r in inner_expr.split(",")]
-
-#             merged_tags = {}
-#             for ref in refs:
-#                 resolved = resolve_reference(ref, conf)
-#                 if resolved:
-#                     merged_tags.update(resolved)
-#             return merged_tags
-
-#         # Case 3: Fallback regex parsing for literal string
 #         if isinstance(tags_config, str):
-#             return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config)
-#                     for k, v in [m.groups()]}
-
+#             return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config) 
+#                    for k, v in [m.groups()]}
 #         return {}
 
 #     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
 #         if not conf.get("__address__"):
 #             return CheckResult.SKIPPED
-
+            
 #         tags = self.get_tags(conf)
 #         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
 
 # check = EnsureTagsExist()
-
-
-from __future__ import annotations
-import requests
-import re
-from typing import Any, Dict
-from checkov.common.models.enums import CheckResult, CheckCategories
-from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
-
-class EnsureTagsExist(BaseResourceCheck):
-    def __init__(self) -> None:
-        super().__init__(
-            name="Ensure required tags exist",
-            id="CCOE_AZ2_TAGS_6",
-            categories=[CheckCategories.CONVENTION],
-            supported_resources=['azurerm_*']
-        )
-        self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
-        self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"}
-
-    def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
-        tags_config = conf.get("tags", [{}])[0]
-        if isinstance(tags_config, dict):
-            return tags_config
-        if isinstance(tags_config, str):
-            return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config) 
-                   for k, v in [m.groups()]}
-        return {}
-
-    def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
-        if not conf.get("__address__"):
-            return CheckResult.SKIPPED
-            
-        tags = self.get_tags(conf)
-        return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
-
-check = EnsureTagsExist()
 
 
 

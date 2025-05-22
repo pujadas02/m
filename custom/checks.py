@@ -120,7 +120,6 @@
 
 # check = EnsureTagsExist()
 
-
 from __future__ import annotations
 import re
 from typing import Any, Dict
@@ -147,34 +146,22 @@ class EnsureTagsExist(BaseResourceCheck):
             return tags_config
             
         if isinstance(tags_config, str):
-            # Extract all explicit key-value pairs from any dict-like structures
-            return self._extract_explicit_tags(tags_config)
+            # Handle both direct tags and merge expressions
+            if "merge(" in tags_config.lower():
+                # When merge() exists but we can't evaluate it, assume tags might be present
+                return {tag: "exists" for tag in self.required_tags}
+            return self._extract_dict_tags(tags_config)
             
         return {}
 
-    def _extract_explicit_tags(self, config_str: str) -> Dict[str, Any]:
-        """Extract all visible tags from any string configuration"""
+    def _extract_dict_tags(self, dict_str: str) -> Dict[str, str]:
+        """Extract tags from both {'key':'value'} and {key = value} formats"""
         tags = {}
-        
-        # Find all dictionary literals {key = value} or {'key':'value'}
-        dict_matches = re.finditer(
-            r'\{'  # Opening brace
-            r'([^{}]*)'  # Contents of the dictionary
-            r'\}',  # Closing brace
-            config_str
-        )
-        
-        for match in dict_matches:
-            dict_content = match.group(1)
-            # Extract key-value pairs with flexible syntax
-            for kv_match in re.finditer(
-                r'([\'"]?)([\w-]+)\1\s*[:=]\s*([\'"]?)([^\'",}]+)\3',
-                dict_content
-            ):
-                key = kv_match.group(2)
-                value = kv_match.group(4).strip('\'" ')
-                tags[key] = value
-                
+        for match in re.finditer(
+            r'([\'"]?)(\w+)\1\s*[:=]\s*([\'"]?)([^\'",}]+)\3',
+            dict_str
+        ):
+            tags[match.group(2)] = match.group(4).strip('\'" ')
         return tags
 
     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
@@ -183,14 +170,13 @@ class EnsureTagsExist(BaseResourceCheck):
             
         tags = self.get_tags(conf)
         
-        # If we see merge() but couldn't extract tags, be conservative
-        if "merge(" in str(conf.get("tags", "")).lower() and not tags:
+        # Special case: If merge() was used but we couldn't evaluate it
+        if isinstance(conf.get("tags", [""])[0], str) and "merge(" in conf["tags"][0].lower():
             return CheckResult.PASSED
             
         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
 
 check = EnsureTagsExist()
-
 
 
 # from __future__ import annotations

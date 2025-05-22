@@ -8,7 +8,7 @@ locals {
       data_classification  = "confidential"
       business_criticality = "c"
       app_owner_group      = "PNT-DATAINGESTION-GLOBAL"
-      
+      expert_centre        = "PNT-DATAINGESTION-GLOBAL"
       snapshotlifetime     = "1"
     }
 

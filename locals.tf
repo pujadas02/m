@@ -1,14 +1,6 @@
 locals {
   tags = {
     common_tags = {
-      app                  = "Litmus IoT Edge"
-      ppm_id_owner         = "Reeves, Lee"
-      ppm_io_cc            = "81007982"
-      environment          = "production"
-      data_classification  = "confidential"
-      business_criticality = "c"
-      app_owner_group      = "PNT-DATAINGESTION-GLOBAL"
-      
       snapshotlifetime     = "1"
     }
 
@@ -16,6 +8,14 @@ locals {
       non_iaas = {
         cvlt_backup = "cvlt_no_backup"
         expert_centre = "PNT-DATAINGESTION-GLOBAL"
+        app                  = "Litmus IoT Edge"
+        ppm_id_owner         = "Reeves, Lee"
+        ppm_io_cc            = "81007982"
+        environment          = "production"
+        data_classification  = "confidential"
+        business_criticality = "c"
+        app_owner_group      = "PNT-DATAINGESTION-GLOBAL"
+      
       }
 
       app_server = {

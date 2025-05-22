@@ -19,9 +19,10 @@ runs:
       shell: bash
       working-directory: ${{ inputs.working-directory }}
       run: |
-        terraform init
-        terraform plan -out=tfplan
+        terraform init -backend=false
+        terraform plan -refresh=false -lock=false -input=false -out=tfplan
         terraform show -json tfplan > plan.json
+        checkov -f plan.json
         
    
     - name: Run Checkov action

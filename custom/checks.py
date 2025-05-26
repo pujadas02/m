@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 import requests
 import re
@@ -34,7 +33,6 @@ class EnsureTagsExist(BaseResourceCheck):
         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
 
 check = EnsureTagsExist()
-
 
 
 

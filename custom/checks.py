@@ -43,57 +43,98 @@
 
 # check = EnsureSnapshotLifetimeTagExistsCheck()
 
-from __future__ import annotations
+# from __future__ import annotations
 
-from typing import Any
+# from typing import Any
+# from checkov.common.models.enums import CheckResult, CheckCategories
+# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
+
+# class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
+#     def __init__(self) -> None:
+#         name = "Ensure environment tag exists. Valid Values are [production,legacy prod,disaster recovery,qa,QA,dev,Dev,test,Test,sandbox,Sandbox,N/A,NA]"
+#         id = "CCOE_AZ2_TAGS_2"
+#         supported_resources = ['azurerm_*']
+#         categories = [CheckCategories.BACKUP_AND_RECOVERY]
+#         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
+
+#     def scan_resource_conf(self, conf: dict[str, list[Any]]) -> CheckResult:
+#         excluded_resource_types = [
+#             "azurerm_virtual_machine_extension",
+#             "azurerm_monitor_smart_detector_alert_rule",
+#             "azurerm_monitor_action_group",
+#             "azurerm_security_center_automation",
+#             "azurerm_network_watcher",
+#             "azurerm_network_connection_monitor",
+#             "azurerm_network_watcher_flow_log",
+#             "azurerm_virtual_hub",
+#             "azurerm_management_group_template_deployment",
+#             "azurerm_resource_group_template_deployment",
+#             "azurerm_subscription_template_deployment",
+#             "azurerm_tenant_template_deployment",
+#             "azurerm_network_security_group",
+#             "azurerm_network_security_rule",
+#             "azurerm_automation_runbook",
+#             "azurerm_api_connection",
+#             "azurerm_role_assignment",
+#             "azurerm_monitor_diagnostic_setting"
+#         ]
+#         resource_type = conf.get("__address__")
+#         if resource_type:
+#             for excluded_type in excluded_resource_types:
+#                 if excluded_type in resource_type:
+#                     return CheckResult.SKIPPED
+#             tags = conf.get("tags")
+#             if tags and isinstance(tags, list):
+#                 tags = tags[0]
+#                 if tags and isinstance(tags, dict):
+#                     environment = tags.get("environment")
+#                     if environment is not None and environment in ["production", "legacy prod", "disaster recovery", "qa", "QA", "dev", "Dev", "test", "Test", "sandbox", "Sandbox", "N/A", "NA"]:
+#                         return CheckResult.PASSED 
+#                     else:
+#                         return CheckResult.FAILED
+#             else:
+#                 if not tags:
+#                     return CheckResult.FAILED
+
+# check = EnsureSnapshotLifetimeTagExistsCheck()
+
+
+
+
+
+from __future__ import annotations
+import requests
+import re
+from typing import Any, Dict
 from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
-class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
+class EnsureTagsExist(BaseResourceCheck):
     def __init__(self) -> None:
-        name = "Ensure environment tag exists. Valid Values are [production,legacy prod,disaster recovery,qa,QA,dev,Dev,test,Test,sandbox,Sandbox,N/A,NA]"
-        id = "CCOE_AZ2_TAGS_2"
-        supported_resources = ['azurerm_*']
-        categories = [CheckCategories.BACKUP_AND_RECOVERY]
-        super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
+        super().__init__(
+            name="Ensure required tags exist",
+            id="CCOE_AZ2_TAGS_6",
+            categories=[CheckCategories.CONVENTION],
+            supported_resources=['azurerm_*']
+        )
+        self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
+        self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre"}
 
-    def scan_resource_conf(self, conf: dict[str, list[Any]]) -> CheckResult:
-        excluded_resource_types = [
-            "azurerm_virtual_machine_extension",
-            "azurerm_monitor_smart_detector_alert_rule",
-            "azurerm_monitor_action_group",
-            "azurerm_security_center_automation",
-            "azurerm_network_watcher",
-            "azurerm_network_connection_monitor",
-            "azurerm_network_watcher_flow_log",
-            "azurerm_virtual_hub",
-            "azurerm_management_group_template_deployment",
-            "azurerm_resource_group_template_deployment",
-            "azurerm_subscription_template_deployment",
-            "azurerm_tenant_template_deployment",
-            "azurerm_network_security_group",
-            "azurerm_network_security_rule",
-            "azurerm_automation_runbook",
-            "azurerm_api_connection",
-            "azurerm_role_assignment",
-            "azurerm_monitor_diagnostic_setting"
-        ]
-        resource_type = conf.get("__address__")
-        if resource_type:
-            for excluded_type in excluded_resource_types:
-                if excluded_type in resource_type:
-                    return CheckResult.SKIPPED
-            tags = conf.get("tags")
-            if tags and isinstance(tags, list):
-                tags = tags[0]
-                if tags and isinstance(tags, dict):
-                    environment = tags.get("environment")
-                    if environment is not None and environment in ["production", "legacy prod", "disaster recovery", "qa", "QA", "dev", "Dev", "test", "Test", "sandbox", "Sandbox", "N/A", "NA"]:
-                        return CheckResult.PASSED 
-                    else:
-                        return CheckResult.FAILED
-            else:
-                if not tags:
-                    return CheckResult.FAILED
+    def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
+        tags_config = conf.get("tags", [{}])[0]
+        if isinstance(tags_config, dict):
+            return tags_config
+        if isinstance(tags_config, str):
+            return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config) 
+                   for k, v in [m.groups()]}
+        return {}
 
-check = EnsureSnapshotLifetimeTagExistsCheck()
+    def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
+        if not conf.get("__address__"):
+            return CheckResult.SKIPPED
+            
+        tags = self.get_tags(conf)
+        return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
+
+check = EnsureTagsExist()
+

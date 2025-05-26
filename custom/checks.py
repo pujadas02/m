@@ -149,6 +149,7 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
             tags = conf.get("tags")
             if tags and isinstance(tags, list):
                     tags = tags[0]
+                    print(f"tags: {tags}")
                 # if tags and isinstance(tags, dict):
                     app = tags.get("app")
                     app_owner_group = tags.get("app_owner_group")

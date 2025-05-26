@@ -2,11 +2,11 @@ locals {
   tags = {
     common_tags = {
       snapshotlifetime     = "1"
-      app                  = "Litmus IoT Edge"
     }
 
     cvlt_backup = {
       non_iaas = {
+        app                  = "Litmus IoT Edge"
         cvlt_backup = "cvlt_no_backup"
         expert_centre = "PNT-DATAINGESTION-GLOBAL"
         ppm_id_owner         = "Reeves, Lee"

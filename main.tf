@@ -20,7 +20,5 @@ resource "azurerm_monitor_diagnostic_setting" "logic20" {
 
 resource "azurerm_dns_zone" "example-public" {
   name                = "mydomain.com"
-  tags = {
-    business_criticality = "T1"
-  }
+  tags = var.tags
 }

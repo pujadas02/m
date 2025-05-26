@@ -1,13 +1,16 @@
 tags = {
-  app                  = "Mars Integration Services"
-  ppm_id_owner         = "Chen, Bruce"
-  ppm_io_cc            = "11631976"
-  environment          = "dev" # Allowed values are: 'production', 'legacy prod', 'disaster recovery', 'qa', 'QA', 'dev', 'Dev', 'test', 'Test', 'sandbox', 'Sandbox', 'N/A', 'NA'
-  data_classification  = "Confidential"
-  business_criticality = "A"
-  app_owner_group      = "OPS-APPHOSTING-BAI-SOLACE"
-  expert_centre        = "OPS-APPHOSTING-BAI-SOLACE"
-  cvlt_backup          = "cvlt_no_backup"
-  snapshotlifetime     = "0"
-  datadog              = "monitored"
+   cvlt_backup = {
+      non_iaas = {
+        app  = "Litmus IoT Edge"
+        cvlt_backup = "cvlt_no_backup"
+        expert_centre = "PNT-DATAINGESTION-GLOBAL"
+        ppm_id_owner         = "Reeves, Lee"
+        ppm_io_cc            = "81007982"
+        environment          = "production"
+        data_classification  = "confidential"
+        business_criticality = "c"
+        app_owner_group      = "PNT-DATAINGESTION-GLOBAL"
+      
+      }
+  }
 }

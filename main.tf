@@ -8,7 +8,7 @@ resource "azurerm_resource_group" "primary" {
 }
 resource "azurerm_resource_group" "rg_01" {
   name                = "mydomain.com"
-  tags     = merge(var.tags.cvlt_backup.non_iaas, var.tags, local.tags.cvlt_backup.non_iaas, local.tags.common_tags)
+  tags     = merge(var.tags.cvlt_backup.non_iaas, local.tags.cvlt_backup.non_iaas, local.tags.common_tags)
  
   location = "k"
 }

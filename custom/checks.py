@@ -148,8 +148,8 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
                     return CheckResult.SKIPPED
             tags = conf.get("tags")
             if tags and isinstance(tags, list):
-                tags = tags[0]
-                if tags and isinstance(tags, dict):
+                    tags = tags[0]
+                # if tags and isinstance(tags, dict):
                     app = tags.get("app")
                     app_owner_group = tags.get("app_owner_group")
                     ppm_io_cc = tags.get("ppm_io_cc")

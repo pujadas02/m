@@ -6,6 +6,7 @@ provider "azurerm" {
 resource "azurerm_resource_group" "primary" {
   name     = "hi"
   location = "Eastuss"
+  tags = var.tags
 }
 
 

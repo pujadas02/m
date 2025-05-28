@@ -62,19 +62,6 @@ runs:
         download_external_modules: true
         quiet: true
 
-
-
-
-
-
-
-
-
-
-
-
-
-        
     - name: Install datadog CI CLI
       if: always()
       id: datadog_cli

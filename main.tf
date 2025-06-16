@@ -4,6 +4,7 @@ provider "azurerm" {
 resource "azurerm_resource_group" "primary" {
   name     = "hi"
   location = "Eastuss"
+  tags = local.tags
 }
 resource "azurerm_monitor_diagnostic_setting" "logic20" {
   name                       = "OperationLogs"
@@ -20,9 +21,7 @@ resource "azurerm_monitor_diagnostic_setting" "logic20" {
 resource "azurerm_dns_zone" "example-public" {
   name                = "mydomain.com"
   resource_group_name = "hi"
-  tags = {
-    app = "T1"
-  }
+  tags = var.tags
 }
 resource "azurerm_resource_group" "rg_01" {
   name                = "mydomain.com"

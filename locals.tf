@@ -10,6 +10,7 @@ locals {
       app_owner_group      = "PNT-DATAINGESTION-GLOBAL"
       expert_centre        = "PNT-DATAINGESTION-GLOBAL"
       snapshotlifetime     = "1"
+      cvlt_backup = "cvlt_no_backup"
     }
 
     cvlt_backup = {

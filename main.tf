@@ -4,7 +4,7 @@ provider "azurerm" {
 resource "azurerm_resource_group" "primary" {
   name     = "hi"
   location = "Eastuss"
-  tags = local.tags
+  tags = local.tags.common_tags
 }
 resource "azurerm_monitor_diagnostic_setting" "logic20" {
   name                       = "OperationLogs"

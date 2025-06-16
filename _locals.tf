@@ -11,6 +11,7 @@ locals {
     app_owner_group      = "BIGID_OPS_SUPPORT_GROUP" # Should be checked on CMDB on CI Application Owner Group
     expert_centre        = "BIGID_OPS_SUPPORT_GROUP" # This should be the same as the above
     snapshotlifetime     = "0"                       # Must be a string from 1 to 30
+    cvlt_backup = "cvlt_no_backup"
   }
   vm_tags = {
     app                  = "BigID"                   # App name according to CMDB

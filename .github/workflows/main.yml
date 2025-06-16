@@ -35,6 +35,6 @@ jobs:
       - name: Run Checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          dir: ./
+          directory: ./
           config_file: ./checkov-config.yml
       

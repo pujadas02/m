@@ -96,7 +96,7 @@ class EnsureTagsExist(BaseResourceCheck):
             
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
 
-    def has_tags_support(self, resource_type: str) -> bool:
+    def has_tags_support(self, resource_type):
         try:
             response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
             return response.status_code == 200 and "`tags`" in response.text

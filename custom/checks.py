@@ -114,20 +114,30 @@ class EnsureTagsExist(BaseResourceCheck):
     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
         tags_config = conf.get("tags", [{}])[0]
     
-    # Handle direct tags and string tags (original logic)
+    # Handle direct tags
         if isinstance(tags_config, dict):
-            return tags_config
+             return tags_config
+        
+    # Handle string tags
         if isinstance(tags_config, str):
-            return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config)
-                   for k, v in [m.groups()]}
+             return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config)
+                     for k, v in [m.groups()]}
     
-    # Handle merge() with same resolution as before
+    # Handle merge() operations
         if isinstance(tags_config, dict) and 'merge' in tags_config:
-             merged_tags = {}
-             for arg in tags_config['merge']:  # Will process both parts
-                 if isinstance(arg, dict) and 'tags' in arg:
-                     merged_tags.update(arg['tags'])
-             return merged_tags
+            final_tags = {}
+        # Process each argument in merge() the SAME WAY as original code
+            for merge_arg in tags_config['merge']:
+                if isinstance(merge_arg, dict) and 'tags' in merge_arg:
+                    arg_tags = merge_arg['tags']
+                    if isinstance(arg_tags, dict):
+                        final_tags.update(arg_tags)
+                    elif isinstance(arg_tags, str):
+                        final_tags.update(
+                             {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", arg_tags)
+                              for k, v in [m.groups()]}
+                         )
+            return final_tags
     
         return {}
 

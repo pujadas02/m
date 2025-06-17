@@ -77,6 +77,8 @@
 
 
 
+
+
 from __future__ import annotations
 import requests
 import re
@@ -95,6 +97,14 @@ class EnsureTagsExist(BaseResourceCheck):
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
         self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre", "cvlt_backup"}
 
+
+    def has_tags_support(self, resource_type: str) -> bool:
+        try:
+            response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
+            return response.status_code == 200 and "`tags`" in response.text
+        except:
+            return False
+ 
     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
         tags_config = conf.get("tags", [{}])[0]
         if isinstance(tags_config, dict):
@@ -112,6 +122,83 @@ class EnsureTagsExist(BaseResourceCheck):
         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
 
 check = EnsureTagsExist()
+
+
+
+
+
+
+
+
+
+# from __future__ import annotations
+# import requests
+# import re
+# from typing import Any, Dict
+# from checkov.common.models.enums import CheckResult, CheckCategories
+# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
+
+# class EnsureTagsExist(BaseResourceCheck):
+#     def __init__(self) -> None:
+#         super().__init__(
+#             name="Ensure required tags exist",
+#             id="CCOE_AZ2_TAGS_6",
+#             categories=[CheckCategories.CONVENTION],
+#             supported_resources=['azurerm_*']
+#         )
+#         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
+#         self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre", "cvlt_backup"}
+
+#     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
+#         tags_config = conf.get("tags", [{}])[0]
+#         if isinstance(tags_config, dict):
+#             return tags_config
+#         if isinstance(tags_config, str):
+#             return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config) 
+#                    for k, v in [m.groups()]}
+#         return {}
+
+#     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
+#         if not conf.get("__address__"):
+#             return CheckResult.SKIPPED
+            
+#         tags = self.get_tags(conf)
+#         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
+
+# check = EnsureTagsExist()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

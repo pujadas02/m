@@ -22,7 +22,6 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
             return False
  
     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
-        """Improved tag extraction from Code B"""
         tags_config = conf.get("tags", [{}])[0]
         if isinstance(tags_config, dict):
             return tags_config

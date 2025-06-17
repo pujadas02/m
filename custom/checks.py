@@ -7,13 +7,22 @@ from checkov.terraform.checks.resource.base_resource_check import BaseResourceCh
  
 class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
     def __init__(self) -> None:
-        name = "Ensure business_criticality tag exists. Valid Values are [A+, a+,A,B,b,C,c,z,z,Tier 0,tier0,T0,tier 0,tier0,t0,Tier 1,Tier1,T1,tier 1,tier1,t1,N/A,NA]"
-        id = "CCOE_AZ2_TAGS_6"
-        categories = [CheckCategories.CONVENTION]
-        supported_resources = ['azurerm_*']
-        super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
+        # name = "Ensure business_criticality tag exists. Valid Values are [A+, a+,A,B,b,C,c,z,z,Tier 0,tier0,T0,tier 0,tier0,t0,Tier 1,Tier1,T1,tier 1,tier1,t1,N/A,NA]"
+        # id = "CCOE_AZ2_TAGS_6"
+        # categories = [CheckCategories.CONVENTION]
+        # supported_resources = ['azurerm_*']
+        # super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
+        # self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
+        # self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre", "cvlt_backup"}
+        super().__init__(
+            name="Ensure required tags exist",
+            id="CCOE_AZ2_TAGS_6",
+            categories=[CheckCategories.CONVENTION],
+            supported_resources=['azurerm_*']
+        )
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
         self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre", "cvlt_backup"}
+
 
     # def has_tags_support(self, resource_type: str) -> bool:
     #     try:

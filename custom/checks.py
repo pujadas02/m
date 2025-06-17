@@ -112,24 +112,24 @@ class EnsureTagsExist(BaseResourceCheck):
     #                for k, v in [m.groups()]}
     #     return {}
     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
-    tags_config = conf.get("tags", [{}])[0]
+        tags_config = conf.get("tags", [{}])[0]
     
     # Handle direct tags and string tags (original logic)
-    if isinstance(tags_config, dict):
-        return tags_config
-    if isinstance(tags_config, str):
-        return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config)
-                     for k, v in [m.groups()]}
+        if isinstance(tags_config, dict):
+            return tags_config
+        if isinstance(tags_config, str):
+            return {k: v for m in re.finditer(r"'(\w+)'\s*:\s*'([^']*)'", tags_config)
+                   for k, v in [m.groups()]}
     
     # Handle merge() with same resolution as before
-    if isinstance(tags_config, dict) and 'merge' in tags_config:
-        merged_tags = {}
-        for arg in tags_config['merge']:  # Will process both parts
-            if isinstance(arg, dict) and 'tags' in arg:
-                merged_tags.update(arg['tags'])
-        return merged_tags
+        if isinstance(tags_config, dict) and 'merge' in tags_config:
+             merged_tags = {}
+             for arg in tags_config['merge']:  # Will process both parts
+                 if isinstance(arg, dict) and 'tags' in arg:
+                     merged_tags.update(arg['tags'])
+             return merged_tags
     
-    return {}
+        return {}
 
     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
         if not (address := conf.get("__address__", "")):

@@ -119,8 +119,16 @@ class EnsureTagsExist(BaseResourceCheck):
             return CheckResult.SKIPPED
             
         tags = self.get_tags(conf)
-        return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
-
+        # return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
+        business_criticality = tags.get("business_criticality")
+        if business_criticality is not None and business_criticality in [
+            "A+", "a+", "A", "a", "B", "b", "C", "c", "Z", "z",
+            "Tier 0", "Tier0", "T0", "tier 0", "tier0", "t0",
+            "Tier 1", "Tier1", "T1", "tier 1", "tier1", "t1",
+            "N/A", "NA"]:
+            return CheckResult.PASSED
+            
+        return CheckResult.FAILED
 check = EnsureTagsExist()
 
 

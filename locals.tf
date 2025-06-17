@@ -13,9 +13,8 @@ locals {
     }
 
     cvlt_backup = {
-      non_iaas = {
-        business_criticality = "c"
-      }
+      business_criticality = "c"
+    }
 
       app_server = {
         cvlt_backup        = "cvlt_vsa_file"
@@ -24,4 +23,4 @@ locals {
       }
     }
   }
-}
+

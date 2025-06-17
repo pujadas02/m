@@ -15,12 +15,12 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
         self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre", "cvlt_backup"}
 
-    def has_tags_support(self, resource_type: str) -> bool:
-        try:
-            response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
-            return response.status_code == 200 and "`tags`" in response.text
-        except:
-            return False
+    # def has_tags_support(self, resource_type: str) -> bool:
+    #     try:
+    #         response = requests.get(f"{self.docs_url}{resource_type}.html.markdown", timeout=3)
+    #         return response.status_code == 200 and "`tags`" in response.text
+    #     except:
+    #         return False
  
     def get_tags(self, conf: Dict[str, Any]) -> Dict[str, Any]:
         tags_config = conf.get("tags", [{}])[0]

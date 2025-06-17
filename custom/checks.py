@@ -95,8 +95,6 @@ class EnsureTagsExist(BaseResourceCheck):
             supported_resources=['azurerm_*']
         )
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
-        self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre", "cvlt_backup"}
-
 
     def has_tags_support(self, resource_type: str) -> bool:
         try:
@@ -115,11 +113,18 @@ class EnsureTagsExist(BaseResourceCheck):
         return {}
 
     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
-        if not conf.get("__address__"):
+         if not (address := conf.get("__address__", "")):
             return CheckResult.SKIPPED
+ 
+        resource_type = address.split(".")[0][8:] 
+        if not self.has_tags_support(resource_type):
+            return CheckResult.SKIPPED
+         
+        # if not conf.get("__address__"):
+        #     return CheckResult.SKIPPED
             
         tags = self.get_tags(conf)
-        # return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
+     
         business_criticality = tags.get("business_criticality")
         if business_criticality is not None and business_criticality in [
             "A+", "a+", "A", "a", "B", "b", "C", "c", "Z", "z",
@@ -127,7 +132,7 @@ class EnsureTagsExist(BaseResourceCheck):
             "Tier 1", "Tier1", "T1", "tier 1", "tier1", "t1",
             "N/A", "NA"]:
             return CheckResult.PASSED
-            
+       
         return CheckResult.FAILED
 check = EnsureTagsExist()
 

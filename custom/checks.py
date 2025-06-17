@@ -87,13 +87,14 @@ from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
 class EnsureTagsExist(BaseResourceCheck):
-    def __init__(self) -> None:
-        super().__init__(
-            name="Ensure required tags exist",
-            id="CCOE_AZ2_TAGS_6",
-            categories=[CheckCategories.CONVENTION],
-            supported_resources=['azurerm_*']
-        )
+   def __init__(self) -> None:
+        name = "Ensure business_criticality tag exists. Valid Values are
+        [A+,a+,A,a,B,b,C,c,Z,z,Tier 0,Tier0,T0,,tier 0,tier0,t0,Tier 1,Tier1,T1,tier 1,tier1,t1,N/A,NA]"
+        id = "CCOE_AZ2_TAGS_5"  
+        supported_resources = ['azurerm_*']
+        categories = [CheckCategories.BACKUP_AND_RECOVERY]  
+        super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
+            
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
 
     def has_tags_support(self, resource_type: str) -> bool:
@@ -118,11 +119,7 @@ class EnsureTagsExist(BaseResourceCheck):
             
         resource_type = address.split(".")[0][8:]
         if not self.has_tags_support(resource_type):
-            return CheckResult.SKIPPED            
-         
-        # if not conf.get("__address__"):
-        #     return CheckResult.SKIPPED
-            
+            return CheckResult.SKIPPED                      
         tags = self.get_tags(conf)
      
         business_criticality = tags.get("business_criticality")
@@ -132,7 +129,7 @@ class EnsureTagsExist(BaseResourceCheck):
             "Tier 1", "Tier1", "T1", "tier 1", "tier1", "t1",
             "N/A", "NA"]:
             return CheckResult.PASSED
-       
+             
         return CheckResult.FAILED
 check = EnsureTagsExist()
 

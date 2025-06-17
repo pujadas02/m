@@ -8,9 +8,9 @@ from checkov.terraform.checks.resource.base_resource_check import BaseResourceCh
 class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
     def __init__(self) -> None:
         name = "Ensure business_criticality tag exists. Valid Values are [A+, a+,A,B,b,C,c,z,z,Tier 0,tier0,T0,tier 0,tier0,t0,Tier 1,Tier1,T1,tier 1,tier1,t1,N/A,NA]"
-        id = "CCOE_AZ2_TAGS_5"
+        id = "CCOE_AZ2_TAGS_6"
+        categories = [CheckCategories.CONVENTION]
         supported_resources = ['azurerm_*']
-        categories = [CheckCategories.BACKUP_AND_RECOVERY]
         super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
         self.docs_url = "https://raw.githubusercontent.com/hashicorp/terraform-provider-azurerm/main/website/docs/r/"
         self.required_tags = {"app", "app_owner_group", "ppm_io_cc", "ppm_id_owner", "expert_centre", "cvlt_backup"}
@@ -32,14 +32,15 @@ class EnsureSnapshotLifetimeTagExistsCheck(BaseResourceCheck):
         return {}
  
     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
-        if not (address := conf.get("__address__", "")):
-            return CheckResult.SKIPPED
+        # if not (address := conf.get("__address__", "")):
+        #     return CheckResult.SKIPPED
  
-        resource_type = address.split(".")[0][8:] 
-        if not self.has_tags_support(resource_type):
+        # resource_type = address.split(".")[0][8:] 
+        # if not self.has_tags_support(resource_type):
+        #     return CheckResult.SKIPPED
+
+        if not conf.get("__address__"):
             return CheckResult.SKIPPED
-
-
         tags = self.get_tags(conf)
         return CheckResult.PASSED if all(tag in tags for tag in self.required_tags) else CheckResult.FAILED
 

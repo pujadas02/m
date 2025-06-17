@@ -113,10 +113,10 @@ class EnsureTagsExist(BaseResourceCheck):
         return {}
 
     def scan_resource_conf(self, conf: Dict[str, Any]) -> CheckResult:
-         if not (address := conf.get("__address__", "")):
+        if not (address := conf.get("__address__", "")):
              return CheckResult.SKIPPED
             
-        resource_type = address.split(".")[0][8:] 
+        resource_type = address.split(".")[0][8:]
         if not self.has_tags_support(resource_type):
             return CheckResult.SKIPPED            
          

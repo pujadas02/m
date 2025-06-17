@@ -9,13 +9,15 @@ locals {
       app_owner_group      = "PNT-DATAINGESTION-GLOBAL"
       expert_centre        = "PNT-DATAINGESTION-GLOBAL"
       snapshotlifetime     = "1"
+      business_criticality = "c"
       cvlt_backup = "cvlt_no_backup"
     }
 
     cvlt_backup = {
-      business_criticality = "c"
-    }
-
+      non_iaas = {
+        cvlt_backup = "cvlt_no_backup"
+      }
+     
       app_server = {
         cvlt_backup        = "cvlt_vsa_file"
         ppm_billing_item   = "PET- MANUFACTURING DATA MANAGEMENT DESIGN AND PILOT"
@@ -23,4 +25,4 @@ locals {
       }
     }
   }
-
+}

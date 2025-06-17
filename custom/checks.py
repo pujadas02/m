@@ -87,7 +87,7 @@ from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
 class EnsureTagsExist(BaseResourceCheck):
-   def __init__(self) -> None:
+    def __init__(self) -> None:
         name = "Ensure business_criticality tag exists. Valid Values are [A+, a+,A,B,b,C,c,z,z,Tier 0,tier0,T0,tier 0,tier0,t0,Tier 1,Tier1,T1,tier 1,tier1,t1,N/A,NA]"
         id = "CCOE_AZ2_TAGS_5"  
         supported_resources = ['azurerm_*']

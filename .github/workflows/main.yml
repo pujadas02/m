@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-      - tag_app
+      - cvlt
   pull_request:
     branches:
       - master

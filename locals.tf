@@ -10,7 +10,6 @@ locals {
       expert_centre        = "PNT-DATAINGESTION-GLOBAL"
       snapshotlifetime     = "1"
       business_criticality = "c"
-      cvlt_backup = "cvlt_no_backup"
     }
 
     cvlt_backup = {

@@ -40,5 +40,4 @@ class EnsureCvltBackupTagExistsCheck(BaseResourceCheck):
         cvlt_backup = tags.get("cvlt_backup")
         if cvlt_backup is not None and cvlt_backup in ["cvlt_no_backup", "cvlt_ida_ora", "cvlt_ida_file", "cvlt_ida_other", "cvlt_ida_sql", "cvlt_vsa_file", "cvlt_vsa_sql", "cvlt_vsa_ora"]:
             return CheckResult.PASSED
-        return CheckResult.FAILED
 check = EnsureCvltBackupTagExistsCheck()

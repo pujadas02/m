@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-      - cvlt
+      - gcp-peering
   pull_request:
     branches:
       - master

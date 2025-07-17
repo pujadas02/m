@@ -1,0 +1,12 @@
+metadata:
+  name: "Restrict VPC peering usage"
+  id: "CCOE_AZ2_TAGS_3"
+  category: "security"
+  severity: "HIGH"
+  description: "Ensure VPC peering disabled.
+  
+definition:
+    cond_type: "resource"
+    resource_types:
+     - "google_compute_network_peering"
+    operator: "not_exists"          

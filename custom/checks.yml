@@ -8,6 +8,6 @@ metadata:
 definition:
   cond_type: "resource"
   resource_types:
-    - "azurerm_kubernetes_cluster"
+    - "google_compute_network_peering"
   operator: "not_exists"
   

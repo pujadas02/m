@@ -1,33 +1,36 @@
-provider "azurerm" {
-  features {}
-}
-resource "azurerm_resource_group" "primary" {
-  name     = "hi"
-  location = "Eastuss"
-  tags = local.tags.common_tags
-}
-resource "azurerm_monitor_diagnostic_setting" "logic20" {
-  name                       = "OperationLogs"
-  target_resource_id = "j"
-  enabled_log {
-    category = "WorkflowRuntime"
-  }
-  metric {
-    category = "AllMetrics"
-  }
+# VPC Network 1 (This is the source network)
+resource "google_compute_network" "example_network" {
+  name                    = "example-network"
+  auto_create_subnetworks  = true
 }
 
-
-resource "azurerm_dns_zone" "example-public" {
-  name                = "mydomain.com"
-  resource_group_name = "hi"
-  tags = var.tags
+# Subnetwork 1 for the example network
+resource "google_compute_subnetwork" "example_subnet" {
+  name          = "example-subnet"
+  network       = google_compute_network.example_network.name
+  region        = "us-central1"
+  ip_cidr_range = "10.0.0.0/24"
 }
-resource "azurerm_resource_group" "rg_01" {
-  name                = "mydomain.com"
-  tags     = merge(local.tags.common_tags, local.tags.cvlt_backup.non_iaas)
-  location = "k"
-}
-  
 
-  
+# VPC Network 2 (This is the peer network)
+resource "google_compute_network" "peer_network" {
+  name                    = "peer-network"
+  auto_create_subnetworks  = true
+}
+
+# Subnetwork 2 for the peer network
+resource "google_compute_subnetwork" "peer_subnet" {
+  name          = "peer-subnet"
+  network       = google_compute_network.peer_network.name
+  region        = "us-central1"
+  ip_cidr_range = "10.1.0.0/24"
+}
+
+# TEST CASE: VPC Peering Resource (This will trigger the Checkov policy)
+resource "google_compute_network_peering" "example_peering" {
+  name         = "example-vpc-peering"
+  network      = google_compute_network.example_network.name
+  peer_network = google_compute_network.peer_network.name
+  auto_create_routes = true
+}
+

@@ -4,9 +4,11 @@ metadata:
   category: "security"
   severity: "HIGH"
   description: "Ensure VPC peering disabled.
-  
+
 definition:
-   - cond_type: "resource"
-     resource_types:
-      - "google_compute_network_peering"
-     operator: "not_exists"          
+  cond_type: "resource"
+  resource_types:
+   - "google_compute_network_peering"
+  operator: "not_exists"
+  
+         

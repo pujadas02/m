@@ -1,63 +1,14 @@
 metadata:
-  name: "Restrict VPC peering usage"
-  id: "CCOE_AZ2_TAGS_3"
+  name: "Ensure AKS Clusters have Microsoft Entra ID integration enabled."
+  id: "CCOE_AZ2_AKS_3"
   category: "security"
   severity: "HIGH"
-  description: "Ensure VPC peering disabled.
+  description: "Ensure AKS Clusters have Microsoft Entra ID integration enabled."
 
-# definition:
-#   cond_type: "resource"
-#   resource_types:
-#    - "google_compute_network_peering"
-#   operator: "not_exists"
-  
 definition:
-  or:
-    - cond_type: "attribute"
-      resource_types:
-        - "azurerm_kubernetes_cluster"
-      attribute: "kubernetes_version"
-      operator: "not_exists"
-    - and:  
-        - cond_type: "attribute"
-          resource_types:
-            - "azurerm_kubernetes_cluster"
-          attribute: "kubernetes_version"
-          operator: "exists"
-        - or:
-            - cond_type: "attribute"
-              resource_types:
-                - "azurerm_kubernetes_cluster"
-              attribute: "kubernetes_version"
-              operator: "equals"
-              value: "1.29"
-            - cond_type: "attribute"
-              resource_types:
-                - "azurerm_kubernetes_cluster"
-              attribute: "kubernetes_version"
-              operator: "equals"
-              value: "1.30"
-            - cond_type: "attribute"
-              resource_types:
-                - "azurerm_kubernetes_cluster"
-              attribute: "kubernetes_version"
-              operator: "equals"
-              value: "1.31"
-            - cond_type: "attribute"
-              resource_types:
-                - "azurerm_kubernetes_cluster"
-              attribute: "kubernetes_version"
-              operator: "regex_match"
-              value: "1.29.*"
-            - cond_type: "attribute"
-              resource_types:
-                - "azurerm_kubernetes_cluster"
-              attribute: "kubernetes_version"
-              operator: "regex_match"
-              value: "1.30.*"
-            - cond_type: "attribute"
-              resource_types:
-                - "azurerm_kubernetes_cluster"
-              attribute: "kubernetes_version"
-              operator: "regex_match"
-              value: "1.31.*"
+  cond_type: "attribute"
+  resource_types:
+    - "azurerm_kubernetes_cluster"
+  attribute: "local_account_disabled"
+  operator: "equals"
+  value: "true"

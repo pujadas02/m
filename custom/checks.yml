@@ -18,7 +18,12 @@ definition:
       attribute: "stack_type"
       operator: "equals"
       value: "IPV4_ONLY"
-  
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_subnetwork"
+      attribute: "ipv6_cidr_range"
+      operator: "not_regex_match"
+      value: "*:*"  # No IPv6 CIDRs allowed
 # definition:
 #   and:
 #     - or:

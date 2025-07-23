@@ -26,7 +26,7 @@ definition:
       resource_types:
         - "google_compute_subnetwork"
       attribute: "ipv6_cidr_range"
-      operator: "not_regex"
+      operator: "not_regex_match"
       value: ".*:.*"  # No IPv6 CIDRs allowed
 
     - cond_type: "attribute"
@@ -46,7 +46,7 @@ definition:
       resource_types:
         - "google_compute_instance"
       attribute: "alias_ip_range.ip_cidr_range"
-      operator: "not_regex"
+      operator: "not_regex_match"
       value: ".*:.*"
 
     # Compute network checks

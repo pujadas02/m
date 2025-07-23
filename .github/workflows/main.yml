@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-      - GCP-Datastream---Block-Public-Connectivity-Methods/main.tf
+      - GCP-Disable-All-IPv6-usage/main.tf
   pull_request:
     branches:
       - master

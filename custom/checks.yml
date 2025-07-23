@@ -10,15 +10,15 @@ definition:
     - or:
         - cond_type: "attribute"
           resource_types:
-            - "azurerm_redis_cache"
-          attribute: "non_ssl_port_enabled"
+            - "google_compute_subnetwork"
+          attribute: "stack_type"
           operator: "not_exists"
         - cond_type: "attribute"
           resource_types:
-            - "azurerm_redis_cache"
-          attribute: "non_ssl_port_enabled"
+            - "google_compute_subnetwork"
+          attribute: "stack_type"
           operator: "equals"
-          value: "false"
+          value: "IPV4_ONLY"
     - or:
         - cond_type: "attribute"
           resource_types:

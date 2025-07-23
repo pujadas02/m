@@ -5,7 +5,7 @@ on:
     branches:
     - GCP-Disable-All-IPv6-usage
     paths: 
-    - custom/checks.yml
+    - main.tf
   pull_request:
     branches:
       - master

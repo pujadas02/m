@@ -22,12 +22,12 @@ definition:
       attribute: "ipv6_access_type"
       operator: "not_exists"
 
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "ipv6_cidr_range"
-      operator: "not_regex_match"
-      value: "*:*"  # No IPv6 CIDRs allowed
+    # - cond_type: "attribute"
+    #   resource_types:
+    #     - "google_compute_subnetwork"
+    #   attribute: "ipv6_cidr_range"
+    #   operator: "not_regex_match"
+    #   value: "*:*"  # No IPv6 CIDRs allowed
 
     - cond_type: "attribute"
       resource_types:

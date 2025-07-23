@@ -7,6 +7,38 @@ resource "google_compute_subnetwork" "subnetwork-ipv6" {
 }
 
 
+
+
+
+
+
+resource "azurerm_cognitive_account" "example" {
+  name                = "example-cognitive-account"
+  location            = "eastus"
+  resource_group_name = "example-rg"
+  kind                = "CognitiveServices"
+  sku_name            = "S1"
+
+  public_network_access_enabled = false
+
+  network_acls {
+    default_action = "Deny"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 resource "google_service_account" "default" {
   account_id   = "my-custom-sa"
   display_name = "Custom SA for VM Instance"

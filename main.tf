@@ -9,3 +9,16 @@ resource "google_compute_network" "custom-test" {
   name                    = "ipv6-test-network"
   auto_create_subnetworks = false
 }
+
+resource "azurerm_redis_cache" "example" {
+  name                = "example-redis"
+  location            = "East US"
+  resource_group_name = "example-resources"
+  capacity            = 1
+  family              = "C"
+  sku_name            = "Basic"
+
+  # Attributes checked by the policy
+  non_ssl_port_enabled = false
+  enable_non_ssl_port  = false
+}

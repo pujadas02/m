@@ -2,7 +2,6 @@ resource "google_datastream_private_connection" "private_conn" {
   name     = "private-connection"
   location = "us-central1"
 }
-
 resource "google_datastream_connection_profile" "postgres_private" {
   name                 = "postgres-private-profile"
   location             = "us-central1"

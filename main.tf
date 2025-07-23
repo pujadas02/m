@@ -18,6 +18,12 @@ resource "azurerm_cognitive_account" "example" {
   resource_group_name = "example-rg"
   kind                = "CognitiveServices"
   sku_name            = "S1"
+
+  public_network_access_enabled = true
+
+  network_acls {
+    default_action = "Deny"
+  }
 }
 
 

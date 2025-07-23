@@ -5,22 +5,20 @@ resource "google_compute_subnetwork" "subnet_pass1" {
   ip_cidr_range = "10.0.0.0/24"
   stack_type = "IPV4_ONLY"
 }
-resource "azurerm_resource_group" "example" {
-  name     = "example-resources"
-  location = "West Europe"
-}
+resource "google_compute_instance" "ipv4_only_instance" {
+  name         = "ipv4-instance"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
 
-# NOTE: the Name used for Redis needs to be globally unique
-resource "azurerm_redis_cache" "example" {
-  name                 = "example-cache"
-  location             = azurerm_resource_group.example.location
-  resource_group_name  = azurerm_resource_group.example.name
-  capacity             = 2
-  family               = "C"
-  sku_name             = "Standard"
-  non_ssl_port_enabled = false
-  minimum_tls_version  = "1.2"
-
-  redis_configuration {
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
   }
+
+  network_interface {
+    network = "default"
+  }
+
+  stack_type = "IPV4_ONLY"
 }

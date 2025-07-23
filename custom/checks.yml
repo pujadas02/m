@@ -5,39 +5,35 @@ metadata:
   severity: "HIGH"
   description: "Ensure all IPv6 are disabled"
 
-definition:
-  or:
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "stack_type"
-      operator: "not_exists"
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "stack_type"
-      operator: "equals"
-      value: "IPV4_ONLY"
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "ipv6_cidr_range"
-      operator: "not_regex_match"
-      value: "*:*"  # No IPv6 CIDRs allowed
 # definition:
-#   and:
-#     - or:
-#         - cond_type: "attribute"
-#           resource_types:
-#             - "google_compute_subnetwork"
-#           attribute: "stack_type"
-#           operator: "not_exists"
-#         - cond_type: "attribute"
-#           resource_types:
-#             - "google_compute_subnetwork"
-#           attribute: "stack_type"
-#           operator: "equals"
-#           value: "IPV4_ONLY"   # Subnetwork checks - must be IPV4_ONLY (no IPv6) 
+#   or:
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_subnetwork"
+#       attribute: "stack_type"
+#       operator: "not_exists"
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_subnetwork"
+#       attribute: "stack_type"
+#       operator: "equals"
+#       value: "IPV4_ONLY"
+    
+definition:
+  and:
+    - or:
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_subnetwork"
+          attribute: "stack_type"
+          operator: "not_exists"
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_subnetwork"
+          attribute: "stack_type"
+          operator: "equals"
+          value: "IPV4_ONLY"   # Subnetwork checks - must be IPV4_ONLY (no IPv6) 
+
 #     - or:
 #         - cond_type: "attribute"
 #           resource_types:
@@ -89,7 +85,7 @@ definition:
     #         - "google_compute_instance"
     #       attribute: "alias_ip_range.ip_cidr_range"
     #       operator: "not_regex_match"
-    #       value: ".*:.*"
+    #       value: "*:*"
     # - or:
     #     - cond_type: "attribute"
     #       resource_types:

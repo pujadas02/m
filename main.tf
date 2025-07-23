@@ -35,7 +35,7 @@ resource "google_compute_instance" "default" {
 
   network_interface {
     network = "default"
-    stack_type = "IPV4_ONLY"
+    stack_type = "IPV4_IPV6"
     access_config {
     }
   }

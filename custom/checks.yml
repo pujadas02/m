@@ -23,12 +23,12 @@ definition:
     - or:
         - cond_type: "attribute"
           resource_types:
-            - "azurerm_redis_cache"
+            - "azurerm_redis_cach"
           attribute: "enable_non_ssl_port"
           operator: "not_exists"
         - cond_type: "attribute"
           resource_types:
-            - "azurerm_redis_cache"
+            - "azurerm_redis_cach"
           attribute: "enable_non_ssl_port"
           operator: "equals"
           value: "false"

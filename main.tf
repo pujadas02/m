@@ -1,30 +1,19 @@
-resource "google_compute_network" "example_network" {
-  name                    = "example-network"
-  auto_create_subnetworks  = true
+resource "google_datastream_private_connection" "private_conn" {
+  name     = "private-connection"
+  location = "us-central1"
 }
 
+resource "google_datastream_connection_profile" "postgres_private" {
+  name                 = "postgres-private-profile"
+  location             = "us-central1"
+  connection_profile_id = "pg-private-profile"
 
-resource "google_compute_subnetwork" "example_subnet" {
-  name          = "example-subnet"
-  network       = google_compute_network.example_network.name
-  region        = "us-central1"
-  ip_cidr_range = "10.0.0.0/24"
+  postgresql_profile {
+    hostname = "10.0.0.5"
+    port     = 5432
+    username = "pg_user"
+    password = "pg_password"
+    database = "postgres_db"
+  }
+
 }
-
-
-resource "google_compute_network" "peer_network" {
-  name                    = "peer-network"
-  auto_create_subnetworks  = true
-}
-
-
-resource "google_compute_subnetwork" "peer_subnet" {
-  name          = "peer-subnet"
-  network       = google_compute_network.peer_network.name
-  region        = "us-central1"
-  ip_cidr_range = "10.1.0.0/24"
-}
-
-
-
-

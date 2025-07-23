@@ -1,13 +1,63 @@
 metadata:
-  name: "Datastream - Block Public Connectivity Methods"
-  id: "CCOE_GCP_DATASTREAM_1"
+  name: "Disable IPv6 usage in GCP network resources"
+  id: "CCOE_GCP_DISABLE_IPV6"
   category: "security"
   severity: "HIGH"
-  description: "Ensure Datastream connection profiles use private connectivity to block public connectivity methods."
+  description: "Ensure all IPv6 are disabled"
 
 definition:
-  cond_type: "attribute"
-  resource_types:
-    - "google_datastream_connection_profile"
-  attribute: "private_connectivity"
-  operator: "exists"
+  and:
+    # Subnetwork checks - must be IPV4_ONLY (no IPv6)
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_subnetwork"
+      attribute: "stack_type"
+      operator: "equal"
+      value: "IPV4_ONLY"
+
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_subnetwork"
+      attribute: "ipv6_access_type"
+      operator: "not_exists"
+
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_subnetwork"
+      attribute: "ipv6_cidr_range"
+      operator: "not_regex"
+      value: ".*:.*"  # No IPv6 CIDRs allowed
+
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_instance"
+      attribute: "stack_type"
+      operator: "equal"
+      value: "IPV4_ONLY"
+
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_instance"
+      attribute: "ipv6_access_config"
+      operator: "not_exists"
+
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_instance"
+      attribute: "alias_ip_range.ip_cidr_range"
+      operator: "not_regex"
+      value: ".*:.*"
+
+    # Compute network checks
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_network"
+      attribute: "enable_ula_internal_ipv6"
+      operator: "not_equal"
+      value: true
+
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_network"
+      attribute: "internal_ipv6_range"
+      operator: "not_exists"

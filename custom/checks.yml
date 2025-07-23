@@ -5,7 +5,6 @@ metadata:
   severity: "HIGH"
   description: "Ensure all IPv6 are disabled"
   
-skip_missing_resource_types: true
 definition:
   and:
     - or:

@@ -19,6 +19,18 @@ definition:
           attribute: "stack_type"
           operator: "equals"
           value: "IPV4_ONLY"   # Subnetwork checks - must be IPV4_ONLY (no IPv6) 
+    - or:
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_instance"
+          attribute: "stack_type"
+          operator: "not_exists"
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_instance"
+          attribute: "stack_type"
+          operator: "equals"
+          value: "IPV4_ONLY"      
           
     # - cond_type: "attribute"
     #   resource_types:
@@ -39,18 +51,7 @@ definition:
     #       operator: "not_regex_match"
     #       value: "*:*"  # No IPv6 CIDRs allowed
           
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "stack_type"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "stack_type"
-          operator: "equals"
-          value: "IPV4_ONLY"       
+     
 
     # - cond_type: "attribute"
     #   resource_types:
@@ -58,30 +59,30 @@ definition:
     #   attribute: "ipv6_access_config"
     #   operator: "not_exists"
 
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "alias_ip_range.ip_cidr_range"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "alias_ip_range.ip_cidr_range"
-          operator: "not_regex_match"
-          value: ".*:.*"
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_network"
-          attribute: "enable_ula_internal_ipv6"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_network"
-          attribute: "enable_ula_internal_ipv6"
-          operator: "not_equals"
-          value: true
+    # - or:
+    #     - cond_type: "attribute"
+    #       resource_types:
+    #         - "google_compute_instance"
+    #       attribute: "alias_ip_range.ip_cidr_range"
+    #       operator: "not_exists"
+    #     - cond_type: "attribute"
+    #       resource_types:
+    #         - "google_compute_instance"
+    #       attribute: "alias_ip_range.ip_cidr_range"
+    #       operator: "not_regex_match"
+    #       value: ".*:.*"
+    # - or:
+    #     - cond_type: "attribute"
+    #       resource_types:
+    #         - "google_compute_network"
+    #       attribute: "enable_ula_internal_ipv6"
+    #       operator: "not_exists"
+    #     - cond_type: "attribute"
+    #       resource_types:
+    #         - "google_compute_network"
+    #       attribute: "enable_ula_internal_ipv6"
+    #       operator: "not_equals"
+    #       value: true
   
     # - cond_type: "attribute"
     #   resource_types:

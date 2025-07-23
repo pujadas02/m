@@ -23,12 +23,12 @@ definition:
         - cond_type: "attribute"
           resource_types:
             - "google_compute_instance"
-          attribute: "stack_type"
+          attribute: "network_interface.stack_type"
           operator: "not_exists"
         - cond_type: "attribute"
           resource_types:
             - "google_compute_instance"
-          attribute: "stack_type"
+          attribute: "network_interface.stack_type"
           operator: "equals"
           value: "IPV4_ONLY" 
     # - or:

@@ -29,8 +29,8 @@ definition:
           resource_types:
             - "google_compute_instance"
           attribute: "stack_type"
-          operator: "equals"
-          value: "IPV4_ONLY"  
+          operator: "regex_match"
+          value: ".*IPV4_ONLY.*" 
     # - or:
     #     - cond_type: "attribute"
     #       resource_types:

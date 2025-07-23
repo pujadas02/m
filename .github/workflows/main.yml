@@ -6,6 +6,7 @@ on:
     - GCP-Disable-All-IPv6-usage
     paths: 
     - main.tf
+    - custom/checks.yml
   pull_request:
     branches:
       - master

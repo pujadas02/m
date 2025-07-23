@@ -4,10 +4,11 @@ metadata:
   category: "security"
   severity: "HIGH"
   description: "Ensure all IPv6 are disabled"
-
+  
 definition:
   and:
     # Subnetwork checks - must be IPV4_ONLY (no IPv6)
+    
     - cond_type: "attribute"
       resource_types:
         - "google_compute_subnetwork"

@@ -18,7 +18,6 @@ resource "google_compute_instance" "ipv4_only_instance" {
 
   network_interface {
     network = "default"
-  }
-
-  stack_type = "IPV4_ONLY"
+    stack_type = "IPV4_ONLY"
+  } 
 }

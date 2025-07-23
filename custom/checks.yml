@@ -5,12 +5,6 @@ metadata:
   severity: "HIGH"
   description: "Ensure all IPv6 are disabled"
   
-# definition:
-#        cond_type: "attribute"
-#        resource_types:
-#          - "google_compute_subnetwork"
-#        attribute: "ipv6_access_type"
-#        operator: "not_exists"
 definition:
   and:
     - or:
@@ -26,11 +20,11 @@ definition:
           operator: "equals"
           value: "IPV4_ONLY"   # Subnetwork checks - must be IPV4_ONLY (no IPv6) 
           
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "ipv6_access_type"
-      operator: "not_exists"
+    # - cond_type: "attribute"
+    #   resource_types:
+    #     - "google_compute_subnetwork"
+    #   attribute: "ipv6_access_type"
+    #   operator: "not_exists"
       
     # - or:
     #     - cond_type: "attribute"
@@ -58,11 +52,11 @@ definition:
           operator: "equals"
           value: "IPV4_ONLY"       
 
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_instance"
-      attribute: "ipv6_access_config"
-      operator: "not_exists"
+    # - cond_type: "attribute"
+    #   resource_types:
+    #     - "google_compute_instance"
+    #   attribute: "ipv6_access_config"
+    #   operator: "not_exists"
 
     - or:
         - cond_type: "attribute"
@@ -89,8 +83,8 @@ definition:
           operator: "not_equals"
           value: true
   
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_network"
-      attribute: "internal_ipv6_range"
-      operator: "not_exists"
+    # - cond_type: "attribute"
+    #   resource_types:
+    #     - "google_compute_network"
+    #   attribute: "internal_ipv6_range"
+    #   operator: "not_exists"

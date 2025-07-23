@@ -6,22 +6,55 @@ metadata:
   description: "Ensure all IPv6 are disabled"
 
 
+
 definition:
   or:
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_subnetwork"
-            - "google_compute_instance"
-          attribute: "network_interface.stack_type"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_subnetwork"
-            - "google_compute_instance"
-          attribute: "network_interface.stack_type"
-          operator: "equals"
-          value: "IPV4_ONLY"
+    - and:
+      - cond_type: "attribute"
+        resource_types:
+          - "azurerm_cognitive_account"
+        attribute: "public_network_access_enabled"
+        operator: "exists"
+      - cond_type: "attribute"
+        resource_types:
+          - "azurerm_cognitive_account"
+        attribute: "public_network_access_enabled"
+        operator: "equals"
+        value: "false"
+      - cond_type: "attribute"
+        resource_types:
+          - "azurerm_cognitive_account"
+        attribute: "network_acls.default_action"
+        operator: "equals"
+        value: "Deny"
+    - and: 
+      - cond_type: "attribute"
+        resource_types:
+          - "azurerm_search_service"
+        attribute: "public_network_access_enabled"
+        operator: "exists"
+      - cond_type: "attribute"
+        resource_types:
+          - "azurerm_search_service"
+        attribute: "public_network_access_enabled"
+        operator: "equals"
+        value: "false"
+# definition:
+#   or:
+#     - or:
+#         - cond_type: "attribute"
+#           resource_types:
+#             - "google_compute_subnetwork"
+#             - "google_compute_instance"
+#           attribute: "network_interface.stack_type"
+#           operator: "not_exists"
+#         - cond_type: "attribute"
+#           resource_types:
+#             - "google_compute_subnetwork"
+#             - "google_compute_instance"
+#           attribute: "network_interface.stack_type"
+#           operator: "equals"
+#           value: "IPV4_ONLY"
 
 # definition:
 #   and:

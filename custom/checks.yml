@@ -30,7 +30,7 @@ definition:
             - "google_compute_instance"
           attribute: "stack_type"
           operator: "regex_match"
-          value: ".*IPV4_ONLY.*" 
+          value: "IPV4_ONLY" 
     # - or:
     #     - cond_type: "attribute"
     #       resource_types:

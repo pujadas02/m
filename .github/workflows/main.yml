@@ -3,7 +3,9 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-      - GCP-Disable-All-IPv6-usage/main.tf
+      - GCP-Disable-All-IPv6-usage
+    paths: 
+      - ./main.tf
   pull_request:
     branches:
       - master

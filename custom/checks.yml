@@ -6,59 +6,65 @@ metadata:
   description: "Ensure all IPv6 are disabled"
   
 definition:
-  and:
-    # Subnetwork checks - must be IPV4_ONLY (no IPv6)
+       cond_type: "attribute"
+       resource_types:
+         - "google_compute_subnetwork"
+       attribute: "ipv6_access_type"
+       operator: "not_exists"
+# definition:
+#   and:
+#     # Subnetwork checks - must be IPV4_ONLY (no IPv6)
     
-    # - cond_type: "attribute"
-    #   resource_types:
-    #     - "google_compute_subnetwork"
-    #   attribute: "stack_type"
-    #   operator: "equals"
-    #   value: "IPV4_ONLY"
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_subnetwork"
+#       attribute: "stack_type"
+#       operator: "equals"
+#       value: "IPV4_ONLY"
 
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "ipv6_access_type"
-      operator: "not_exists"
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_subnetwork"
+#       attribute: "ipv6_access_type"
+#       operator: "not_exists"
 
-    # - cond_type: "attribute"
-    #   resource_types:
-    #     - "google_compute_subnetwork"
-    #   attribute: "ipv6_cidr_range"
-    #   operator: "not_regex_match"
-    #   value: "*:*"  # No IPv6 CIDRs allowed
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_subnetwork"
+#       attribute: "ipv6_cidr_range"
+#       operator: "not_regex_match"
+#       value: "*:*"  # No IPv6 CIDRs allowed
 
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_instance"
-      attribute: "stack_type"
-      operator: "equals"
-      value: "IPV4_ONLY"
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_instance"
+#       attribute: "stack_type"
+#       operator: "equals"
+#       value: "IPV4_ONLY"
 
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_instance"
-      attribute: "ipv6_access_config"
-      operator: "not_exists"
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_instance"
+#       attribute: "ipv6_access_config"
+#       operator: "not_exists"
 
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_instance"
-      attribute: "alias_ip_range.ip_cidr_range"
-      operator: "not_regex_match"
-      value: ".*:.*"
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_instance"
+#       attribute: "alias_ip_range.ip_cidr_range"
+#       operator: "not_regex_match"
+#       value: ".*:.*"
 
-    # Compute network checks
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_network"
-      attribute: "enable_ula_internal_ipv6"
-      operator: "not_equals"
-      value: true
+#     # Compute network checks
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_network"
+#       attribute: "enable_ula_internal_ipv6"
+#       operator: "not_equals"
+#       value: true
 
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_network"
-      attribute: "internal_ipv6_range"
-      operator: "not_exists"
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_network"
+#       attribute: "internal_ipv6_range"
+#       operator: "not_exists"

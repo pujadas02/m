@@ -3,22 +3,50 @@ resource "google_compute_subnetwork" "subnetwork-ipv6" {
   ip_cidr_range = "10.0.0.0/22"
   region        = "us-west2"
   network       = google_compute_network.custom-test.id
+  stack_type    = "IPV4_ONLY"
 }
 
-resource "google_compute_network" "custom-test" {
-  name                    = "ipv6-test-network"
-  auto_create_subnetworks = false
+
+resource "google_service_account" "default" {
+  account_id   = "my-custom-sa"
+  display_name = "Custom SA for VM Instance"
 }
 
-resource "azurerm_redis_cache" "example" {
-  name                = "example-redis"
-  location            = "East US"
-  resource_group_name = "example-resources"
-  capacity            = 1
-  family              = "C"
-  sku_name            = "Basic"
+resource "google_compute_instance" "default" {
+  name         = "my-instance"
+  machine_type = "n2-standard-2"
+  zone         = "us-central1-a"
 
-  # Attributes checked by the policy
-  non_ssl_port_enabled = false
-  enable_non_ssl_port  = false
+  tags = ["foo", "bar"]
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+      labels = {
+        my_label = "value"
+      }
+    }
+  }
+
+  // Local SSD disk
+  scratch_disk {
+    interface = "NVME"
+  }
+
+  network_interface {
+    network = "default"
+    stack_type = "IPV4_ONLY"
+    access_config {
+    }
+  }
+  metadata = {
+    foo = "bar"
+  }
+  metadata_startup_script = "echo hi > /test.txt"
+  service_account {
+    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
+    email  = google_service_account.default.email
+    scopes = ["cloud-platform"]
+  }
 }
+

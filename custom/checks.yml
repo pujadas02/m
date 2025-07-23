@@ -7,31 +7,22 @@ metadata:
 
 
 definition:
-  and:
+  or:
     - or:
         - cond_type: "attribute"
           resource_types:
-            - "azurerm_redis_cache"
-          attribute: "non_ssl_port_enabled"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "azurerm_redis_cache"
-          attribute: "non_ssl_port_enabled"
-          operator: "equals"
-          value: "false"
-    - or:
-        - cond_type: "attribute"
-          resource_types:
+            - "google_compute_subnetwork"
             - "google_compute_instance"
           attribute: "stack_type"
           operator: "not_exists"
         - cond_type: "attribute"
           resource_types:
+            - "google_compute_subnetwork"
             - "google_compute_instance"
           attribute: "stack_type"
           operator: "equals"
           value: "IPV4_ONLY"
+
 # definition:
 #   and:
 #     - or:

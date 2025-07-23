@@ -7,21 +7,30 @@ metadata:
 
 definition:
   and:
-    # Subnetwork must not allow any IPv6
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "stack_type"
-      operator: "not_regex_match"
-      value: "*IPV6*"
-
-    # Instance must not allow any IPv6
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_instance"
-      attribute: "stack_type"
-      operator: "not_regex_match"
-      value: "*IPV6*"  
+    - or:
+        - cond_type: "attribute"
+          resource_types:
+            - "azurerm_redis_cache"
+          attribute: "non_ssl_port_enabled"
+          operator: "not_exists"
+        - cond_type: "attribute"
+          resource_types:
+            - "azurerm_redis_cache"
+          attribute: "non_ssl_port_enabled"
+          operator: "equals"
+          value: "false"
+    - or:
+        - cond_type: "attribute"
+          resource_types:
+            - "azurerm_redis_cache"
+          attribute: "enable_non_ssl_port"
+          operator: "not_exists"
+        - cond_type: "attribute"
+          resource_types:
+            - "azurerm_redis_cache"
+          attribute: "enable_non_ssl_port"
+          operator: "equals"
+          value: "false"
 # definition:
 #   and:
 #     - or:

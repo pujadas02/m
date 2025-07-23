@@ -10,12 +10,12 @@ definition:
     - or:
         - cond_type: "attribute"
           resource_types:
-            - "google_compute_subnetwork"
+            - "google_compute_subnetwor"
           attribute: "stack_type"
           operator: "not_exists"
         - cond_type: "attribute"
           resource_types:
-            - "google_compute_subnetwork"
+            - "google_compute_subnetwor"
           attribute: "stack_type"
           operator: "equals"
           value: "IPV4_ONLY"

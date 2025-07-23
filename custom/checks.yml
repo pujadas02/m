@@ -13,7 +13,7 @@ definition:
       resource_types:
         - "google_compute_subnetwork"
       attribute: "stack_type"
-      operator: "equal"
+      operator: "equals"
       value: "IPV4_ONLY"
 
     - cond_type: "attribute"
@@ -33,7 +33,7 @@ definition:
       resource_types:
         - "google_compute_instance"
       attribute: "stack_type"
-      operator: "equal"
+      operator: "equals"
       value: "IPV4_ONLY"
 
     - cond_type: "attribute"
@@ -54,7 +54,7 @@ definition:
       resource_types:
         - "google_compute_network"
       attribute: "enable_ula_internal_ipv6"
-      operator: "not_equal"
+      operator: "not_equals"
       value: true
 
     - cond_type: "attribute"

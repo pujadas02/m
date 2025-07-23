@@ -3,7 +3,7 @@ resource "google_compute_subnetwork" "subnetwork-ipv6" {
   ip_cidr_range = "10.0.0.0/22"
   region        = "us-west2"
   network       = google_compute_network.custom-test.id
-  stack_type    = "IPV4_IPV6"
+  stack_type    = "IPV4_ONLY"
 }
 
 

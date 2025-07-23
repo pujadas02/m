@@ -16,4 +16,7 @@ resource "google_datastream_connection_profile" "postgres_private" {
     database = "postgres_db"
   }
 
+  private_connectivity {
+    private_connection = google_datastream_private_connection.private_conn.id
+  }
 }

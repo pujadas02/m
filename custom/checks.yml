@@ -34,7 +34,7 @@ definition:
           resource_types:
             - "google_compute_subnetwork"
           attribute: "stack_type"
-          operator: "equals"
+          operator: "equals_ignore_case"
           value: "IPV4_ONLY"
     - or:
         - cond_type: "attribute"
@@ -46,7 +46,7 @@ definition:
           resource_types:
             - "google_compute_instance"
           attribute: "network_interface.stack_type"
-          operator: "equals"
+          operator: "equals_ignore_case"
           value: "IPV4_ONLY"
 # definition:
 #   and:

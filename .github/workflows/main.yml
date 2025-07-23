@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-      - gcp-peering
+      - GCP-Datastream---Block-Public-Connectivity-Methods
   pull_request:
     branches:
       - master

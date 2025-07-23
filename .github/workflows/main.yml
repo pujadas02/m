@@ -5,7 +5,7 @@ on:
     branches:
       - GCP-Datastream---Block-Public-Connectivity-Methods 
     paths: 
-      - ./main.tf
+      - main.tf
   pull_request:
     branches:
       - master

@@ -22,15 +22,15 @@ definition:
     - or:
         - cond_type: "attribute"
           resource_types:
-            - "azurerm_redis_cache"
-          attribute: "enable_non_ssl_port"
+            - "google_compute_instance"
+          attribute: "network_interface.stack_type"
           operator: "not_exists"
         - cond_type: "attribute"
           resource_types:
-            - "azurerm_redis_cache"
-          attribute: "enable_non_ssl_port"
+            - "google_compute_instance"
+          attribute: "network_interface.stack_type"
           operator: "equals"
-          value: "false"
+          value: "IPV4_ONLY" 
 # definition:
 #   and:
 #     - or:

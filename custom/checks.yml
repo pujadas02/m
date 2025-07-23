@@ -1,13 +1,13 @@
 metadata:
-  name: "Restrict VPC peering usage"
-  id: "CCOE_AZ2_TAGS_3"
+  name: "Datastream - Block Public Connectivity Methods"
+  id: "CCOE_GCP_DATASTREAM_1"
   category: "security"
   severity: "HIGH"
-  description: "Ensure VPC peering disabled."
+  description: "Ensure Datastream connection profiles use private connectivity to block public connectivity methods."
 
 definition:
-  cond_type: "resource"
+  cond_type: "attribute"
   resource_types:
-    - "google_compute_network_peering"
-  operator: "not_exists"
-  
+    - "google_datastream_connection_profile"
+  attribute: "private_connectivity"
+  operator: "exists"

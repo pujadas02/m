@@ -4,33 +4,50 @@ metadata:
   category: "security"
   severity: "HIGH"
   description: "Ensure all IPv6 are disabled"
-  
+
 definition:
   and:
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_subnetwork"
-          attribute: "stack_type"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_subnetwork"
-          attribute: "stack_type"
-          operator: "equals"
-          value: "IPV4_ONLY"
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "network_interface.stack_type"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "network_interface.stack_type"
-          operator: "equals"
-          value: "IPV4_ONLY" 
+    # Subnetwork must not allow any IPv6
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_subnetwork"
+      attribute: "stack_type"
+      operator: "not_regex_match"
+      value: "*IPV6*"
+
+    # Instance must not allow any IPv6
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_instance"
+      attribute: "stack_type"
+      operator: "not_regex_match"
+      value: "*IPV6*"  
+# definition:
+#   and:
+#     - or:
+#         - cond_type: "attribute"
+#           resource_types:
+#             - "google_compute_subnetwork"
+#           attribute: "stack_type"
+#           operator: "not_exists"
+#         - cond_type: "attribute"
+#           resource_types:
+#             - "google_compute_subnetwork"
+#           attribute: "stack_type"
+#           operator: "equals"
+#           value: "IPV4_ONLY"
+#     - or:
+#         - cond_type: "attribute"
+#           resource_types:
+#             - "google_compute_instance"
+#           attribute: "network_interface.stack_type"
+#           operator: "not_exists"
+#         - cond_type: "attribute"
+#           resource_types:
+#             - "google_compute_instance"
+#           attribute: "network_interface.stack_type"
+#           operator: "equals"
+#           value: "IPV4_ONLY" 
     # - or:
     #     - cond_type: "attribute"
     #       resource_types:

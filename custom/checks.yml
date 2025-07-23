@@ -30,7 +30,7 @@ definition:
           resource_types:
             - "google_compute_subnetwork"
           attribute: "stack_type"
-          operator: "equals"
+          operator: "equals_ignore_case"
           value: "IPV4_ONLY"
 # definition:
 #   and:

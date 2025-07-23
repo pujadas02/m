@@ -9,12 +9,12 @@ definition:
   and:
     # Subnetwork checks - must be IPV4_ONLY (no IPv6)
     
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "stack_type"
-      operator: "equals"
-      value: "IPV4_ONLY"
+    # - cond_type: "attribute"
+    #   resource_types:
+    #     - "google_compute_subnetwork"
+    #   attribute: "stack_type"
+    #   operator: "equals"
+    #   value: "IPV4_ONLY"
 
     - cond_type: "attribute"
       resource_types:

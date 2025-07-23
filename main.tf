@@ -19,7 +19,7 @@ resource "azurerm_cognitive_account" "example" {
   kind                = "CognitiveServices"
   sku_name            = "S1"
 
-  
+  public_network_access_enabled = false
 
   network_acls {
     default_action = "Deny"
@@ -27,6 +27,14 @@ resource "azurerm_cognitive_account" "example" {
 }
 
 
+resource "azurerm_search_service" "example" {
+  name                = "example-search-service"
+  location            = "eastus"
+  resource_group_name = "example-rg"
+  sku                 = "basic"
+
+  public_network_access_enabled = false
+}
 
 
 

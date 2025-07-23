@@ -10,27 +10,27 @@ definition:
     - or:
         - cond_type: "attribute"
           resource_types:
-            - "google_compute_subnetwork"
-          attribute: "stack_type"
+            - "azurerm_redis_cache"
+          attribute: "non_ssl_port_enabled"
           operator: "not_exists"
         - cond_type: "attribute"
           resource_types:
-            - "google_compute_subnetwork"
-          attribute: "stack_type"
+            - "azurerm_redis_cache"
+          attribute: "non_ssl_port_enabled"
           operator: "equals"
-          value: "IPV4_ONLY"
+          value: "false"
     - or:
         - cond_type: "attribute"
           resource_types:
-            - "google_compute_instance"
-          attribute: "stack_type"
+            - "azurerm_redis_cache"
+          attribute: "enable_non_ssl_port"
           operator: "not_exists"
         - cond_type: "attribute"
           resource_types:
-            - "google_compute_instance"
-          attribute: "stack_type"
+            - "azurerm_redis_cache"
+          attribute: "enable_non_ssl_port"
           operator: "equals"
-          value: "IPV4_ONLY"  
+          value: "false"
 # definition:
 #   and:
 #     - or:
@@ -44,7 +44,7 @@ definition:
 #             - "google_compute_subnetwork"
 #           attribute: "stack_type"
 #           operator: "equals"
-#           value: "IPV4_ONLY"   # Subnetwork checks - must be IPV4_ONLY (no IPv6) 
+#           value: "IPV4_ONLY"
 #     - or:
 #         - cond_type: "attribute"
 #           resource_types:
@@ -56,8 +56,7 @@ definition:
 #             - "google_compute_instance"
 #           attribute: "stack_type"
 #           operator: "equals"
-#           value: "IPV4_ONLY"
-
+#           value: "IPV4_ONLY"  
     # - or:
     #     - cond_type: "attribute"
     #       resource_types:

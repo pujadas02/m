@@ -22,7 +22,7 @@ resource "google_compute_instance" "default" {
     alias_ip_range {
       ip_cidr_range = "2600:1900::/64"             
     }
-    access_config {
+    ipv6_access_config {
     }
   }
 }

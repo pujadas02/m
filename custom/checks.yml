@@ -18,7 +18,7 @@ definition:
           resource_types:
             - "google_compute_subnetwork"
             - "google_compute_instance"
-          attribute: 
+          attribute_types: 
             - "network_interface.stack_type"
             - "stack_type"
           operator: "equals"

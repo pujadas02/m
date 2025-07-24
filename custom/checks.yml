@@ -61,7 +61,7 @@ definition:
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
-              attribute: "alias_ip_range
+              attribute: "alias_ip_range"
               operator: "not_exists"
             - cond_type: "attribute"
               resource_types:

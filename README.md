@@ -11,3 +11,9 @@ Helps avoid unwanted global access exposure.
 Ensures IAP is only enabled in explicitly permitted regions or configurations.
 
 https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_backend_service
+
+| Scenario                | Result |
+| ----------------------- | ------ |
+| `iap.enabled = true`    | ❌ Fail |
+| `iap.enabled = false`   | ✅ Pass |
+| `iap` block not present | ✅ Pass |

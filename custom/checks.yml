@@ -7,17 +7,6 @@ metadata:
   
 definition:
   or:
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "ipv6_cidr_range"
-      operator: "not_exists"
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "ipv6_cidr_range"
-      operator: "not_regex_match"
-      value: ".*:.*"
     - and:
         - or:
             - cond_type: "attribute"
@@ -31,18 +20,6 @@ definition:
               attribute: "stack_type"
               operator: "equals"
               value: "IPV4_ONLY"
-        - or:
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_subnetwork"
-              attribute: "ipv6_cidr_range"
-              operator: "not_exists"
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_subnetwork"
-              attribute: "ipv6_cidr_range"
-              operator: "not_regex_match"
-              value: ".*:.*"
         - or:
             - cond_type: "attribute"
               resource_types:
@@ -78,18 +55,6 @@ definition:
                 - "google_compute_instance"
               attribute: "network_interface.ipv6_access_config"
               operator: "not_exists"
-        - or:
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_instance"
-              attribute: "network_interface.*.alias_ip_range.*.ip_cidr_range"
-              operator: "not_exists"
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_instance"
-              attribute: "network_interface.*.alias_ip_range.*.ip_cidr_range"
-              operator: "not_regex_match"
-              value: "^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/\\d+$" # No IPv6 CIDRs allowed
     - and:
         - or:
             - cond_type: "attribute"
@@ -116,3 +81,28 @@ definition:
               operator: "not_exists"
 
 
+
+# - or:
+#             - cond_type: "attribute"
+#               resource_types:
+#                 - "google_compute_subnetwork"
+#               attribute: "ipv6_cidr_range"
+#               operator: "not_exists"
+#             - cond_type: "attribute"
+#               resource_types:
+#                 - "google_compute_subnetwork"
+#               attribute: "ipv6_cidr_range"
+#               operator: "not_regex_match"
+#               value: ".*:.*"
+  # - or:
+  #           - cond_type: "attribute"
+  #             resource_types:
+  #               - "google_compute_instance"
+  #             attribute: "network_interface.*.alias_ip_range.*.ip_cidr_range"
+  #             operator: "not_exists"
+  #           - cond_type: "attribute"
+  #             resource_types:
+  #               - "google_compute_instance"
+  #             attribute: "network_interface.*.alias_ip_range.*.ip_cidr_range"
+  #             operator: "not_regex_match"
+  #             value: "^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/\\d+$" # No IPv6 CIDRs allowed

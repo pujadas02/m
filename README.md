@@ -12,3 +12,8 @@ Supports compliance and data governance requirements
 Helps maintain a secure environment by blocking unsafe downloads
 
 OFFICIAL DOC - https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata
+
+| **Feature**      | **Metadata Key**             | **Value**           | **Behavior**                              |
+| ---------------- | ---------------------------- | ------------------- | ----------------------------------------- |
+| File Downloading | `notebook-disable-downloads` | `true`              | ✅ Disables file downloading in JupyterLab |
+|                  |                              | `false` *(default)* | ❌ Enables file downloading in JupyterLab  |

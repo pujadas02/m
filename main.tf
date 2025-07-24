@@ -1,23 +1,11 @@
-resource "google_organization_iam_audit_config" "org_success" {
-  org_id  = "your-org-id"
-  service = "allServices"
-  audit_log_config {
-    log_type = "DATA_READ"
-    exempted_members   = []
-  }
-}
-resource "google_folder_iam_audit_config" "folder_success" {
-  folder_id = "your-folder-id"
-  service   = "allServices"
-  audit_log_config {
-    log_type = "ADMIN_READ"
-  }
-}
-resource "google_project_iam_audit_config" "project_success" {
-  project = "your-project-id"
-  service = "allServices"
-  audit_log_config {
-    log_type = "ADMIN_READ"
-    exempted_members   = [ffhhg]
+resource "google_bigquery_connection" "aws_connection" {
+  provider      = google-beta
+  connection_id = "my-aws-connection"
+  friendly_name = "AWS Connection for BigQuery Omni"
+
+  aws {
+    cross_account_role_arn = "arn:aws:iam::123456789012:role/BigQueryOmniAccess"
+    s3_staging_dir         = "s3://my-bq-omni-staging-bucket"
+    region                 = "us-east-1"
   }
 }

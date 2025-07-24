@@ -18,8 +18,8 @@ resource "google_compute_instance" "default" {
   network_interface {
     network = "default"
     stack_type = "IPV4_ONLY"
-  }
-  ipv6_access_config {
+    ipv6_access_config {
+    }
   }
 }
 

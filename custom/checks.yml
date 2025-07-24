@@ -6,7 +6,7 @@ metadata:
   description: "Creation of global self-managed SSL certificates is disallowed."
 
 definition:
-      cond_type: "resource_type"
-      resource_types:
-        - "google_compute_ssl_certificate"
-      operator: "not_exists"
+  cond_type: "resource"
+  resource_types:
+   - "google_compute_ssl_certificate"
+  operator: "not_exists"

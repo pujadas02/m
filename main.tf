@@ -3,7 +3,7 @@ resource "google_organization_iam_audit_config" "org_success" {
   service = "allServices"
   audit_log_config {
     log_type = "DATA_READ"
-    exempted_members   = ["user:joebloggs@hashicorp.com"]
+    exempted_members   = []
   }
 }
 resource "google_folder_iam_audit_config" "folder_success" {

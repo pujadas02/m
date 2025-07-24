@@ -13,7 +13,8 @@ For disabling IPv6-specific fields DISABLE THESE, such as:
 | `google_compute_instance` | `alias_ip_range` block `ip_cidr_range` attribute| Defines IP range for alias IPs. Can be single IP, netmask, or CIDR, but must be in the subnetwork range. Can be IPv4 or IPv6 depending on subnetwork.                |
 
 
-In check iam not restricting the ip ranges of ipv6 bcoz if stack type is ipv4 so ip ranges must be ipv4. just making sure it must not exist.
+In check iam not restricting the ip ranges of ipv6 bcoz if stack type is ipv4 ip ranges must be ipv4. just making sure it must not exist.
+(`ipv6_cidr_range`  , `ipv6_access_config` , `alias_ip_range` block `ip_cidr_range` , `ipv6_access_type` )
 
 SO I HAVE TO ENSURE THESE ATTRIBUTES ARE NOT PRESENT UNDER THESE THREE RESOURCES 
 

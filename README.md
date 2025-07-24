@@ -70,6 +70,8 @@ resource "google_compute_instance" "insecure_vm" {
 
 
 **Reference:** [Manage guest attributes on VMs – GCP Docs](https://cloud.google.com/compute/docs/metadata/manage-guest-attributes)
+             
+              
               [main doc](https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata)
 
 

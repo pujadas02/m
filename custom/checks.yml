@@ -73,13 +73,12 @@ definition:
                 - "google_compute_instance"
               attribute: "network_interface.*.alias_ip_range.*.ip_cidr_range"
               operator: "not_exists"
-            - cond_type: "solver"
-              solver_type: "attribute"
+            - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
               attribute: "network_interface.*.alias_ip_range.*.ip_cidr_range"
-              operator: "cidr_range_not_subset_attribute_solver"
-              value: "0.0.0.0/0" # No IPv6 CIDRs allowed
+              operator: "not_regex_match"
+              value: "^([0-9]{1,3}\\.){3}[0-9]{1,3}\\/\\d+$" # No IPv6 CIDRs allowed
     - and:
         - or:
             - cond_type: "attribute"

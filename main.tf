@@ -4,7 +4,7 @@ resource "google_compute_instance" "secure_vm" {
   zone         = "us-central1-a"
 
   metadata = {
-    serial-port-enable = "false"
+    
   }
 
   boot_disk {

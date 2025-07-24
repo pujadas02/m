@@ -14,6 +14,9 @@ resource "google_bigquery_connection" "connection" {
   friendly_name = local.bigquery_prefix
   description   = "External connection to Azure"
 
-  
+  azure {
+    customer_tenant_id               = var.azure_tenant_id
+    federated_application_client_id = azuread_application.bigquery_connection.application_id
+  }
 }
 

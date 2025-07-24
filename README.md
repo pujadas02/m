@@ -15,11 +15,11 @@ This is a configuration-based best practice (not a GCP org policy constraint) th
 
 | Setting             | Description                                                                     | Behavior               |
 | ------------------- | ------------------------------------------------------------------------------- | ---------------------- |
-| `false` *(default)* | Disables guest attribute access; protects sensitive runtime metadata.           | ✅ Secure – Compliant   |
-| `true`              | Enables guest attributes, exposing system-level details to the metadata server. | ❌ Risk – Non-compliant |
+| `false`  | Disables guest attribute access; protects sensitive runtime metadata.           | ✅ Secure – Compliant   |
+| `true` *(default)*    | Enables guest attributes, exposing system-level details to the metadata server. | ❌ Risk – Non-compliant |
 
 
-### ✅ Compliant Configuration (PASS) either this or missing attribute is fine 
+### ✅ Compliant Configuration (PASS) 
 
 ```hcl
 resource "google_compute_instance" "secure_vm" {
@@ -44,7 +44,7 @@ resource "google_compute_instance" "secure_vm" {
 
 
 
-### ❌ Non-Compliant Configuration (FAIL)
+### ❌ Non-Compliant Configuration (FAIL) this or missing attribute will fail
 
 ```hcl
 resource "google_compute_instance" "insecure_vm" {
@@ -70,5 +70,6 @@ resource "google_compute_instance" "insecure_vm" {
 
 
 **Reference:** [Manage guest attributes on VMs – GCP Docs](https://cloud.google.com/compute/docs/metadata/manage-guest-attributes)
+              [main doc](https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata)
 
 

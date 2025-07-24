@@ -1,13 +1,12 @@
 metadata:
-  name: "Disable BigQuery Omni for AWS"
-  id: "CCOE_GCP_DISABLE_BIGQUERY_OMNI_AZURE"
+  name: "Disable Creation of Global Self-Managed SSL Certificates"
+  id: "CCOE_GCP_DISABLE_GLOBAL_SELF_MANAGED_SSL"
   category: "security"
   severity: "HIGH"
-  description: "Ensure BigQuery Omni connections to AZURE are disabled by not configuring any AZURE connection block in google_bigquery_connection resources."
+  description: "Creation of global self-managed SSL certificates is disallowed."
 
 definition:
-      cond_type: "attribute"
+      cond_type: "resource_type"
       resource_types:
-        - "google_bigquery_connection"
-      attribute: "azure"
+        - "google_compute_ssl_certificate"
       operator: "not_exists"

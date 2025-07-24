@@ -23,6 +23,7 @@ resource "google_compute_instance" "default" {
       ip_cidr_range = "2600:1900::/64"             
     }
     ipv6_access_config {
+      name = "hy"
     }
   }
 }

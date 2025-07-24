@@ -6,11 +6,11 @@ metadata:
   description: "Ensure guest attributes are disabled in VM instances."
 
 definition:
-     cond_type: "attribute"
-     resource_types:
-       - "google_compute_instance" 
-     attribute: "metadata.enable_guest_attributes"
-     operator: "equals"
-     value: false
+  cond_type: "attribute"
+  resource_types:
+    - "google_compute_instance" 
+  attribute: "metadata.enable_guest_attributes"
+  operator: "equals"
+  value: false
 
      

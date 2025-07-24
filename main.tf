@@ -1,3 +1,22 @@
+resource "google_compute_ssl_certificate" "self_managed" {
+  name        = "global-self-managed-cert"
+  private_key = file("private-key.pem")
+  certificate = file("certificate.pem")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 resource "google_bigquery_connection" "aws_connection" {
   provider      = google-beta
   connection_id = "my-aws-connection"

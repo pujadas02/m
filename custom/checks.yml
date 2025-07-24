@@ -9,6 +9,6 @@ definition:
   cond_type: "attribute"
   resource_types:
    - "google_workbench_instance"
-  attribute: "metadata.notebook-disable-downloads"
+  attribute: "gce_setup.metadata.notebook-disable-downloads"
   operator: "equals"
   value: true

@@ -3,7 +3,7 @@ resource "google_compute_backend_service" "iap_enabled" {
   protocol = "HTTP"
 
   iap {
-    enabled              = true
+    enabled              = false
     oauth2_client_id     = "example-client-id"
     oauth2_client_secret = "example-secret"
   }

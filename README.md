@@ -1,30 +1,23 @@
-## Disable BigQuery Omni for Cloud Azure
+# Disable Creation of Global Self-Managed SSL Certificates
 
-BigQuery Omni allows querying data stored in Microsoft Azure directly from Google BigQuery. Disabling this feature helps prevent data exfiltration to Azure, ensures compliance with data residency policies, and reduces security risks by restricting cross-cloud data processing.
+**Policy:** constraints/compute.disableGlobalSelfManagedSslCertificate
 
-### How to Disable:
+**Description:**  
+This boolean constraint disables the creation of **global self-managed SSL certificates** (`google_compute_ssl_certificate`) in your Google Cloud environment. It ensures consistent security by enforcing the use of Google-managed or regional certificates only, reducing operational overhead and mitigating risks related to manual certificate management.
 
-To disable BigQuery Omni for Azure, do not create any `google_bigquery_connection` resource with an `azure` configuration block in your Terraform code. This effectively blocks connections from BigQuery to Azure.
+**Impact:**  
+- Prevents creating global self-managed SSL certificates.  
+- Allows Google-managed or regional self-managed certificates.  
+- Helps maintain compliance and reduces security risks associated with manual SSL certificate management.
 
-### Example of enabling BigQuery Omni for Azure (DO NOT include this to disable):
+**How to Enforce:**  
+Apply the `constraints/compute.disableGlobalSelfManagedSslCertificate` constraint at the organization, folder, or project level.
+
+**Example Terraform resource to avoid (disallowed):**
 
 ```hcl
-resource "google_bigquery_connection" "azure_connection" {
-  provider      = google-beta
-  connection_id = "my-azure-connection"
-  friendly_name = "Azure Connection for BigQuery Omni"
-
-  azure {
-    tenant_id         = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    service_principal_id = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"
-    service_principal_key = "azure-service-principal-key"
-    azure_ad_resource = "https://storage.azure.com/"
-    storage_account   = "myazurestorageaccount"
-    container        = "bq-omni-staging-container"
-  }
+resource "google_compute_ssl_certificate" "self_managed" {
+  name        = "global-self-managed-cert"
+  private_key = file("private-key.pem")
+  certificate = file("certificate.pem")
 }
-```
-
-### To disable:
-
-Simply ensure no such resource exists or remove any BigQuery connection that references Azure.

@@ -2,6 +2,7 @@ resource "google_compute_subnetwork" "subnetwork-ipv6" {
   name          = "ipv6-test-subnetwork"
   region        = "us-west2"
   stack_type    = "IPV4_ONLY"
+  ipv6_access_type = "EXTERNAL"
 }
 
 resource "google_compute_network" "vpc_fail" {

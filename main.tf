@@ -7,87 +7,26 @@ resource "google_compute_subnetwork" "subnetwork-ipv6" {
   ipv6_access_type = "EXTERNAL"
 }
 
-
-
-
-
-
-
-resource "azurerm_cognitive_account" "example" {
-  name                = "example-cognitive-account"
-  location            = "eastus"
-  resource_group_name = "example-rg"
-  kind                = "CognitiveServices"
-  sku_name            = "S1"
-
-  public_network_access_enabled = true
-
-  network_acls {
-    default_action = "Deny"
-  }
-}
-
-
-resource "azurerm_search_service" "example" {
-  name                = "example-search-service"
-  location            = "eastus"
-  resource_group_name = "example-rg"
-  sku                 = "basic"
-
-  public_network_access_enabled = false
-}
-
-
-
-
-
-
-
-
-
-
-
-
-resource "google_service_account" "default" {
-  account_id   = "my-custom-sa"
-  display_name = "Custom SA for VM Instance"
+resource "google_compute_network" "vpc_fail" {
+  name                    = "vpc-ipv6"
+  auto_create_subnetworks = false
+  enable_ula_internal_ipv6 = true  
 }
 
 resource "google_compute_instance" "default" {
   name         = "my-instance"
   machine_type = "n2-standard-2"
   zone         = "us-central1-a"
-
-  tags = ["foo", "bar"]
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-      labels = {
-        my_label = "value"
-      }
-    }
-  }
-
-  // Local SSD disk
-  scratch_disk {
-    interface = "NVME"
-  }
-
   network_interface {
     network = "default"
     stack_type = "IPV4_ONLY"
+    alias_ip_range {
+      ip_cidr_range = "2600:1900::/64"             
+    }
     access_config {
     }
-  }
-  metadata = {
-    foo = "bar"
-  }
-  metadata_startup_script = "echo hi > /test.txt"
-  service_account {
-    # Google recommends custom service accounts that have cloud-platform scope and permissions granted via IAM Roles.
-    email  = google_service_account.default.email
-    scopes = ["cloud-platform"]
+    ipv6_access_config {
+    }
   }
 }
 

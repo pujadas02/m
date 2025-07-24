@@ -1,12 +1,14 @@
 metadata:
-  name: "Disable Creation of Global Self-Managed SSL Certificates"
-  id: "CCOE_GCP_DISABLE_GLOBAL_SELF_MANAGED_SSL"
+  name: "Disable IAP on Global Backend Services"
+  id: "CCOE_GCP_DISABLE_GLOBAL_IAP"
   category: "security"
   severity: "HIGH"
-  description: "Creation of global self-managed SSL certificates is not allowed."
+  description: "Ensure that Identity-Aware Proxy (IAP) is not enabled on global backend services."
 
 definition:
-  cond_type: "resource"
+  cond_type: "attribute"
   resource_types:
    - "google_compute_ssl_certificate"
-  operator: "not_exists"
+  attribute: "iap.enabled"
+  operator: "not_equals"
+  value: true

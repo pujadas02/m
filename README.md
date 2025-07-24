@@ -1,6 +1,4 @@
 
----
-
 ## 🔒 Disable Guest Attributes of Compute Engine Metadata
 
 **Constraint Purpose:**
@@ -15,7 +13,11 @@ This is a configuration-based best practice (not a GCP org policy constraint) th
 * **Security Hardening** – Reduces the surface area for introspection and potential abuse.
 * **Best Practice Compliance** – Aligns with secure-by-default principles in cloud environments.
 
----
+| Setting             | Description                                                                     | Behavior               |
+| ------------------- | ------------------------------------------------------------------------------- | ---------------------- |
+| `false` *(default)* | Disables guest attribute access; protects sensitive runtime metadata.           | ✅ Secure – Compliant   |
+| `true`              | Enables guest attributes, exposing system-level details to the metadata server. | ❌ Risk – Non-compliant |
+
 
 ### ✅ Compliant Configuration (PASS)
 
@@ -40,7 +42,7 @@ resource "google_compute_instance" "secure_vm" {
 }
 ```
 
----
+
 
 ### ❌ Non-Compliant Configuration (FAIL)
 
@@ -65,8 +67,8 @@ resource "google_compute_instance" "insecure_vm" {
 }
 ```
 
----
+
 
 **Reference:** [Manage guest attributes on VMs – GCP Docs](https://cloud.google.com/compute/docs/metadata/manage-guest-attributes)
 
----
+

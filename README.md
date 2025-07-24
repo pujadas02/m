@@ -1,19 +1,38 @@
-### Disable File Downloads on Vertex AI Workbench Notebooks
+## Disable Global Access to VM Serial Ports
 
-This policy enforces **`constraints/ainotebooks.disableFileDownloads = true`**, which blocks users from enabling the file download option in the Vertex AI Workbench UI. Internally, the system applies the metadata flag:  
-```yaml
-notebook-disable-downloads: "true"
+This policy ensures that VM serial port access is disabled globally to prevent unauthorized interactive access or data exfiltration via serial consoles.
 
-```
-Prevents sensitive data exfiltration from notebooks
+**Metadata Key:** `serial-port-enable`
 
-Supports compliance and data governance requirements
+| Value     | Behavior                                                  |
+|-----------|-----------------------------------------------------------|
+| `false`   | ✅ Disables serial port access                             |
+| `true` *(default)* | ❌ Enables serial port access, posing a security risk |
 
-Helps maintain a secure environment by blocking unsafe downloads
+---
 
-OFFICIAL DOC - https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata
+### ✅ How to Enforce
 
-| **Feature**      | **Metadata Key**             | **Value**           | **Behavior**                              |
-| ---------------- | ---------------------------- | ------------------- | ----------------------------------------- |
-| File Downloading | `notebook-disable-downloads` | `true`              | ✅ Disables file downloading in JupyterLab |
-|                  |                              | `false` *(default)* | ❌ Enables file downloading in JupyterLab  |
+Add metadata with `serial-port-enable = "false"` in your VM definition:
+
+```hcl
+resource "google_compute_instance" "secure_vm" {
+  name         = "secure-vm"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
+
+  metadata = {
+    serial-port-enable = "false"
+  }
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
+  }
+
+  network_interface {
+    network = "default"
+    access_config {}
+  }
+}

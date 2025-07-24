@@ -1,15 +1,20 @@
-resource "google_workbench_instance" "default" {
-  name     = "workbench-instance-example"
-  location = "us-central1-a"
+resource "google_compute_instance" "secure_vm" {
+  name         = "secure-vm"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
 
-  gce_setup {
-    machine_type = "n1-standard-1"
-    vm_image {
-      project = "cloud-notebooks-managed"
-      family  = "workbench-instances"
+  metadata = {
+    serial-port-enable = "false"
+  }
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
     }
-    metadata = {
-      notebook-disable-downloads = "true"
-    }
+  }
+
+  network_interface {
+    network = "default"
+    access_config {}
   }
 }

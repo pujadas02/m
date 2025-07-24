@@ -1,6 +1,6 @@
 ## Disable Global Access to VM Serial Ports
 
-This policy ensures that VM serial port access is disabled globally to prevent unauthorized interactive access or data exfiltration via serial consoles. Missing metadata block will not allow serial access by default.
+This policy ensures that VM serial port access is disabled globally to prevent unauthorized interactive access or data exfiltration via serial consoles.
 
 **Metadata Key:** `serial-port-enable`
 

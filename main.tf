@@ -17,7 +17,7 @@ resource "google_compute_instance" "default" {
   zone         = "us-central1-a"
   network_interface {
     network = "default"
-    stack_type = "IPV4_ONLY"
+    stack_type = "IPV4_IPV6"
   }
 }
 

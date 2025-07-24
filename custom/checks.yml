@@ -6,9 +6,16 @@ metadata:
   description: "Ensure VM serial port access is disabled by setting `serial-port-enable=false` in metadata."
 
 definition:
-  cond_type: "attribute"
-  resource_types:
-   - "google_compute_instance" 
-  attribute: "metadata.serial-port-enable"
-  operator: "equals"
-  value: false
+  or:
+   - cond_type: "attribute"
+     resource_types:
+       - "google_compute_instance" 
+     attribute: "metadata.serial-port-enable"
+     operator: "equals"
+     value: false
+   - cond_type: "attribute"
+     resource_types:
+       - "google_compute_instance" 
+     attribute: "metadata.serial-port-enable"
+     operator: "not_exists"
+     

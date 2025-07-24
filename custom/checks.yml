@@ -49,24 +49,24 @@ definition:
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
-              attribute: "network_interface"
+              attribute: "network_interface.stack_type"
               operator: "not_exists"
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
-              attribute: "network_interface"
+              attribute: "network_interface.stack_type"
               operator: "equals"
               value: "IPV4_ONLY"
         - or:
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
-              attribute: "alias_ip_range"
+              attribute: "alias_ip_range.ip_cidr_range"
               operator: "not_exists"
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
-              attribute: "alias_ip_range"
+              attribute: "alias_ip_range.ip_cidr_range"
               operator: "not_regex_match"
               value: "*:*"  # No IPv6 CIDRs allowed
         - or:

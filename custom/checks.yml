@@ -8,6 +8,17 @@ metadata:
 definition:
   or:
     - and:
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_subnetwork"
+          attribute: "ipv6_cidr_range"
+          operator: "not_exists"
+        - cond_type: "attribute"
+          resource_types:
+             - "google_compute_subnetwork"
+          attribute: "ipv6_cidr_range"
+          operator: "not_regex_match"
+          value: "*:*"
         - or:
             - cond_type: "attribute"
               resource_types:

@@ -6,18 +6,8 @@ metadata:
   description: "Ensure that no members are exempted from audit logging in IAM Audit Config."
 
 definition:
-  or:
     - cond_type: "attribute"
       resource_types:
-        - "google_organization_iam_audit_config"
-        - "google_folder_iam_audit_config"
-        - "google_project_iam_audit_config"
-      attribute: "audit_log_config.exempted_members"
+        - "google_bigquery_connection"
+      attribute: "aws"
       operator: "not_exists"
-    - cond_type: "attribute"
-      resource_types:
-        - "google_organization_iam_audit_config"
-        - "google_folder_iam_audit_config"
-        - "google_project_iam_audit_config"
-      attribute: "audit_log_config.exempted_members"
-      operator: "is_empty"

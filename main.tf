@@ -1,10 +1,15 @@
-resource "google_compute_backend_service" "iap_enabled" {
-  name     = "global-backend"
-  protocol = "HTTP"
+resource "google_workbench_instance" "default" {
+  name     = "workbench-instance-example"
+  location = "us-central1-a"
 
-  iap {
-    enabled              = false
-    oauth2_client_id     = "example-client-id"
-    oauth2_client_secret = "example-secret"
+  gce_setup {
+    machine_type = "n1-standard-1"
+    vm_image {
+      project = "cloud-notebooks-managed"
+      family  = "workbench-instances"
+    }
+    metadata = {
+      notebook-disable-downloads = "true"
+    }
   }
 }

@@ -17,7 +17,7 @@ definition:
         - "google_compute_subnetwork"
       attribute: "ipv6_cidr_range"
       operator: "not_regex_match"
-      value: "*:*"
+      value: ".*:.*"
     - and:
         - or:
             - cond_type: "attribute"
@@ -42,7 +42,7 @@ definition:
                 - "google_compute_subnetwork"
               attribute: "ipv6_cidr_range"
               operator: "not_regex_match"
-              value: "*:*"
+              value: ".*:.*"
         - or:
             - cond_type: "attribute"
               resource_types:

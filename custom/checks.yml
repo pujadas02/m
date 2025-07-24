@@ -30,8 +30,8 @@ definition:
               resource_types:
                 - "google_compute_subnetwork"
               attribute: "ipv6_cidr_range"
-              operator: "cidr_range_not_subset_attribute_solver"
-              value: "0.0.0.0/0"
+              operator: "not_regex_match"
+              value: "*:*"
         - or:
             - cond_type: "attribute"
               resource_types:
@@ -77,8 +77,8 @@ definition:
               resource_types:
                 - "google_compute_instance"
               attribute: "network_interface.alias_ip_range.ip_cidr_range"
-              operator: "not_regex_match"
-              value: "*:*"  # No IPv6 CIDRs allowed
+              operator: "cidr_range_not_subset_attribute_solver"
+              value: "0.0.0.0/0" # No IPv6 CIDRs allowed
     - and:
         - or:
             - cond_type: "attribute"

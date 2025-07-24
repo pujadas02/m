@@ -7,7 +7,7 @@ metadata:
   
 definition:
   or:
-    - and:
+    - or:
         - cond_type: "attribute"
           resource_types:
             - "google_compute_subnetwork"
@@ -19,6 +19,7 @@ definition:
           attribute: "ipv6_cidr_range"
           operator: "not_regex_match"
           value: "*:*"
+    - and:
         - or:
             - cond_type: "attribute"
               resource_types:

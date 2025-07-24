@@ -19,7 +19,7 @@ This is a configuration-based best practice (not a GCP org policy constraint) th
 | `true`              | Enables guest attributes, exposing system-level details to the metadata server. | ❌ Risk – Non-compliant |
 
 
-### ✅ Compliant Configuration (PASS)
+### ✅ Compliant Configuration (PASS) either this or missing block is fine 
 
 ```hcl
 resource "google_compute_instance" "secure_vm" {

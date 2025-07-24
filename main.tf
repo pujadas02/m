@@ -18,6 +18,6 @@ resource "google_project_iam_audit_config" "project_success" {
   service = "allServices"
   audit_log_config {
     log_type = "ADMIN_READ"
-    exempted_members   = []
+    exempted_members   = [ffhhg]
   }
 }

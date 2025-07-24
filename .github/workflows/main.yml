@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP-Disable-All-IPv6-usage
+    - GCP-Disable-Audit-Logging-exemption
     paths: 
     - main.tf
     - custom/checks.yml

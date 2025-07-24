@@ -3,7 +3,7 @@ metadata:
   id: "CCOE_GCP_DISABLE_GLOBAL_SELF_MANAGED_SSL"
   category: "security"
   severity: "HIGH"
-  description: "Creation of global self-managed SSL certificates is disallowed."
+  description: "Creation of global self-managed SSL certificates is not allowed."
 
 definition:
   cond_type: "resource"

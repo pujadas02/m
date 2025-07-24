@@ -3,7 +3,7 @@ metadata:
   id: "CCOE_GCP_DISABLE_FILE_DOWNLOADS_VERTEX_AI"
   category: "security"
   severity: "HIGH"
-  description: "Ensure new Vertex AI Workbench instances are created with file download disabled.This is enforced via metadata 'notebook-disable-downloads' = "true" "
+  description: "Ensure new Vertex AI Workbench instances are created with file download disabled."
   
 definition:
   cond_type: "attribute"

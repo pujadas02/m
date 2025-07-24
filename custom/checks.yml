@@ -1,14 +1,14 @@
 metadata:
-  name: "Disable IAP on Global Backend Services"
-  id: "CCOE_GCP_DISABLE_GLOBAL_IAP"
+  name: "Disable File Downloads on Vertex AI Workbench"
+  id: "CCOE_GCP_DISABLE_FILE_DOWNLOADS_VERTEX_AI"
   category: "security"
   severity: "HIGH"
-  description: "Ensure that Identity-Aware Proxy (IAP) is not enabled on global backend services."
-
+  description: "Ensure new Vertex AI Workbench instances are created with file download disabled.This is enforced via metadata 'notebook-disable-downloads' = "true" "
+  
 definition:
   cond_type: "attribute"
   resource_types:
-   - "google_compute_backend_service"
-  attribute: "iap.enabled"
-  operator: "not_equals"
+   - "google_workbench_instance"
+  attribute: "metadata.notebook-disable-downloads"
+  operator: "equals"
   value: true

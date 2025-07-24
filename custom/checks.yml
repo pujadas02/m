@@ -74,6 +74,7 @@ definition:
               attribute: "network_interface.*.alias_ip_range.*.ip_cidr_range"
               operator: "not_exists"
             - cond_type: solver
+              solver_type: attribute
               resource_types:
                 - "google_compute_instance"
               attribute: "network_interface.*.alias_ip_range.*.ip_cidr_range"

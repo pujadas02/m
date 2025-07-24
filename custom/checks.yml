@@ -40,7 +40,7 @@ definition:
         - cond_type: "attribute"
           resource_types:
             - "google_compute_subnetwork"
-          attribute: "ipv6_access_type"
+          attribute: "ipv6_access_typ"
           operator: "not_exists"
     # - or:
     #     - cond_type: "attribute"

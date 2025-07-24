@@ -27,7 +27,9 @@ resource "google_compute_instance" "secure_vm" {
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
-  enable_guest_attributes = false
+  metadata = {
+    enable-guest-attributes = "false"
+  }
 
   boot_disk {
     initialize_params {
@@ -52,7 +54,9 @@ resource "google_compute_instance" "insecure_vm" {
   machine_type = "e2-medium"
   zone         = "us-central1-a"
 
-  enable_guest_attributes = true
+  metadata = {
+    enable-guest-attributes = "true"
+  }
 
   boot_disk {
     initialize_params {

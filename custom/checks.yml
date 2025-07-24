@@ -3,11 +3,11 @@ metadata:
   id: "CCOE_GCP_DISABLE_BIGQUERY_OMNI_AWS"
   category: "security"
   severity: "HIGH"
-  description: "Ensure BigQuery Omni connections to AWS are disabled by not configuring any AWS connection block in google_bigquery_connection resources."
+  description: "Ensure BigQuery Omni connections to AZURE are disabled by not configuring any AZURE connection block in google_bigquery_connection resources."
 
 definition:
       cond_type: "attribute"
       resource_types:
         - "google_bigquery_connection"
-      attribute: "aws"
+      attribute: "azure"
       operator: "not_exists"

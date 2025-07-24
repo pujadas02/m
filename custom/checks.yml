@@ -32,16 +32,16 @@ definition:
           operator: "equals"
           value: "IPV4_ONLY"
     - or:
-       - cond_type: "attribute"
+        - cond_type: "attribute"
           resource_types:
             - "google_compute_subnetwork"
           attribute: "ipv6_access_type"
           operator: "not_exists"
-       - cond_type: "attribute"
-         resource_types:
-           - "google_compute_subnetwork"
-         attribute: "ipv6_access_type"
-         operator: "not_exists"
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_subnetwork"
+          attribute: "ipv6_access_type"
+          operator: "not_exists"
     # - or:
     #     - cond_type: "attribute"
     #       resource_types:

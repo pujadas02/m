@@ -1,19 +1,14 @@
-🔒 Disable Enabling Identity-Aware Proxy (IAP) on Global Resources
-Description:
-This policy ensures that Identity-Aware Proxy (IAP) is not enabled on global backend services. IAP on global services may be restricted to enforce tighter security boundaries or reduce complexity by limiting centralized access gateways.
+### Disable File Downloads on Vertex AI Workbench Notebooks
 
-Security Implications:
+This policy enforces **`constraints/ainotebooks.disableFileDownloads = true`**, which blocks users from enabling the file download option in the Vertex AI Workbench UI. Internally, the system applies the metadata flag:  
+```yaml
+notebook-disable-downloads: "true"
 
-Restricts centralized IAP usage to align with security policies or compliance.
+```
+Prevents sensitive data exfiltration from notebooks
 
-Helps avoid unwanted global access exposure.
+Supports compliance and data governance requirements
 
-Ensures IAP is only enabled in explicitly permitted regions or configurations.
+Helps maintain a secure environment by blocking unsafe downloads
 
-https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_backend_service
-
-| Scenario                | Result |
-| ----------------------- | ------ |
-| `iap.enabled = true`    | ❌ Fail |
-| `iap.enabled = false`   | ✅ Pass |
-| `iap` block not present | ✅ Pass |
+OFFICIAL DOC - https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata

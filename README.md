@@ -1,72 +1,25 @@
-### **Audit Logging Exemption Policy**
+Disable BigQuery Omni for Cloud AWS
+BigQuery Omni allows querying data stored in AWS S3 directly from Google BigQuery. Disabling this feature helps prevent data exfiltration to AWS, ensures compliance with data residency policies, and reduces security risks by restricting cross-cloud data processing.
 
-This policy controls the auditing of activities in Google Cloud. It enables or disables audit logging for specified IAM roles and actions. The `exempted_members` field allows exclusion of certain users or service accounts from being logged for specific `log_type` operations (e.g., `ADMIN_READ`, `DATA_READ`).
+How to Disable:
 
-When you **disable audit logging exemption**, any previously excluded members will now have their actions logged under the specified log types.
+To disable BigQuery Omni for AWS, do not create any google_bigquery_connection resource with an aws configuration block in your Terraform code. This effectively blocks connections from BigQuery to AWS.
 
-#### **Key Concepts:**
+Example of enabling BigQuery Omni for AWS (DO NOT include this to disable):
 
-* **Enabled Logging**: Logs are generated for operations like `ADMIN_READ`, `DATA_READ`, etc.
-* **Exemption**: Certain users, service accounts, or groups can be excluded from logs.
-* **Disabling Exemption**: Removes users from the `exempted_members` list, ensuring their actions are logged.
+hcl
+Copy
+Edit
+resource "google_bigquery_connection" "aws_connection" {
+  provider      = google-beta
+  connection_id = "my-aws-connection"
+  friendly_name = "AWS Connection for BigQuery Omni"
 
-### **Example Terraform Configuration (Success)**
-
-This example shows how to **enable audit logging** and ensure that no users are exempted:
-
-```hcl
-resource "google_organization_iam_audit_config" "organization" {
-  org_id  = "1234567890"
-  service = "allServices"
-
-  # Enabling logging for all services
-  audit_log_config {
-    log_type = "DATA_READ"
-    # No exempted members, so all actions will be logged
+  aws {
+    cross_account_role_arn = "arn:aws:iam::123456789012:role/BigQueryOmniAccess"
+    s3_staging_dir         = "s3://my-bq-omni-staging-bucket"
+    region                 = "us-east-1"
   }
 }
-```
-
-In this case, **all users' actions** for `DATA_READ` will be logged, and no one is exempted.
-
-### **Example Terraform Configuration (Failure)**
-
-This example demonstrates what happens when **exemption is applied** to a specific user, meaning their actions will **not be logged** for `DATA_READ`:
-
-```hcl
-resource "google_organization_iam_audit_config" "organization" {
-  org_id  = "1234567890"
-  service = "allServices"
-
-  # Enabling logging for all services
-  audit_log_config {
-    log_type = "DATA_READ"
-    exempted_members = [
-      "user:joebloggs@hashicorp.com",  # Exempting joebloggs from data read logs
-    ]
-  }
-}
-```
-
-In this case, the user **`joebloggs@hashicorp.com`** will be **exempted from data read logs**, and their actions will not be logged for `DATA_READ`.
-
-### **Disabling the Exemption (Failure Case)**
-
-To **disable the exemption** and ensure that the user is **no longer exempt** from logging, you remove the `exempted_members` or empty the list:
-
-```hcl
-resource "google_organization_iam_audit_config" "organization" {
-  org_id  = "1234567890"
-  service = "allServices"
-
-  # Enabling logging for all services
-  audit_log_config {
-    log_type = "DATA_READ"
-    # Removed exempted_members block, now all actions are logged
-  }
-}
-```
-
-In this **failure case**, the user `joebloggs@hashicorp.com` will now have their actions logged for `DATA_READ`, as they are no longer excluded.
-
-
+To disable:
+Simply ensure no such resource exists or remove any BigQuery connection that references AWS.

@@ -73,7 +73,7 @@ definition:
                 - "google_compute_instance"
               attribute: "network_interface.*.alias_ip_range.*.ip_cidr_range"
               operator: "not_exists"
-            - cond_type: "attribute"
+            - cond_type: solver
               resource_types:
                 - "google_compute_instance"
               attribute: "network_interface.*.alias_ip_range.*.ip_cidr_range"

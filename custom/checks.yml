@@ -24,7 +24,7 @@ definition:
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_subnetwork"
-              attribute: "ipv6_access_type"
+              attribute: "ipv6_cidr_range"
               operator: "not_exists"
             - cond_type: "attribute"
               resource_types:
@@ -48,7 +48,7 @@ definition:
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
-              attribute: "network_interface.ipv6_access_config"
+              attribute: "network_interface.alias_ip_range.ip_cidr_range"
               operator: "not_exists"
             - cond_type: "attribute"
               resource_types:

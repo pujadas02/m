@@ -49,36 +49,24 @@ definition:
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
-              attribute: "network_interface.network_interface.stack_type"
+              attribute: "network_interface.stack_type"
               operator: "not_exists"
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
-              attribute: "network_interface.network_interface.stack_type"
+              attribute: "network_interface.stack_type"
               operator: "equals"
               value: "IPV4_ONLY"
         - or:
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
-              attribute: "network_interface.alias_ip_range.ip_cidr_range"
+              attribute: "network_interface.network"
               operator: "not_exists"
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
-              attribute: "network_interface.alias_ip_range.ip_cidr_range"
-              operator: "not_regex_match"
-              value: "*:*"  # No IPv6 CIDRs allowed
-        - or:
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_instance"
-              attribute: "ipv6_access_config"
-              operator: "not_exists"
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_instance"
-              attribute: "ipv6_access_config"
+              attribute: "network_interface.network"
               operator: "not_exists"
     - and:
         - or:
@@ -104,4 +92,17 @@ definition:
                 - "google_compute_network"
               attribute: "internal_ipv6_range"
               operator: "not_exists"
-            
+
+
+            # - or:
+            # - cond_type: "attribute"
+            #   resource_types:
+            #     - "google_compute_instance"
+            #   attribute: "network_interface.network"
+            #   operator: "not_exists"
+            # - cond_type: "attribute"
+            #   resource_types:
+            #     - "google_compute_instance"
+            #   attribute: "network_interface.network"
+            #   operator: "not_regex_match"
+            #   value: "*:*"  # No IPv6 CIDRs allowed

@@ -1,9 +1,9 @@
 metadata:
-  name: "Ensure Disable Audit Logging Exemption"
-  id: "CCOE_GCP_DISABLE_AUDIT_LOGGING_EXEMPTION"
+  name: "Disable BigQuery Omni for AWS"
+  id: "CCOE_GCP_DISABLE_BIGQUERY_OMNI_AWS"
   category: "security"
   severity: "HIGH"
-  description: "Ensure that no members are exempted from audit logging in IAM Audit Config."
+  description: "Ensure BigQuery Omni connections to AWS are disabled by not configuring any AWS connection block in google_bigquery_connection resources."
 
 definition:
       cond_type: "attribute"

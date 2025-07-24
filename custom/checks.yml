@@ -6,7 +6,7 @@ metadata:
   description: "Ensure that no members are exempted from audit logging in IAM Audit Config."
 
 definition:
-    - cond_type: "attribute"
+      cond_type: "attribute"
       resource_types:
         - "google_bigquery_connection"
       attribute: "aws"

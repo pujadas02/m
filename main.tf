@@ -8,7 +8,6 @@ resource "google_bigquery_connection" "aws_connection" {
     region                 = "us-east-1"
   }
 }
-
 resource "google_bigquery_connection" "connection" {
   connection_id = local.bigquery_prefix
   location      = var.bigquery_omni_region

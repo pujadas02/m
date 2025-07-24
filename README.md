@@ -36,3 +36,6 @@ resource "google_compute_instance" "secure_vm" {
     access_config {}
   }
 }
+```
+
+https://docs.prowler.com/checks/gcp/google-cloud-networking-policies/bc_gcp_networking_11/#:~:text=To%20change%20the%20policy%20using%20the%20GCP%20Console%2C,located%20below%20the%20Remote%20access%20block.%20Click%20Save. 

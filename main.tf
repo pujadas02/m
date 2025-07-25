@@ -1,6 +1,6 @@
 resource "google_project_iam_member" "example_member" {
   project = "my-project-id"
-  role    = "roles/iap.tunnelResourceAccessor"
+ 
   member  = "user:example-user@example.com"
 }
 

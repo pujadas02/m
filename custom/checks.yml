@@ -9,8 +9,8 @@ metadata:
 definition:
   cond_type: "attribute"
   resource_types:
-    - "data.google_iam_policy"
-  attribute: "binding.role"
+    - "data.google_iam_policy.binding"
+  attribute: "role"
   operator: "not_equals"
   value: "roles/iap.tunnelResourceAccessor"
 

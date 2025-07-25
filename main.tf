@@ -8,6 +8,8 @@ resource "google_workbench_instance" "default" {
       project = "cloud-notebooks-managed"
       family  = "workbench-instances"
     }
-   
+    metadata = {
+      notebook-disable-root = "false"
+    }
   }
 }

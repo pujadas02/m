@@ -5,26 +5,24 @@ metadata:
   severity: "HIGH"
   description: "Ensure users are not granted roles/iap.tunnelResourceAccessor to prevent SSH-in-browser access."
 
-
 definition:
-  cond_type: "attribute"
-  resource_types:
-    - "data.google_iam_policy.binding"
-  attribute: "role"
-  operator: "not_equals"
-  value: "roles/iap.tunnelResourceAccessor"
-
-# definition:
-#   cond_type: "attribute"
-#   resource_types:
-#     - "google_project_iam_member"
-#     - "google_project_iam_binding"
-#     - "google_project_iam_policy"
-#     - "google_folder_iam_member"
-#     - "google_organization_iam_member"
-#   attribute: "role"
-#   operator: "not_equals"
-#   value: "roles/iap.tunnelResourceAccessor"
+    and:
+        - cond_type: "attribute"
+          resource_types:
+            - "data.google_iam_policy"
+          attribute: "binding.role"
+          operator: "not_equals"
+          value: "roles/iap.tunnelResourceAccessor"
+        - cond_type: "attribute"
+          resource_types:
+            - "google_project_iam_member"
+            - "google_project_iam_binding"
+            - "google_project_iam_policy"
+            - "google_folder_iam_member"
+            - "google_organization_iam_member"
+          attribute: "role"
+          operator: "not_equals"
+          value: "roles/iap.tunnelResourceAccessor"
 
 
 

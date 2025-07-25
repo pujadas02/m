@@ -1,16 +1,31 @@
 metadata:
-  name: "Disable Guest Attributes of Compute Engine metadata"
-  id: "CCOE_GCP_DISABLE_GUEST_ATTRIBUTES"
-  category: "security"
+  name: "Disallow IAP Tunnel Access for SSH"
+  id: "CCOE_GCP_DISALLOW_IAP_TUNNEL_ACCESS"
+  category: "iam"
   severity: "HIGH"
-  description: "Ensure guest attributes are disabled in VM instances."
+  description: "Ensure users are not granted roles/iap.tunnelResourceAccessor to prevent SSH-in-browser access."
+
 
 definition:
   cond_type: "attribute"
   resource_types:
-    - "google_compute_instance" 
-  attribute: "metadata.enable-guest-attributes"
-  operator: "equals"
-  value: false
+    - "data.google_iam_policy"
+  attribute: "binding.role"
+  operator: "not_equals"
+  value: "roles/iap.tunnelResourceAccessor"
 
-     
+# definition:
+#   cond_type: "attribute"
+#   resource_types:
+#     - "google_project_iam_member"
+#     - "google_project_iam_binding"
+#     - "google_project_iam_policy"
+#     - "google_folder_iam_member"
+#     - "google_organization_iam_member"
+#   attribute: "role"
+#   operator: "not_equals"
+#   value: "roles/iap.tunnelResourceAccessor"
+
+
+
+  

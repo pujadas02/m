@@ -9,7 +9,7 @@ resource "google_workbench_instance" "default" {
       family  = "workbench-instances"
     }
     metadata = {
-      notebook-disable-downloads = "true"
+      notebook-disable-root = "true"
     }
   }
 }

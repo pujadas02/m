@@ -17,4 +17,5 @@ In check iam not restricting the ip ranges of ipv6 bcoz if stack type is ipv4 ip
 (`ipv6_cidr_range`  , `ipv6_access_config` , `alias_ip_range` block `ip_cidr_range` , `ipv6_access_type` )
 
 SO I HAVE TO ENSURE THESE ATTRIBUTES ARE NOT PRESENT UNDER THESE THREE RESOURCES 
-
+ 
+(https://cloud.google.com/vpc/docs/vpc#org-policies)[doc]

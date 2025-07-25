@@ -1,19 +1,21 @@
-### Disable File Downloads on Vertex AI Workbench Notebooks
+### Disable Root Access on Vertex AI Workbench Notebooks
 
-This policy enforces **`constraints/ainotebooks.disableFileDownloads = true`**, which blocks users from enabling the file download option in the Vertex AI Workbench UI. Internally, the system applies the metadata flag:  
-```yaml
-notebook-disable-downloads: "true"
+This policy enforces `constraints/ainotebooks.disableRootAccess = true`, which blocks users from enabling **root (sudo) access** in new **Vertex AI Workbench user-managed notebooks**.
+
+Internally, the system applies the metadata flag:
 
 ```
-Prevents sensitive data exfiltration from notebooks
+notebook-disable-root-access: "true"
+```
 
-Supports compliance and data governance requirements
+* 🔒 **Prevents elevation of privileges inside notebook VMs**
+* 📊 **Supports security, compliance, and governance controls**
+* 🧱 **Helps enforce least-privilege principles in development environments**
 
-Helps maintain a secure environment by blocking unsafe downloads
+**OFFICIAL DOC** – [Manage Metadata on Vertex AI Workbench Instances](https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata)
 
-OFFICIAL DOC - https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata
+| Feature     | Metadata Key                   | Value             | Behavior                                     |
+| ----------- | ------------------------------ | ----------------- | -------------------------------------------- |
+| Root Access | `notebook-disable-root-access` | `true`            | ✅ Disables sudo/root access in notebooks     |
+|             |                                | `false` (default) | ❌ Allows root access in notebook environment |
 
-| **Feature**      | **Metadata Key**             | **Value**           | **Behavior**                              |
-| ---------------- | ---------------------------- | ------------------- | ----------------------------------------- |
-| File Downloading | `notebook-disable-downloads` | `true`              | ✅ Disables file downloading in JupyterLab |
-|                  |                              | `false` *(default)* | ❌ Enables file downloading in JupyterLab  |

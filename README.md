@@ -5,7 +5,7 @@ This policy enforces `constraints/ainotebooks.disableRootAccess = true`, which b
 Internally, the system applies the metadata flag:
 
 ```
-notebook-disable-root-access: "true"
+notebook-disable-root: "true"
 ```
 
 * 🔒 **Prevents elevation of privileges inside notebook VMs**
@@ -16,6 +16,6 @@ notebook-disable-root-access: "true"
 
 | Feature     | Metadata Key                   | Value             | Behavior                                     |
 | ----------- | ------------------------------ | ----------------- | -------------------------------------------- |
-| Root Access | `notebook-disable-root-access` | `true`            | ✅ Disables sudo/root access in notebooks     |
+| Root Access | `notebook-disable-root` | `true`            | ✅ Disables sudo/root access in notebooks     |
 |             |                                | `false` (default) | ❌ Allows root access in notebook environment |
 

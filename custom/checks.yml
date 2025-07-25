@@ -11,7 +11,7 @@ definition:
           resource_types:
             - "data.google_iam_policy"
           attribute: "binding.role"
-          operator: "equals"
+          operator: "not_equals"
           value: "roles/iap.tunnelResourceAccessor"
         - cond_type: "attribute"
           resource_types:
@@ -23,7 +23,7 @@ definition:
             - "google_folder_iam_member"
             - "google_organization_iam_member"
           attribute: "role"
-          operator: "equals"
+          operator: "not_equals"
           value: "roles/iap.tunnelResourceAccessor"
 
 

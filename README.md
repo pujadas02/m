@@ -24,13 +24,13 @@ Browser-based SSH (SSH-in-Browser) leverages [Identity-Aware Proxy (IAP) TCP tun
   [https://cloud.google.com/iam/docs/understanding-roles#iap-roles](https://cloud.google.com/iam/docs/understanding-roles#iap-roles)
 
 ```hcl
-# ✅ Enforce secure metadata
+## ✅ Enforce secure metadata
 metadata = {
   enable-oslogin         = "TRUE"
   block-project-ssh-keys = "TRUE"
 }
 
-# ✅ Ensure IAP SSH access is not granted
+## ✅ Ensure IAP SSH access is not granted
 resource "google_project_iam_binding" "remove_iap_tunnel" {
   project = "your-project-id"
   role    = "roles/iap.tunnelResourceAccessor"
@@ -39,7 +39,7 @@ resource "google_project_iam_binding" "remove_iap_tunnel" {
 
 ```
 
-# enable-oslogin
+## enable-oslogin
  "TRUE":
 Enables OS Login, which means SSH access is managed via IAM roles and permissions, not manually added SSH keys.
 Each user's SSH key is stored and linked to their Google identity.
@@ -50,7 +50,7 @@ VM falls back to project-level or instance-level SSH keys.
 Anyone with SSH keys in metadata or added manually can access the VM — potentially bypassing IAM.
 Less secure and harder to audit.
 
-# block-project-ssh-keys
+## block-project-ssh-keys
  "TRUE":
 Blocks project-wide SSH keys from being injected into the instance.
 Only instance-level SSH keys (or OS Login keys) will be valid.

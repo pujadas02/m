@@ -37,7 +37,7 @@ resource "google_project_iam_binding" "remove_iap_tunnel" {
   members = [] # Prevent any assignment
 }
 
-
+```
 
 🔧 enable-oslogin
 ✅ When set to "TRUE":

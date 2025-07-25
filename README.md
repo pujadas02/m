@@ -1,81 +1,38 @@
+# 🚫 Disable SSH-in-Browser Access in Google Cloud
 
-## 🔒 Disable Guest Attributes of Compute Engine Metadata
+This policy enforces the removal of the `roles/iap.tunnelResourceAccessor` IAM role and ensures Compute Engine instances are configured to reduce browser-based SSH exposure.
 
-**Constraint Purpose:**
-Prevent the exposure of runtime metadata from virtual machines by disabling guest attributes on Compute Engine instances.
+Browser-based SSH (SSH-in-Browser) leverages [Identity-Aware Proxy (IAP) TCP tunneling](https://cloud.google.com/iap/docs/using-tcp-forwarding) to open terminal sessions in the Cloud Console. This can be useful but also introduces a risk of unauthorized or overly broad administrative access.
 
-**Constraint Type:**
-This is a configuration-based best practice (not a GCP org policy constraint) that ensures `enable_guest_attributes` is not enabled in VM instances.
+## 📋 Table: Enforcement Behavior
 
-### ✅ Why Disable Guest Attributes?
+| Feature                        | Setting                                       | Behavior                                     |
+|-------------------------------|-----------------------------------------------|----------------------------------------------|
+| IAP TCP Tunneling             | `roles/iap.tunnelResourceAccessor` **removed** | ❌ Blocks SSH-in-browser and IAP tunnel access |
+| OS Login                      | `enable-oslogin = "TRUE"`                    | ✅ Uses IAM for SSH access                    |
+| Project-wide SSH Keys         | `block-project-ssh-keys = "TRUE"`            | ✅ Prevents inherited SSH key injection       |
 
-* **Data Minimization** – Prevents exposure of guest-level system information to the metadata server.
-* **Security Hardening** – Reduces the surface area for introspection and potential abuse.
-* **Best Practice Compliance** – Aligns with secure-by-default principles in cloud environments.
+## 📘 References
 
-| Setting             | Description                                                                     | Behavior               |
-| ------------------- | ------------------------------------------------------------------------------- | ---------------------- |
-| `false`  | Disables guest attribute access; protects sensitive runtime metadata.           | ✅ Secure – Compliant   |
-| `true` *(default)*    | Enables guest attributes, exposing system-level details to the metadata server. | ❌ Risk – Non-compliant |
+- **IAP TCP Tunneling and Role**  
+  [https://cloud.google.com/iap/docs/using-tcp-forwarding](https://cloud.google.com/iap/docs/using-tcp-forwarding)
 
+- **SSH-in-Browser Docs**  
+  [https://cloud.google.com/compute/docs/ssh-in-browser](https://cloud.google.com/compute/docs/ssh-in-browser)
 
-### ✅ Compliant Configuration (PASS) 
-
-```hcl
-resource "google_compute_instance" "secure_vm" {
-  name         = "secure-vm"
-  machine_type = "e2-medium"
-  zone         = "us-central1-a"
-
-  metadata = {
-    enable-guest-attributes = "false"
-  }
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-
-  network_interface {
-    network = "default"
-    access_config {}
-  }
-}
-```
-
-
-
-### ❌ Non-Compliant Configuration (FAIL) this or missing attribute will fail
+- **IAP Role: `roles/iap.tunnelResourceAccessor`**  
+  [https://cloud.google.com/iam/docs/understanding-roles#iap-roles](https://cloud.google.com/iam/docs/understanding-roles#iap-roles)
 
 ```hcl
-resource "google_compute_instance" "insecure_vm" {
-  name         = "insecure-vm"
-  machine_type = "e2-medium"
-  zone         = "us-central1-a"
-
-  metadata = {
-    enable-guest-attributes = "true"
-  }
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-
-  network_interface {
-    network = "default"
-    access_config {}
-  }
+# ✅ Enforce secure metadata
+metadata = {
+  enable-oslogin         = "TRUE"
+  block-project-ssh-keys = "TRUE"
 }
-```
 
-
-
-**Reference:** [Manage guest attributes on VMs – GCP Docs](https://cloud.google.com/compute/docs/metadata/manage-guest-attributes)
-             
-              
-**Reference:** [main doc](https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata)
-
-
+# ✅ Ensure IAP SSH access is not granted
+resource "google_project_iam_binding" "remove_iap_tunnel" {
+  project = "your-project-id"
+  role    = "roles/iap.tunnelResourceAccessor"
+  members = [] # Prevent any assignment
+}

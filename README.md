@@ -1,81 +1,15 @@
+🔹 constraints/compute.disableHybridCloudIpv6
+✅ Description:
+This organization policy constraint disables the use of IPv6 for hybrid cloud networking—meaning any scenario where your on-premises infrastructure connects to GCP using Cloud VPN or Cloud Interconnect, and IPv6 is involved.
 
-## 🔒 Disable Guest Attributes of Compute Engine Metadata
+💡 Hybrid Cloud = On-prem ↔ GCP over VPN or Interconnect
 
-**Constraint Purpose:**
-Prevent the exposure of runtime metadata from virtual machines by disabling guest attributes on Compute Engine instances.
-
-**Constraint Type:**
-This is a configuration-based best practice (not a GCP org policy constraint) that ensures `enable_guest_attributes` is not enabled in VM instances.
-
-### ✅ Why Disable Guest Attributes?
-
-* **Data Minimization** – Prevents exposure of guest-level system information to the metadata server.
-* **Security Hardening** – Reduces the surface area for introspection and potential abuse.
-* **Best Practice Compliance** – Aligns with secure-by-default principles in cloud environments.
-
-| Setting             | Description                                                                     | Behavior               |
-| ------------------- | ------------------------------------------------------------------------------- | ---------------------- |
-| `false`  | Disables guest attribute access; protects sensitive runtime metadata.           | ✅ Secure – Compliant   |
-| `true` *(default)*    | Enables guest attributes, exposing system-level details to the metadata server. | ❌ Risk – Non-compliant |
-
-
-### ✅ Compliant Configuration (PASS) 
-
-```hcl
-resource "google_compute_instance" "secure_vm" {
-  name         = "secure-vm"
-  machine_type = "e2-medium"
-  zone         = "us-central1-a"
-
-  metadata = {
-    enable-guest-attributes = "false"
-  }
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-
-  network_interface {
-    network = "default"
-    access_config {}
-  }
-}
-```
-
-
-
-### ❌ Non-Compliant Configuration (FAIL) this or missing attribute will fail
-
-```hcl
-resource "google_compute_instance" "insecure_vm" {
-  name         = "insecure-vm"
-  machine_type = "e2-medium"
-  zone         = "us-central1-a"
-
-  metadata = {
-    enable-guest-attributes = "true"
-  }
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-
-  network_interface {
-    network = "default"
-    access_config {}
-  }
-}
-```
-
-
-
-**Reference:** [Manage guest attributes on VMs – GCP Docs](https://cloud.google.com/compute/docs/metadata/manage-guest-attributes)
-             
-              
-**Reference:** [main doc](https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata)
-
+| Resource                                 | Affected When Using IPv6 | Example Blocked Fields                               |
+| ---------------------------------------- | ------------------------ | ---------------------------------------------------- |
+| `google_compute_ha_vpn_gateway`          | ✅                        | If associated tunnels use IPv6                       |
+| `google_compute_vpn_gateway`             | ✅                        | Same as above                                        |
+| `google_compute_vpn_tunnel`              | ✅                        | `peer_ip` or `local_traffic_selector` with IPv6      |
+| `google_compute_interconnect_attachment` | ✅                        | `ipsec_internal_addresses` or BGP peer IPs with IPv6 |
+| `google_compute_router_interface`        | ✅                        | If `ip_range` is IPv6                                |
+| `google_compute_router_peer`             | ✅                        | IPv6 BGP peer IPs                                    |
 

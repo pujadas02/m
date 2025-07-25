@@ -6,7 +6,7 @@ metadata:
   description: "Ensure users are not granted roles/iap.tunnelResourceAccessor to prevent SSH-in-browser access."
 
 definition:
-    not:
+    or:
         - cond_type: "attribute"
           resource_types:
             - "data.google_iam_policy"

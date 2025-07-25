@@ -4,7 +4,7 @@ resource "google_project_iam_policy" "example" {
 }
 data "google_iam_policy" "admin" {
   binding {
-    role = "roles/iap.tunnelResourceAccessor"
+    role = "roles/hy"
     members = [
       "user:foo@example.com",
     ]

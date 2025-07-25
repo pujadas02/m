@@ -18,4 +18,4 @@ In check iam not restricting the ip ranges of ipv6 bcoz if stack type is ipv4 ip
 
 SO I HAVE TO ENSURE THESE ATTRIBUTES ARE NOT PRESENT UNDER THESE THREE RESOURCES 
  
-(https://cloud.google.com/vpc/docs/vpc#org-policies)[doc]
+[doc](https://cloud.google.com/vpc/docs/vpc#org-policies)

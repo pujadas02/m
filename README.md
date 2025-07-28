@@ -1,6 +1,16 @@
-https://docs.prowler.com/checks/gcp/google-cloud-public-policies/ensure-gcp-vertex-ai-workbench-does-not-have-public-ips/#:~:text=It%27s%20not%20currently%20possible%20to%20edit%20a%20Vertex,Locate%20the%20External%20IP%20dropdown%20and%20select%20None.
+# Disable Service Account Key Creation
+
+This policy ensures that **no new service account keys are created** in your Google Cloud Platform (GCP) environment. Service account keys are long-lived credentials that can be easily leaked or misused if not properly managed.
+
+## Why is this important?
+
+* **Reduce credential leakage risk:** Keys can be downloaded and accidentally exposed in insecure locations.
+* **Enforce best practices:** Encourages using IAM roles, Workload Identity Federation, or OAuth tokens instead of static keys.
+* **Simplify security management:** Avoids the overhead of manual key rotation and revocation.
+* **Improve compliance:** Aligns with security standards that discourage use of static credentials.
+
+## What does the policy do?
+
+* Detects creation of service account keys (`google_service_account_key` resource).
 
 
-
-
-https://github.com/teamdatatonic/terraform-google-secure-vertex-workbench/blob/b6b887bdaf746bc78c2e23d2fd42c03f223fff0b/notebooks.tf#L20

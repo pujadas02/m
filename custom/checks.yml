@@ -6,7 +6,7 @@ metadata:
   description: "Ensure that VPC subnets do not have internal IPv6 enabled to disable internal IPv6 usage."
 
 definition:
-  and:
+  or:
     - or:
         - cond_type: "attribute"
           resource_types:    

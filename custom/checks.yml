@@ -1,16 +1,22 @@
 metadata:
-  name: "Disable Terminal Access on Vertex AI Workbench"
-  id: "CCOE_GCP_DISABLE_TERMINAL_ACCESS_VERTEX_AI"
+  name: "Disable VM Serial Port Logging to Stackdriver"
+  id: "CCOE_GCP_DISABLE_SERIAL_PORT_LOGGING"
   category: "security"
-  severity: "HIGH"
-  description: "Ensure new Vertex AI Workbench instances are created with terminal access disabled."
+  severity: "MEDIUM"
+  description: "Ensure VM serial port logging to Stackdriver is disabled."
 
 definition:
-  cond_type: "attribute"
-  resource_types:
-    - "google_workbench_instance"
-  attribute: "gce_setup.metadata.notebook-disable-terminal"
-  operator: "equals"
-  value: "true"
+  or:
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_instance"
+      attribute: "metadata.serial-port-logging-enable"
+      operator: "not_exists"
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_instance"
+      attribute: "metadata.serial-port-logging-enable"
+      operator: "equals"    
+      value: "false"
 
   

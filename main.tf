@@ -9,7 +9,7 @@ resource "google_compute_instance" "oslogin_instance" {
   machine_type = "f1-micro"
   zone         = "us-central1-c"
   metadata = {
-    enable-oslogin : "TRUE"
+    
   }
   boot_disk {
     initialize_params {

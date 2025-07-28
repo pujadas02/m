@@ -17,3 +17,9 @@ Enforces IAM-based access control and audit logging for SSH.
 
 ### [doc gcp](https://cloud.google.com/compute/docs/oslogin/set-up-oslogin#enable_os_login_during_vm_creation)
 
+
+
+if  google_compute_project_metadata exists - enable oslogin must be true 
+   then check vm if enable os login does not exist that ok, if exists must equals to true.
+
+if google_compute_project_metadata doesnot exist - vm enable os login must exists and must be true

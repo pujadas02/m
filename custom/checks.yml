@@ -1,20 +1,14 @@
 metadata:
-  name: "Disable External IPv6 Usage on VPC Subnetworks"
-  id: "CCOE_GCP_DISABLE_EXTERNAL_IPV6"
-  category: "networking"
+  name: "Enforce Public Access Prevention on Storage Buckets"
+  id: "CUSTOM_GCP_ENFORCE_PAP"
+  category: "security"
   severity: "HIGH"
-  description: "Ensure external IPv6 access is disabled."
+  description: "Ensure public access prevention on Google Cloud Storage buckets is enabled."
 
 definition:
-  or:
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "ipv6_access_type"
-      operator: "not_exists"
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_subnetwork"
-      attribute: "ipv6_access_type"
-      operator: "not_equals_ignore_case"
-      value: "EXTERNAL"
+  cond_type: "attribute"
+  resource_types:
+    - "google_storage_bucket"
+  attribute: "public_access_prevention"
+  operator: "equals"
+  value: "enforced"

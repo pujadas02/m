@@ -3,10 +3,10 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP-31-Enforce-Public-Access-Prevention
-    paths: 
-    - main.tf
-    - custom/checks.yml
+    - GCP-32-Enforce-uniform-bucket-level-access
+    # paths: 
+    # - main.tf
+    # - custom/checks.yml
   pull_request:
     branches:
       - master

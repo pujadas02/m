@@ -10,7 +10,7 @@ definition:
   resource_types:
     - "google_project_iam_audit_config"
   attribute: "audit_log_configs[*].log_type"
-  operator: "contains_all"
+  operator: "contains"
   value:
     - "ADMIN_READ"
     - "DATA_READ"

@@ -32,29 +32,28 @@ definition:
           operator: "equals_ignore_case"
           value: "TRUE"
     - or:      
-        - or:
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_instance"
-              attribute: "metadata.enable-oslogin"
-              operator: "not_equals_ignore_case"
-              value: "TRUE"
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_instance"
-              attribute: "metadata.enable-oslogin"
-              operator: "equals_ignore_case"
-              value: "TRUE"
         - and:
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_project_metadata"
               attribute: "metadata.enable-oslogin"
-              operator: "not_equals_ignore_case"
+              operator: "equals_ignore_case"
               value: "TRUE"    
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_project_metadata"
+              attribute: "metadata.enable-oslogin"
+              operator: "equals_ignore_case"
+              value: "TRUE"
+        - or:
+            - cond_type: "attribute"
+              resource_types:
+                - "google_compute_instance"
+              attribute: "metadata.enable-oslogin"
+              operator: "not_exists"
+            - cond_type: "attribute"
+              resource_types:
+                - "google_compute_instance"
               attribute: "metadata.enable-oslogin"
               operator: "equals_ignore_case"
               value: "TRUE"

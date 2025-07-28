@@ -6,7 +6,13 @@ resource "google_project_iam_audit_config" "iap-audit-logging" {
   audit_log_config {
     log_type = "DATA_WRITE"
   }
-  audit_log_config {
-    log_type = "ADMIN_READ"
-  }
+
+}
+
+
+resource "google_compute_network" "vpc_network" {
+  project                                   = "my-project-name"
+  name                                      = "vpc-network"
+  routing_mode                              = "GLOBAL"
+  bgp_best_path_selection_mode              = "STANDARD"
 }

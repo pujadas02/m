@@ -1,47 +1,38 @@
-# 🚫 Disable Terminal Access on Vertex AI Workbench Instances
+# 🚫 Disable VM Serial Port Logging to Stackdriver (Cloud Logging)
 
-This policy ensures that terminal access in Vertex AI Workbench notebook instances is **disabled** by enforcing the metadata key:
+This policy enforces that VM instances to **not** send their serial port output logs to Stackdriver (now called Cloud Logging), reducing exposure of potentially sensitive boot and runtime data.
 
-### Why Disable Terminal Access?
-
-By default, JupyterLab terminals are enabled on Vertex AI Workbench instances, allowing users shell access to the instance environment. While this can be useful, it also increases security risks such as unauthorized access or command execution outside the notebook environment.
-
-Disabling terminal access helps:
-
-* Limit attack surface by blocking shell access.
-* Enforce stricter user interaction through notebook UI only.
-* Reduce risks of privilege escalation or lateral movement.
-
+## Serial Port Logging & Stackdriver (Cloud Logging)
+Serial port logging refers to the ability of a VM instance to send its serial port output (low-level boot and runtime logs) somewhere for inspection.
+Stackdriver Logging (now called Cloud Logging) is the destination service where logs are collected and stored.
 
 ## 📋 Enforcement Behavior
 
-| Feature         | Setting                                       | Behavior                                 |
-| --------------- | --------------------------------------------- | ---------------------------------------- |
-| Terminal Access | `notebook-disable-terminal: "true"`           | ❌ Terminal access disabled in JupyterLab |
-| Terminal Access | `notebook-disable-terminal: "false"` or unset | ✅ Terminal access enabled (default)      |
+| Feature                              | Setting                                        | Behavior                                         |
+| ------------------------------------ | ---------------------------------------------- | ------------------------------------------------ |
+| Serial Port Logging to Cloud Logging | `serial-port-enable-logging: "false"` or unset | ❌ Serial port logs **not sent** to Cloud Logging |
+| Serial Port Logging to Cloud Logging | `serial-port-enable-logging: "true"`           | ✅ Serial port logs **sent** to Cloud Logging     |
 
-## 📘 References
-  [docs](https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata)
+## ✅ How to enforce disabling serial port logging to Cloud Logging
 
-## Example: Terraform snippet to create a Notebook instance with terminal disabled
+Ensure that VM instances have the metadata key `serial-port-enable-logging` set to `"false"` or removed entirely.
+
+## Example: Terraform snippet for disabling serial port logging
 
 ```hcl
-resource "google_workbench_instance" "default" {
-  name     = "workbench-instance-example"
-  location = "us-central1-a"
+resource "google_compute_instance" "example" {
+  name         = "example-instance"
+  machine_type = "n1-standard-1"
+  zone         = "us-central1-a"
 
-  gce_setup {
-    machine_type = "n1-standard-1"
-    vm_image {
-      project = "cloud-notebooks-managed"
-      family  = "workbench-instances"
-    }
-    metadata = {
-     "notebook-disable-terminal" = "true"
-    }
+  metadata = {
+    "serial-port-enable-logging" = "false"
   }
+
+  # other instance configs...
 }
 ```
+## References
 
-
-
+[* Serial Port Logging Metadata — Google Cloud Docs](https://cloud.google.com/compute/docs/troubleshooting/viewing-serial-port-output#setting_project_and_instance_metadata)
+  

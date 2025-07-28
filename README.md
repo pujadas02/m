@@ -26,13 +26,19 @@ Disabling terminal access helps:
 ## Example: Terraform snippet to create a Notebook instance with terminal disabled
 
 ```hcl
-resource "google_notebooks_instance" "example" {
-  name       = "example-instance"
-  location   = "us-central1-a"
-  machine_type = "n1-standard-4"
+resource "google_workbench_instance" "default" {
+  name     = "workbench-instance-example"
+  location = "us-central1-a"
 
-  metadata = {
-    "notebook-disable-terminal" = "true"
+  gce_setup {
+    machine_type = "n1-standard-1"
+    vm_image {
+      project = "cloud-notebooks-managed"
+      family  = "workbench-instances"
+    }
+    metadata = {
+     "notebook-disable-terminal" = "true"
+    }
   }
 }
 ```

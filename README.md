@@ -1,30 +1,18 @@
-# What is Uniform Bucket-Level Access?
-Uniform Bucket-Level Access (UBLA) is a Google Cloud Storage feature that simplifies permission management by disabling all object-level ACLs and enforcing access at the bucket level only.
+# What is Require OS Login?
+Require OS Login enforces that users must use OS Login (which ties Linux user accounts to IAM identities) to SSH into VM instances. This improves security by centralizing SSH access control through IAM instead of managing individual SSH keys on each VM.
 
 ## Why enforce it?
-Simplifies access control management by removing per-object ACLs.
-Reduces risk of accidental public exposure via misconfigured ACLs.
-Ensures consistent permission enforcement across all objects in a bucket.
+Centralizes and simplifies SSH access management.
+Eliminates manual SSH key distribution.
+Enforces IAM-based access control and audit logging for SSH.
 
-## So, we have to make sure:
-```hcl
-uniform_bucket_level_access = true"
-```
+#### Enabling OS Login at the Project level (via project metadata enable-oslogin = TRUE) means all VM instances in that project inherit the setting by default.
 
-[EXAmple ref](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket#uniform_bucket_level_access-1)
+#### However, VM instances can override this setting individually by setting instance metadata enable-oslogin = FALSE.
 
-```hcl
-resource "google_storage_bucket" "no-public-access" {
-  name          = "no-public-access-bucket"
-  location      = "US"
-  force_destroy = true
-  uniform_bucket_level_access = true
-}
-```
+#### so we have to make sure that:
+ Validate that project metadata enable-oslogin is TRUE.
+ Validate that VM instances either do not have the enable-oslogin metadata or have it set to TRUE
 
-
-| Attribute                     | Default Value | Effect                                                     |
-| ----------------------------- | ------------- | ---------------------------------------------------------- |
-| `uniform_bucket_level_access` | `false`       | Bucket uses fine-grained ACLs (less secure).               |
-| `uniform_bucket_level_access` | `true`        | Bucket enforces uniform bucket-level access (more secure). |
+### [doc gcp](https://cloud.google.com/compute/docs/oslogin/set-up-oslogin#enable_os_login_during_vm_creation)
 

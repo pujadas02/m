@@ -1,22 +1,23 @@
-# What is Public Access Prevention (PAP)?
-Public Access Prevention is a Google Cloud feature that blocks all public access to buckets (Cloud Storage). When PAP is enabled on a bucket, even users with permissions cannot make the bucket or its objects publicly accessible.
+# What is Uniform Bucket-Level Access?
+Uniform Bucket-Level Access (UBLA) is a Google Cloud Storage feature that simplifies permission management by disabling all object-level ACLs and enforcing access at the bucket level only.
 
 ## Why enforce it?
-Prevent accidental or intentional public exposure of sensitive data.
-Adds an extra layer of security beyond IAM policies.
+Simplifies access control management by removing per-object ACLs.
+Reduces risk of accidental public exposure via misconfigured ACLs.
+Ensures consistent permission enforcement across all objects in a bucket.
 
-## So, to enforce Public Access Prevention we want to make sure:
+## So, we have to make sure:
 ```hcl
-public_access_prevention == "enforced"
+uniform_bucket_level_access = true"
 ```
 
-[EXAmple ref](https://registry.terraform.io/providers/hashicorp/google/6.45.0/docs/resources/storage_bucket#example-usage---enabling-public-access-prevention)
+[EXAmple ref](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/storage_bucket#uniform_bucket_level_access-1)
 
 ```hcl
 resource "google_storage_bucket" "no-public-access" {
   name          = "no-public-access-bucket"
   location      = "US"
   force_destroy = true
-  public_access_prevention = "enforced"
+  uniform_bucket_level_access = true
 }
 ```

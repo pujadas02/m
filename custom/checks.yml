@@ -1,33 +1,20 @@
 metadata:
-  name: "Disable VPC Internal IPv6 Usage"
-  id: "CCOE_GCP_DISABLE_VPC_INTERNAL_IPV6"
+  name: "Disable External IPv6 Usage on VPC Subnetworks"
+  id: "CCOE_GCP_DISABLE_EXTERNAL_IPV6"
   category: "networking"
   severity: "HIGH"
-  description: "Ensure that VPC subnets do not have internal IPv6 enabled to disable internal IPv6 usage."
+  description: "Ensure external IPv6 access is disabled."
 
 definition:
   or:
-    - or:
-        - cond_type: "attribute"
-          resource_types:    
-            - "google_compute_subnetwork"
-          attribute: "ipv6_access_type"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_subnetwork"
-          attribute: "ipv6_access_type"
-          operator: "not_equals"
-          value: "INTERNAL"
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_network"
-          attribute: "enable_ula_internal_ipv6"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_network"
-          attribute: "enable_ula_internal_ipv6"
-          operator: "not_equals"
-          value: true
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_subnetwork"
+      attribute: "ipv6_access_type"
+      operator: "not_exists"
+    - cond_type: "attribute"
+      resource_types:
+        - "google_compute_subnetwork"
+      attribute: "ipv6_access_type"
+      operator: "not_equals"
+      value: "EXTERNAL"

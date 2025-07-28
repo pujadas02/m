@@ -6,8 +6,8 @@ on:
     - GCP-33--Require-OS-Login
     paths: 
     - main.tf
-    - custom/checks.yml
-    - check.py
+    # - custom/checks.yml
+    - custom/check.py
   pull_request:
     branches:
       - master

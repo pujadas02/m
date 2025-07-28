@@ -1,16 +1,13 @@
-resource "google_project_iam_audit_config" "iap-audit-logging" {
-  service = "iap.googleapis.com"
-  audit_log_config {
-    log_type = "DATA_READ"
-  }
-  audit_log_config {
-    log_type = "DATA_WRITE"
-  }
-  audit_log_config {
-    log_type = "ADMIN_READ"
-  }
-
+resource "google_service_account" "myaccount" {
+  account_id   = "myaccount"
+  display_name = "My Service Account"
 }
+
+resource "google_service_account_key" "mykey" {
+  service_account_id = google_service_account.myaccount.name
+  public_key_type    = "TYPE_X509_PEM_FILE"
+}
+
 
 
 resource "google_compute_network" "vpc_network" {

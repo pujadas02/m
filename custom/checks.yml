@@ -6,7 +6,7 @@ metadata:
   description: "Ensure OS Login is enabled on all VM instances either through project metadata or directly in the instance metadata."
 
 definition:
-  and:     
+  or:     
     - or:
         - cond_type: "attribute"
           resource_types:

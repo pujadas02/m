@@ -9,7 +9,7 @@ definition:
   cond_type: "attribute"
   resource_types:
     - "google_project_iam_audit_config"
-  attribute: "audit_log_configs.*.log_type"
+  attribute: "audit_log_config.*.log_type"
   operator: "contains"
   value:
     - "ADMIN_READ"

@@ -1,15 +1,7 @@
-resource "google_workbench_instance" "default" {
-  name     = "workbench-instance-example"
-  location = "us-central1-a"
-
-  gce_setup {
-    machine_type = "n1-standard-1"
-    vm_image {
-      project = "cloud-notebooks-managed"
-      family  = "workbench-instances"
-    }
-    metadata = {
-     
-    }
+resource "google_compute_instance" "default" {
+  name         = "my-instance"
+  machine_type = "n2-standard-2"
+  zone         = "us-central1-a"
+  metadata = {
+    serial-port-logging-enable = "true"
   }
-}

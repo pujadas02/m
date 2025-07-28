@@ -1,35 +1,17 @@
 metadata:
-  name: "Disable VPC Internal IPv6 Usage"
-  id: "CCOE_GCP_DISABLE_VPC_INTERNAL_IPV6"
-  category: "networking"
+  name: "Enable GCP Detailed Audit Logging Mode"
+  id: "CCOE_GCP_DETAILED_AUDIT_LOGGING"
+  category: "logging"
   severity: "HIGH"
-  description: "Ensure that VPC subnets do not have internal IPv6 enabled to disable internal IPv6 usage."
+  description: "Ensure GCP audit logging is enabled for ADMIN_READ, DATA_READ, and DATA_WRITE to provide detailed audit trails of API usage and data access."
 
 definition:
-  or:
-    - or:
-        - cond_type: "attribute"
-          resource_types:    
-            - "google_compute_subnetwork"
-          attribute: "ipv6_access_type"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_subnetwork"
-          attribute: "ipv6_access_type"
-          operator: "not_equals"
-          value: "INTERNAL"
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_network"
-          attribute: "enable_ula_internal_ipv6"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_network"
-          attribute: "enable_ula_internal_ipv6"
-          operator: "not_equals"
-          value: true
-
-
+  cond_type: "attribute"
+  resource_types:
+    - "google_project_iam_audit_config"
+  attribute: "audit_log_configs[*].log_type"
+  operator: "contains_all"
+  value:
+    - "ADMIN_READ"
+    - "DATA_READ"
+    - "DATA_WRITE"

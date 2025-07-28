@@ -1,21 +1,28 @@
-For disabling IPv6-specific fields DISABLE THESE, such as:
+# For disabling internal IPv6-specific fields DISABLE THESE:
 
 | Resource                    | Attribute                  | Purpose                                                                 |
 | --------------------------- | -------------------------- | ----------------------------------------------------------------------- |
-| `google_compute_subnetwork` | `stack_type`               | `IPV4_ONLY` or `IPV4_IPV6` (enables dual-stack IPv6 support)           |
 | `google_compute_subnetwork` | `ipv6_access_type`         | Specifies `INTERNAL` or `EXTERNAL` IPv6 access mode                    |
-| `google_compute_subnetwork` | `ipv6_cidr_range`          | Optional manually defined IPv6 CIDR range for the subnetwork           |
 | `google_compute_network`    | `enable_ula_internal_ipv6` | Enables internal IPv6 (ULA) within the VPC                             |
-| `google_compute_network`    | `internal_ipv6_range`      | References the internal IPv6 range; requires `enable_ula_internal_ipv6 = true` |
-| Resource                  | Attribute            | Notes                                                                                                
-| `google_compute_instance` | `stack_type`         | Indicates if IPv6 is enabled on the NIC. Values: `IPV4_ONLY`, `IPV4_IPV6`, `IPV6_ONLY`. If absent, defaults to `IPV4_ONLY`. You can check this to detect IPv6 usage. |
-| `google_compute_instance` | `ipv6_access_config` | Enables IPv6 access on a VM's network interface (usually external). Absence means no external IPv6 access.                                                                                       |
-| `google_compute_instance` | `alias_ip_range` block `ip_cidr_range` attribute| Defines IP range for alias IPs. Can be single IP, netmask, or CIDR, but must be in the subnetwork range. Can be IPv4 or IPv6 depending on subnetwork.                |
+| `google_compute_network`    | `internal_ipv6_range`      | References the internal IPv6 range; requires `enable_ula_internal_ipv6 = true` |                                                                                          
+### `enable_ula_internal_ipv6` (Boolean)
 
+* This flag **enables or disables internal IPv6 (ULA - Unique Local Address) within the entire VPC network**.
+* If set to **`true`**, the VPC supports internal IPv6 addressing (ULA).
+* If set to **`false` or unset\`**, internal IPv6 addressing is **disabled** on the VPC.
 
-In check iam not restricting the ip ranges of ipv6 bcoz if stack type is ipv4 ip ranges must be ipv4. just making sure it must not exist.
-(`ipv6_cidr_range`  , `ipv6_access_config` , `alias_ip_range` block `ip_cidr_range` , `ipv6_access_type` )
+### `internal_ipv6_range` (CIDR range)
 
-SO I HAVE TO ENSURE THESE ATTRIBUTES ARE NOT PRESENT UNDER THESE THREE RESOURCES 
- 
+* This specifies the **actual IPv6 CIDR block** used for internal IPv6 addresses within the VPC.
+* This attribute is **only relevant if** `enable_ula_internal_ipv6` is `true`.
+* If `enable_ula_internal_ipv6` is `false` or unset, this attribute should be empty or unset as well.
+
+### `ipv6_access_type` ?
+
+Specifies the type of IPv6 access on the subnet only if IPv6 is enabled(i.e., if stack_type is IPV4_IPV6 or IPV6_ONLY).
+Possible values:
+INTERNAL — Enables internal IPv6 connectivity (ULA).
+EXTERNAL — Enables external IPv6 access.
+Unset — No IPv6 access configured.
+
 [doc](https://cloud.google.com/vpc/docs/vpc#org-policies)

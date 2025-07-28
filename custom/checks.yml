@@ -1,34 +1,14 @@
 metadata:
-  name: "Enable GCP Detailed Audit Logging Mode"
-  id: "CCOE_GCP_DETAILED_AUDIT_LOGGING"
-  category: "logging"
+  name: "Require Disabled Key Versions Before Destruction"
+  id: "CCOE_GCP_KMS_DISABLE_BEFORE_DESTROY"
+  category: "encryption"
   severity: "HIGH"
-  description: "Ensure GCP audit logging is enabled for ADMIN_READ, DATA_READ, and DATA_WRITE to provide detailed audit trails of API usage and data access."
+  description: "Ensure that Google Cloud KMS key versions are set to `DISABLED` before being destroyed."
 
 definition:
-  and:
-    - cond_type: "attribute"
-      resource_types:
-        - "google_project_iam_audit_config"
-      attribute: "audit_log_config.*.log_type"
-      operator: "contains"
-      value: "ADMIN_READ"
-    - cond_type: "attribute"
-      resource_types:
-        - "google_project_iam_audit_config"
-      attribute: "audit_log_config.*.log_type"
-      operator: "contains"
-      value: "DATA_READ"
-    - cond_type: "attribute"
-      resource_types:
-        - "google_project_iam_audit_config"
-      attribute: "audit_log_config.*.log_type"
-      operator: "contains"
-      value: "DATA_WRITE"
-
-  # attribute: "audit_log_config.*.log_type"
-  # operator: "within"
-  # value: 
-  #   - "ADMIN_READ"
-  #   - "DATA_READ"
-  #   - "DATA_WRITE"
+  cond_type: "attribute"
+  resource_types:
+    - "google_kms_crypto_key_version"
+  attribute: "state"
+  operator: "equals"
+  value: "DISABLED"

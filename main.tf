@@ -6,7 +6,9 @@ resource "google_project_iam_audit_config" "iap-audit-logging" {
   audit_log_config {
     log_type = "DATA_WRITE"
   }
-
+  audit_log_config {
+    log_type = "ADMIN_READ"
+  }
 
 }
 

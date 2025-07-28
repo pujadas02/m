@@ -1,37 +1,29 @@
 metadata:
-  name: "Require OS Login on VM Instances"
-  id: "CUSTOM_GCP_OS_LOGIN_ENFORCED"
+  name: "Require OS Login on GCP Compute Instances and Project"
+  id: "CUSTOM_GCP_ENABLE_OSLOGIN"
   category: "security"
   severity: "HIGH"
-  description: "Ensure OS Login is enabled on all VM instances either through project metadata or directly in the instance metadata."
+  description: "Ensure OS Login is enabled via project or instance metadata to enforce IAM-based SSH access control."
 
 definition:
-  and: 
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "equals_ignore_case"
-          value: "TRUE"   
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "not_exists"
+  or:
+    - and:
         - cond_type: "attribute"
           resource_types:
             - "google_compute_project_metadata"
           attribute: "metadata.enable-oslogin"
           operator: "equals_ignore_case"
-          value: "TRUE"   
-
-          
+          value: "TRUE"
+    - and:
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_instance"
+          attribute: "metadata.enable-oslogin"
+          operator: "equals_ignore_case"
+          value: "TRUE"
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_project_metadata"
+          attribute: "metadata.enable-oslogin"
+          operator: "not_exists"
+     

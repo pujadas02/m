@@ -1,4 +1,4 @@
-# 🚫 Disable VM Serial Port Logging to Stackdriver (Cloud Logging)
+# Disable VM Serial Port Logging to Stackdriver (Cloud Logging)
 
 This policy enforces that VM instances to **not** send their serial port output logs to Stackdriver (now called Cloud Logging), reducing exposure of potentially sensitive boot and runtime data.
 
@@ -6,7 +6,7 @@ This policy enforces that VM instances to **not** send their serial port output 
 Serial port logging refers to the ability of a VM instance to send its serial port output (low-level boot and runtime logs) somewhere for inspection.
 Stackdriver Logging (now called Cloud Logging) is the destination service where logs are collected and stored.
 
-## 📋 Enforcement Behavior
+##  Enforcement Behavior
 
 | Feature                              | Setting                                        | Behavior                                         |
 | ------------------------------------ | ---------------------------------------------- | ------------------------------------------------ |

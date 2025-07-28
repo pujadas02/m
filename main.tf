@@ -9,7 +9,7 @@ resource "google_workbench_instance" "default" {
       family  = "workbench-instances"
     }
     metadata = {
-     "notebook-disable-terminal" = "false"
+      notebook-disable-terminal = "true"
     }
   }
 }

@@ -5,3 +5,4 @@ resource "google_compute_instance" "default" {
   metadata = {
     serial-port-logging-enable = "false"
   }
+}

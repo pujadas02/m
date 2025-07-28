@@ -6,9 +6,9 @@ Centralizes and simplifies SSH access management.
 Eliminates manual SSH key distribution.
 Enforces IAM-based access control and audit logging for SSH.
 
-#### Enabling OS Login at the Project level (via project metadata enable-oslogin = TRUE) means all VM instances in that project inherit the setting by default.
+### Enabling OS Login at the Project level (via project metadata enable-oslogin = TRUE) means all VM instances in that project inherit the setting by default.
 
-#### However, VM instances can override this setting individually by setting instance metadata enable-oslogin = FALSE.
+### However, VM instances can override this setting individually by setting instance metadata enable-oslogin = FALSE.
 
 #### so we have to make sure that:
     Validate that project metadata enable-oslogin is TRUE.

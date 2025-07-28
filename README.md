@@ -14,7 +14,7 @@ Enabling these log types helps organizations meet compliance, security, and oper
 | `DATA_READ`  | Logs read access to data (e.g., `gcloud compute instances list`)    |
 | `DATA_WRITE` | Logs write access to data (e.g., `gcloud compute instances create`) |
 
-```
+```hcl
 resource "google_project_iam_audit_config" "iap-audit-logging" {
   service = "iap.googleapis.com"
   audit_log_config {

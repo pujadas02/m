@@ -16,5 +16,5 @@ definition:
       resource_types:
         - "google_compute_subnetwork"
       attribute: "ipv6_access_type"
-      operator: "not_equals"
-      value: EXTERNAL
+      operator: "not_equals_ignore_case"
+      value: "EXTERNAL"

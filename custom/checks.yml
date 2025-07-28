@@ -15,10 +15,10 @@ definition:
           operator: "not_exists"
         - cond_type: "attribute"
           resource_types:
-            - "google_compute_project_metadata"
+            - "google_compute_instance"
           attribute: "metadata.enable-oslogin"
           operator: "equals_ignore_case"
-          value: "TRUE"
+          value: "TRUE"   
     - or:
         - cond_type: "attribute"
           resource_types:
@@ -27,34 +27,35 @@ definition:
           operator: "not_exists"
         - cond_type: "attribute"
           resource_types:
-            - "google_compute_instance"
+            - "google_compute_project_metadata"
           attribute: "metadata.enable-oslogin"
           operator: "equals_ignore_case"
           value: "TRUE"
-    - or:      
-        - and:
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_instance"
-              attribute: "metadata.enable-oslogin"
-              operator: "exists"
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_instance"
-              attribute: "metadata.enable-oslogin"
-              operator: "equals_ignore_case"
-              value: "TRUE"
-        - and:
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_project_metadata"
-              attribute: "metadata.enable-oslogin"
-              operator: "exists"          
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_project_metadata"
-              attribute: "metadata.enable-oslogin"
-              operator: "equals_ignore_case"
-              value: "TRUE"
+ 
+    # - or:      
+    #     - and:
+    #         - cond_type: "attribute"
+    #           resource_types:
+    #             - "google_compute_instance"
+    #           attribute: "metadata.enable-oslogin"
+    #           operator: "exists"
+    #         - cond_type: "attribute"
+    #           resource_types:
+    #             - "google_compute_instance"
+    #           attribute: "metadata.enable-oslogin"
+    #           operator: "equals_ignore_case"
+    #           value: "TRUE"
+    #     - and:
+    #         - cond_type: "attribute"
+    #           resource_types:
+    #             - "google_compute_project_metadata"
+    #           attribute: "metadata.enable-oslogin"
+    #           operator: "exists"          
+    #         - cond_type: "attribute"
+    #           resource_types:
+    #             - "google_compute_project_metadata"
+    #           attribute: "metadata.enable-oslogin"
+    #           operator: "equals_ignore_case"
+    #           value: "TRUE"
      
           

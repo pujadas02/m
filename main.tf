@@ -8,7 +8,7 @@ resource "google_compute_subnetwork" "subnetwork-ipv6" {
 resource "google_compute_network" "vpc_fail" {
   name                    = "vpc-ipv6"
   auto_create_subnetworks = false
-  enable_ula_internal_ipv6 = true
+  
 }
 
 

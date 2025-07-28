@@ -17,4 +17,4 @@ definition:
         - "google_compute_subnetwork"
       attribute: "ipv6_access_type"
       operator: "not_equals"
-      value: "EXTERNAL"
+      value: EXTERNAL

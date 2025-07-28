@@ -1,14 +1,14 @@
 metadata:
-  name: "Enforce Public Access Prevention on Storage Buckets"
-  id: "CUSTOM_GCP_ENFORCE_PAP"
+  name: "Enforce Uniform Bucket-Level Access on Storage Buckets"
+  id: "CUSTOM_GCP_ENFORCE_UNIFORM_BUCKET_ACCESS"
   category: "security"
   severity: "HIGH"
-  description: "Ensure public access prevention on Google Cloud Storage buckets is enabled."
+  description: "Ensure Uniform Bucket-Level Access is enabled on Cloud Storage buckets."
 
 definition:
   cond_type: "attribute"
   resource_types:
     - "google_storage_bucket"
-  attribute: "public_access_prevention"
+  attribute: "uniform_bucket_level_access"
   operator: "equals"
-  value: "enforced"
+  value: true

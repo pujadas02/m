@@ -1,9 +1,35 @@
-resource "google_storage_bucket" "no-public-access" {
-  name          = "no-public-access-bucket"
-  location      = "US"
-  force_destroy = true
-  uniform_bucket_level_access = true
+resource "google_compute_project_metadata" "default" {
+  metadata = {
+    enable-oslogin = "TRUE"
+  }
 }
+
+resource "google_compute_instance" "oslogin_instance" {
+  name         = "oslogin-instance-name"
+  machine_type = "f1-micro"
+  zone         = "us-central1-c"
+  metadata = {
+    enable-oslogin : "TRUE"
+  }
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
+  }
+  network_interface {
+    # A default network is created for all GCP projects
+    network = "default"
+    access_config {
+    }
+  }
+}
+
+
+
+
+
+
+
 
 
 

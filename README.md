@@ -11,9 +11,9 @@ Enforces IAM-based access control and audit logging for SSH.
 #### However, VM instances can override this setting individually by setting instance metadata enable-oslogin = FALSE.
 
 #### so we have to make sure that:
- Validate that project metadata enable-oslogin is TRUE.
+    Validate that project metadata enable-oslogin is TRUE.
  
- Validate that VM instances either do not have the enable-oslogin metadata or have it set to TRUE
+    Validate that VM instances either do not have the enable-oslogin metadata or have it set to TRUE
 
 ### [doc gcp](https://cloud.google.com/compute/docs/oslogin/set-up-oslogin#enable_os_login_during_vm_creation)
 

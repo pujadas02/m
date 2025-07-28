@@ -1,9 +1,9 @@
 metadata:
-  name: "Disable IPv6 usage in GCP network resources"
-  id: "CCOE_GCP_DISABLE_IPV6"
-  category: "security"
+  name: "Disable VPC Internal IPv6 Usage"
+  id: "CCOE_GCP_DISABLE_VPC_INTERNAL_IPV6"
+  category: "networking"
   severity: "HIGH"
-  description: "Ensure all IPv6 are disabled"
+  description: "Ensure that VPC subnets do not have internal IPv6 enabled to disable internal IPv6 usage."
 
 definition:
   or:

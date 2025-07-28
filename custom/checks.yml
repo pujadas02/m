@@ -3,38 +3,80 @@ metadata:
   id: "CUSTOM_GCP_OS_LOGIN_ENFORCED"
   category: "security"
   severity: "HIGH"
-  description: "Ensure OS Login is enabled on all VM instances either through project metadata or directly in the instance metadata."
+  description: "Ensure OS Login is enabled on VM instances via project metadata or explicit instance metadata."
 
 definition:
-  and:
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "equals_ignore_case"
+  or:
+    # Case A: project-level enable-oslogin=TRUE, and VMs do not disable it
+    - and:
+        - resource_types: ["google_compute_project_metadata"]
+          cond_type: attribute
+          attribute: metadata.enable-oslogin
+          operator: equals
           value: "TRUE"
         - or:
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_instance"
-              attribute: "metadata.enable-oslogin"
-              operator: "not_exists"
-            - cond_type: "attribute"
-              resource_types:
-                - "google_compute_instance"
-              attribute: "metadata.enable-oslogin"
-              operator: "equals_ignore_case"
+            # VM-level metadata not set -> inherits project setting
+            - resource_types: ["google_compute_instance"]
+              cond_type: attribute
+              attribute: metadata.enable-oslogin
+              operator: not_exists
+            # VM-level metadata explicitly set to TRUE
+            - resource_types: ["google_compute_instance"]
+              cond_type: attribute
+              attribute: metadata.enable-oslogin
+              operator: equals
               value: "TRUE"
-    - or:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "not_exists"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "metadata.enable-oslogin"
-          operator: "equals_ignore_case"
+
+    # Case B: project-level metadata does not exist -> VM must explicitly set enable-oslogin=TRUE
+    - and:
+        - resource_types: ["google_compute_project_metadata"]
+          cond_type: attribute
+          attribute: metadata.enable-oslogin
+          operator: not_exists
+        - resource_types: ["google_compute_instance"]
+          cond_type: attribute
+          attribute: metadata.enable-oslogin
+          operator: equals
           value: "TRUE"
+
+
+# metadata:
+#   name: "Require OS Login on VM Instances"
+#   id: "CUSTOM_GCP_OS_LOGIN_ENFORCED"
+#   category: "security"
+#   severity: "HIGH"
+#   description: "Ensure OS Login is enabled on all VM instances either through project metadata or directly in the instance metadata."
+
+# definition:
+#   and:
+#     - or:
+#         - cond_type: "attribute"
+#           resource_types:
+#             - "google_compute_project_metadata"
+#           attribute: "metadata.enable-oslogin"
+#           operator: "equals_ignore_case"
+#           value: "TRUE"
+#         - or:
+#             - cond_type: "attribute"
+#               resource_types:
+#                 - "google_compute_instance"
+#               attribute: "metadata.enable-oslogin"
+#               operator: "not_exists"
+#             - cond_type: "attribute"
+#               resource_types:
+#                 - "google_compute_instance"
+#               attribute: "metadata.enable-oslogin"
+#               operator: "equals_ignore_case"
+#               value: "TRUE"
+#     - or:
+#         - cond_type: "attribute"
+#           resource_types:
+#             - "google_compute_project_metadata"
+#           attribute: "metadata.enable-oslogin"
+#           operator: "not_exists"
+#         - cond_type: "attribute"
+#           resource_types:
+#             - "google_compute_instance"
+#           attribute: "metadata.enable-oslogin"
+#           operator: "equals_ignore_case"
+#           value: "TRUE"

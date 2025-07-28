@@ -1,14 +1,45 @@
 metadata:
-  name: "Enforce Uniform Bucket-Level Access on Storage Buckets"
-  id: "CUSTOM_GCP_ENFORCE_UNIFORM_BUCKET_ACCESS"
+  name: "Require OS Login on VM Instances"
+  id: "CUSTOM_GCP_OS_LOGIN_ENFORCED"
   category: "security"
   severity: "HIGH"
-  description: "Ensure Uniform Bucket-Level Access is enabled on Cloud Storage buckets."
+  description: "Ensure OS Login is enabled on all VM instances either through project metadata or directly in the instance metadata."
 
 definition:
-  cond_type: "attribute"
-  resource_types:
-    - "google_storage_bucket"
-  attribute: "uniform_bucket_level_access"
-  operator: "equals"
-  value: true
+  or:
+    # Case 1: Project metadata exists and sets enable-oslogin to TRUE
+    - and:
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_project_metadata"
+          attribute: "metadata.enable-oslogin"
+          operator: "equals_ignore_case"
+          value: "TRUE"
+        - or:
+            # VM does not override
+            - cond_type: "attribute"
+              resource_types:
+                - "google_compute_instance"
+              attribute: "metadata.enable-oslogin"
+              operator: "not_exists"
+            # VM explicitly sets TRUE
+            - cond_type: "attribute"
+              resource_types:
+                - "google_compute_instance"
+              attribute: "metadata.enable-oslogin"
+              operator: "equals_ignore_case"
+              value: "TRUE"
+
+    # Case 2: No project metadata — require VM to explicitly set enable-oslogin to TRUE
+    - and:
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_project_metadata"
+          attribute: "metadata.enable-oslogin"
+          operator: "not_exists"
+        - cond_type: "attribute"
+          resource_types:
+            - "google_compute_instance"
+          attribute: "metadata.enable-oslogin"
+          operator: "equals_ignore_case"
+          value: "TRUE"

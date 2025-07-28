@@ -4,9 +4,10 @@ on:
   push:
     branches:
     - GCP-33--Require-OS-Login
-    paths: 
-    - main.tf
-    - custom/checks.yml
+    # paths: 
+    # - main.tf
+    # - custom/checks.yml
+    # - check.py
   pull_request:
     branches:
       - master

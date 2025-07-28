@@ -4,6 +4,7 @@ This policy ensures that Google Cloud Platform (GCP) projects have **detailed au
 * `ADMIN_READ`
 * `DATA_READ`
 * `DATA_WRITE`
+  
 Enabling these log types helps organizations meet compliance, security, and operational monitoring requirements by capturing **who did what, where, and when** across the platform.
 
 ##  Required Audit Log Types

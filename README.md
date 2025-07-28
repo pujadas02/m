@@ -21,3 +21,10 @@ resource "google_storage_bucket" "no-public-access" {
   uniform_bucket_level_access = true
 }
 ```
+
+
+| Attribute                     | Default Value | Effect                                                     |
+| ----------------------------- | ------------- | ---------------------------------------------------------- |
+| `uniform_bucket_level_access` | `false`       | Bucket uses fine-grained ACLs (less secure).               |
+| `uniform_bucket_level_access` | `true`        | Bucket enforces uniform bucket-level access (more secure). |
+

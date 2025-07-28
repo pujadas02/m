@@ -1,14 +1,12 @@
 metadata:
-  name: "Require Disabled Key Versions Before Destruction"
-  id: "CCOE_GCP_KMS_DISABLE_BEFORE_DESTROY"
-  category: "encryption"
+  name: "Disable Service Account Key Creation"
+  id: "CCOE_GCP_DISABLE_SERVICE_ACCOUNT_KEY_CREATION"
+  category: "security"
   severity: "HIGH"
-  description: "Ensure that Google Cloud KMS key versions are set to `DISABLED` before being destroyed."
+  description: "Ensure service account keys are not created to reduce credential leakage risks."
 
 definition:
-  cond_type: "attribute"
+  cond_type: "resource"
   resource_types:
-    - "google_kms_crypto_key_version"
-  attribute: "state"
-  operator: "equals"
-  value: "DISABLED"
+    - "google_service_account_key"
+  operator: "not_exists"

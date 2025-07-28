@@ -8,7 +8,7 @@ metadata:
 definition:
   or:
     # Case 1: Project metadata exists and sets enable-oslogin to TRUE
-    - and:
+    - or:
         - cond_type: "attribute"
           resource_types:
             - "google_compute_project_metadata"
@@ -31,7 +31,7 @@ definition:
               value: "TRUE"
 
     # Case 2: No project metadata — require VM to explicitly set enable-oslogin to TRUE
-    - and:
+    - or:
         - cond_type: "attribute"
           resource_types:
             - "google_compute_project_metadata"

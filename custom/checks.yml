@@ -7,7 +7,6 @@ metadata:
 
 definition:
   or:
-    # Case 1: Project metadata exists and sets enable-oslogin to TRUE
     - or:
         - cond_type: "attribute"
           resource_types:
@@ -16,21 +15,17 @@ definition:
           operator: "equals_ignore_case"
           value: "TRUE"
         - or:
-            # VM does not override
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
               attribute: "metadata.enable-oslogin"
               operator: "not_exists"
-            # VM explicitly sets TRUE
             - cond_type: "attribute"
               resource_types:
                 - "google_compute_instance"
               attribute: "metadata.enable-oslogin"
               operator: "equals_ignore_case"
               value: "TRUE"
-
-    # Case 2: No project metadata — require VM to explicitly set enable-oslogin to TRUE
     - or:
         - cond_type: "attribute"
           resource_types:

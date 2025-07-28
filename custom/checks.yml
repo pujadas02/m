@@ -6,13 +6,29 @@ metadata:
   description: "Ensure GCP audit logging is enabled for ADMIN_READ, DATA_READ, and DATA_WRITE to provide detailed audit trails of API usage and data access."
 
 definition:
-  cond_type: "attribute"
-  resource_types:
-    - "google_project_iam_audit_config"
-  attribute: "audit_log_config.*.log_type"
-  operator: "within"
-  value: 
-    - "ADMIN_READ"
-    - "DATA_READ"
-    - "DATA_WRITE"
+  and:
+    - cond_type: "attribute"
+      resource_types:
+        - "google_project_iam_audit_config"
+      attribute: "audit_log_config.*.log_type"
+      operator: "contains"
+      value: "ADMIN_READ"
+    - cond_type: "attribute"
+      resource_types:
+        - "google_project_iam_audit_config"
+      attribute: "audit_log_config.*.log_type"
+      operator: "contains"
+      value: "DATA_READ"
+    - cond_type: "attribute"
+      resource_types:
+        - "google_project_iam_audit_config"
+      attribute: "audit_log_config.*.log_type"
+      operator: "contains"
+      value: "DATA_WRITE"
 
+  # attribute: "audit_log_config.*.log_type"
+  # operator: "within"
+  # value: 
+  #   - "ADMIN_READ"
+  #   - "DATA_READ"
+  #   - "DATA_WRITE"

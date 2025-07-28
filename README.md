@@ -1,22 +1,17 @@
-# For disabling internal IPv6-specific fields DISABLE THESE:
+# Disable VPC External IPv6 Usage
 
-| Resource                    | Attribute                  | Purpose                                                                 |
-| --------------------------- | -------------------------- | ----------------------------------------------------------------------- |
-| `google_compute_subnetwork` | `ipv6_access_type`         | Specifies `INTERNAL` or `EXTERNAL` IPv6 access mode                    |
-| `google_compute_network`    | `enable_ula_internal_ipv6` | Enables internal IPv6 (ULA) within the VPC                             |
-                                                                                     
-### `enable_ula_internal_ipv6` (Boolean)
+This policy ensures that external IPv6 access is disabled on VPC subnetworks by verifying that the `ipv6_access_type` attribute is not set to `EXTERNAL`. Restricting external IPv6 access helps reduce exposure of resources to the public internet and improves network security posture.
 
-* This flag **enables or disables internal IPv6 (ULA - Unique Local Address) within the entire VPC network**.
-* If set to **`true`**, the VPC supports internal IPv6 addressing (ULA).
-* If set to **`false` or unset\`**, internal IPv6 addressing is **disabled** on the VPC.
+## Resources Checked
 
-### `ipv6_access_type` ?
+* `google_compute_subnetwork`
 
-Specifies the type of IPv6 access on the subnet only if IPv6 is enabled(i.e., if stack_type is IPV4_IPV6 or IPV6_ONLY).
-Possible values:
-INTERNAL — Enables internal IPv6 connectivity (ULA).
-EXTERNAL — Enables external IPv6 access.
-Unset — No IPv6 access configured.
+## Attributes
 
-[doc](https://cloud.google.com/vpc/docs/vpc#org-policies)
+* `ipv6_access_type` (on subnetworks): Should **not** be set to `EXTERNAL`.
+
+## Why This Matters
+
+Disabling external IPv6 prevents VPC subnetworks from having public IPv6 addresses, reducing attack surface and protecting resources from unauthorized access.
+
+

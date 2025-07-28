@@ -3,10 +3,10 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP--Google-Cloud-Platform---Detailed-Audit-Logging-Mode
-    paths: 
-    - main.tf
-    - custom/checks.yml
+    - GCP-25-Disable-service-account-key-creation
+    # paths: 
+    # - main.tf
+    # - custom/checks.yml
   pull_request:
     branches:
       - master

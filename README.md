@@ -1,4 +1,4 @@
-##Summary
+## Summary
 
 The domain restriction happens via an organization policy (google_organization_policy resource).
 

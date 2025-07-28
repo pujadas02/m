@@ -12,7 +12,7 @@ definition:
   attribute: "audit_log_config.log_type"
   operator: "contains"
   value: 
-  -"ADMIN_READ"
-  -"DATA_READ"
+    - "ADMIN_READ"
+    - "DATA_READ"
   
 

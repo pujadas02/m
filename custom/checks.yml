@@ -1,40 +1,13 @@
 metadata:
-  name: "Require OS Login on GCP Compute Instances and Project"
-  id: "CUSTOM_GCP_ENABLE_OSLOGIN"
-  category: "security"
+  name: "Ensure Cloud SQL instances do not configure authorized networks"
+  id: "CKV_GCP_CUSTOM_2"
+  category: "NETWORKING"
   severity: "HIGH"
-  description: "Ensure OS Login is enabled via project or instance metadata to enforce IAM-based SSH access control."
+  description: "Ensure authorized networks are not configured on Cloud SQL instances."
 
 definition:
-  or:
-    - and:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "equals_ignore_case"
-          value: "TRUE"
-    - and:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "metadata.enable-oslogin"
-          operator: "equals_ignore_case"
-          value: "TRUE"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "not_exists"
-    - and:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "metadata.enable-oslogin"
-          operator: "equals_ignore_case"
-          value: "TRUE"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "exists"
+  resource_types:
+    - "google_sql_database_instance"
+  cond_type: "attribute"
+  attribute: "settings.ip_configuration.authorized_networks"
+  operator: "not_exists"

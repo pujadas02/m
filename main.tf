@@ -8,16 +8,7 @@ resource "google_sql_database_instance" "example" {
 
     ip_configuration {
       ipv4_enabled    = true
-      authorized_networks = [
-        {
-          name  = "office-network"
-          value = "203.0.113.0/24"
-        },
-        {
-          name  = "home-network"
-          value = "198.51.100.0/24"
-        }
-      ]
+      
     }
   }
 }

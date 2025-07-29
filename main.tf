@@ -33,15 +33,8 @@ resource "google_sql_database_instance" "postgres" {
         }
       }
 
-      dynamic "authorized_networks" {
-        for_each = local.onprem
-        iterator = onprem
+      
 
-        content {
-          name  = "onprem-${onprem.key}"
-          value = onprem.value
-        }
-      }
     }
   }
 }

@@ -23,18 +23,6 @@ resource "google_sql_database_instance" "postgres" {
 
     ip_configuration {
 
-      dynamic "authorized_networks" {
-        for_each = google_compute_instance.apps
-        iterator = apps
-
-        content {
-          name  = apps.value.name
-          value = apps.value.network_interface.0.access_config.0.nat_ip
-        }
-      }
-
-      
-
     }
   }
 }

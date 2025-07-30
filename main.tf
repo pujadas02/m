@@ -16,6 +16,8 @@ resource "google_sql_database_instance" "main" {
     }
     availability_type = "REGIONAL"
   }
+
+
 }
 
 resource "google_compute_network_attachment" "default" {

@@ -1,13 +1,15 @@
 metadata:
-  name: "Ensure Cloud SQL instances do not configure authorized networks"
-  id: "CKV_GCP_CUSTOM_2"
-  category: "NETWORKING"
+  name: "CKV_CUSTOM_GCP_SQL_NO_PUBLIC_IP"
+  id: "CKV_CUSTOM_GCP_001"
+  category: "networking"
+  version: "1.0.2"
   severity: "HIGH"
-  description: "Ensure authorized networks are not configured on Cloud SQL instances."
+  description: "Ensure public IPv4 access is disabled on Cloud SQL instances."
 
 definition:
+  cond_type: "attribute"
   resource_types:
     - "google_sql_database_instance"
-  cond_type: "attribute"
-  attribute: "settings.ip_configuration.authorized_networks"
-  operator: "not_exists"
+  attribute: "settings.ip_configuration.ipv4_enabled"
+  operator: "equals"
+  value: false

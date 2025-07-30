@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - 59-GCP-Sets-the-internal-DNS-setting-for-new-projects-to-Zonal-DNS-Only
+    - 59-Restrict-VM-IP-Forwarding 
     paths: 
     - main.tf
     - custom/checks.yml

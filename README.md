@@ -28,3 +28,4 @@ Or rely on auto_create_network = false when creating the project, which deletes 
 If you delete the original default network and create your own network named "default", that network will become the default network for the project.
 
 
+[**REF**](https://stackoverflow.com/questions/54611268/how-do-i-delete-and-replace-the-default-gcp-vpc-with-terraform)

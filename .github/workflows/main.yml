@@ -2,7 +2,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP--Disable-VM-serial-port-logging-to-Stackdriver
+    - 17-GCP-Disable-VM-serial-port-logging-to-Stackdriver
     paths: 
     - main.tf
     - custom/checks.yml

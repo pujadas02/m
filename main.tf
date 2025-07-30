@@ -1,24 +1,23 @@
-resource "google_sql_database_instance" "main" {
-  name             = "psc-enabled-main-instance"
-  database_version = "MYSQL_8_0"
-  settings {
-    tier    = "db-f1-micro"
-    ip_configuration {
-      psc_config {
-        psc_enabled = true
-        allowed_consumer_projects = ["allowed-consumer-project-name"]
-      }
-      ipv4_enabled = false
+resource "google_compute_instance" "vm_fail" {
+  name         = "vm-fail"
+  machine_type = "n1-standard-1"
+  zone         = "us-central1-a"
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-9"
     }
-    backup_configuration {
-      enabled = true
-      binary_log_enabled = true
-    }
-    availability_type = "REGIONAL"
   }
 
+  network_interface {
+    network = "default"
+    access_config {}
+  }
 
+  can_ip_forward = true  
 }
+
+
 
 resource "google_compute_network_attachment" "default" {
     name = "basic-network-attachment"

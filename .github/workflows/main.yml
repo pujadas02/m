@@ -2,7 +2,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCPDisable-Guest-Attributes-of-Compute-Engine-metadata
+    - 12-GCP-Disable-Hybrid-Cloud-IPv6-usage
     paths: 
     - main.tf
     - custom/checks.yml

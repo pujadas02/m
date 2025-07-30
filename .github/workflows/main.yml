@@ -2,7 +2,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP-Disable-SSH-in-browser
+    - 15-GCP-Disable-SSH-in-browser
     paths: 
     - main.tf
     - custom/checks.yml

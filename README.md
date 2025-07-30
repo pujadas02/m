@@ -1,32 +1,26 @@
-# Restrict Public IP access on Cloud SQL instances
-This Checkov custom policy ensures that Google Cloud SQL instances do **not** have public IPv4 addresses assigned. It helps prevent unintended public exposure of database instances.
+# **Restrict VM IP Forwarding**
+Ensure that VM instances do **not** have IP forwarding enabled, which can allow routing or packet spoofing and poses a security risk.
 
-## Benefits
-- **Enhances Security:** Prevents Cloud SQL instances from being publicly accessible, reducing attack surface.
-- **Blocks Implicit Defaults:** Catches cases where the `ip_configuration` block is missing and a public IP would be assigned by default.
-- **Ensures Consistency:** Standardizes secure Cloud SQL configurations across infrastructure.
-- **Supports Compliance:** Aligns with security best practices and regulatory requirements.
-- **Integrates with CI/CD:** Enables automated checks in deployment pipelines to catch misconfigurations early.
+**IP forwarding** is the ability of a VM (or any network device) to receive network traffic and send it out to another destination — effectively routing traffic.
+  Why would you use it?
+   If the VM is acting as:
+     A gateway
+     A NAT instance
+     A firewall proxy
 
-## Why This Matters
+A custom router
+## ✅ Benefits
 
-If you omit ip_configuration entirely, public IPv4 access defaults to true, matching GCP’s default behavior.
+- Prevents VMs from acting as routers or spoofing traffic
+- Reduces attack surface by disabling unnecessary IP forwarding
+- Enforces least privilege and secure defaults
+- Catches misconfigurations early in CI/CD
 
-However, if an ip_configuration block is present but ipv4_enabled isn't explicitly set, Terraform will default it to false, which can cause failures for 2nd‑gen instances without a private_network. 
+- **Resource Type:** `google_compute_instance`
+- **Condition:** 
+  - Fails if `can_ip_forward = true`
+  - Passes if `can_ip_forward` is:
+    - Not set (defaults to `false`)
+    - Explicitly set to `false`
 
-By default, GCP assigns a public IPv4 address if no ip_configuration is defined.
 
-## ensure that:
-**Resource type checked:**  
-- `google_sql_database_instance`
-
-**Check passes if:**  
-- The `ip_configuration` block must be present and `ipv4_enabled` attribute must set to **false**
-
-```hcl
-ip_configuration {
-  ipv4_enabled = false
-}
-```
-
-**REF** [doc](https://github.com/hashicorp/terraform-provider-google/issues/6012)

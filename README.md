@@ -25,3 +25,5 @@ ip_configuration {
   ipv4_enabled = false
 }
 ```
+
+**REF** [doc](https://github.com/hashicorp/terraform-provider-google/issues/6012)

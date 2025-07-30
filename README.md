@@ -11,7 +11,10 @@ This Checkov custom policy ensures that Google Cloud SQL instances do **not** ha
 ## Why This Matters
 
 If you omit ip_configuration entirely, public IPv4 access defaults to true, matching GCP’s default behavior.
+
 However, if an ip_configuration block is present but ipv4_enabled isn't explicitly set, Terraform will default it to false, which can cause failures for 2nd‑gen instances without a private_network. 
+
+By default, GCP assigns a public IPv4 address if no ip_configuration is defined.
 
 ## ensure that:
 **Resource type checked:**  

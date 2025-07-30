@@ -14,7 +14,7 @@ resource "google_compute_instance" "vm_fail" {
     access_config {}
   }
 
-  can_ip_forward = true  
+
 }
 
 

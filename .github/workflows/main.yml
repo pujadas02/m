@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-      - GCP-Datastream---Block-Public-Connectivity-Methods 
+      - 2-GCP-Datastream-Block-Public-Connectivity-Methods
     paths: 
       - main.tf
   pull_request:

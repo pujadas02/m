@@ -3,10 +3,10 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - 35-GCP-Restrict-Public-IP-access-on-Cloud-SQL-instances
-    paths: 
-    - main.tf
-    - custom/checks.yml
+    - 37-GCP-Sets-the-internal-DNS-setting-for-new-projects-to-Zonal-DNS-Only
+    # paths: 
+    # - main.tf
+    # - custom/checks.yml
   pull_request:
     branches:
       - master

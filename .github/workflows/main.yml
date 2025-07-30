@@ -2,7 +2,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP-Disable-Enabling-Identity-Aware-Proxy-(IAP)-on-global-resources
+    - 8-GCP-Disable-Enabling-Identity-Aware-Proxy-(IAP)-on-global-resources
     paths: 
     - main.tf
     - custom/checks.yml

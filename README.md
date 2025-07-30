@@ -2,7 +2,8 @@
 Ensure that VM instances do **not** have IP forwarding enabled, which can allow routing or packet spoofing and poses a security risk.
 
 **IP forwarding** is the ability of a VM (or any network device) to receive network traffic and send it out to another destination — effectively routing traffic.
-  ***Why would you use it?***
+ 
+***Why would you use it?***
    If the VM is acting as:
      A gateway
      A NAT instance

@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP-Restrict-Public-IP-access-on-Cloud-SQL-instances
+    - 35-GCP-Restrict-Public-IP-access-on-Cloud-SQL-instances
     paths: 
     - main.tf
     - custom/checks.yml

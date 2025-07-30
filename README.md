@@ -1,31 +1,25 @@
-# Key points about the default network in GCP and Terraform:
-Default network is automatically created by GCP when you create a new project.
+## What "Sets the internal DNS setting for new projects to Zonal DNS Only" means:
 
-The default network is just a network named "default" — no special config beyond the name.
+* This is an **organization-level constraint** that affects **how DNS resolution works for *all VM instances* within new projects** created under that org/folder.
+* It sets the **default DNS behavior** for the *project* — specifically, whether VMs use **Zonal DNS** or the default (usually global) DNS.
 
-## When you create a GCP project via Terraform, you can set:
-```hcl
-auto_create_network = false
-```
-— this attempts to delete the default network immediately after it’s created during project provisioning.
+### What `vmdnssetting` metadata does:
 
-This does NOT prevent the default network from being created initially, because:
+* `vmdnssetting` is a **project-level metadata key** that **enables or controls zonal/global DNS for all VMs in that project**.
+* DNS resolution itself happens **at the VM (instance) level** because that's where the networking stack uses DNS.
+* You **cannot** set DNS mode per individual VM (there’s no VM instance metadata key for this) — it’s a project-wide setting.
 
-The network is created automatically by GCP at project creation time.
+### Your summary question:
 
-Terraform cannot prevent GCP from initially creating the default network (Terraform describes desired state but cannot stop backend default resource creation).
+> *"For new projects here but I am only doing for VM instance here, right? As we can only set DNS setting or DNS is only used in VM instances?"*
 
-What auto_create_network = false does is delete the default network after it’s been created, during Terraform apply.
+* The **DNS setting applies at the project level (via `vmdnssetting`) and affects all VMs** in the project.
+* The **actual DNS resolution happens on VMs**, but you don’t set DNS mode individually on VMs.
+* So when you set `vmdnssetting` at the project metadata, you control how **all VMs in that project** resolve internal DNS.
 
-Because the default network is created first by GCP, Terraform cannot create a new network named default until the original default network is deleted.
+### TL;DR:
 
-To manage or remove the default network with Terraform, you need to:
-
-Import the default network resource into Terraform state (because it exists outside Terraform control initially),
-
-Or rely on auto_create_network = false when creating the project, which deletes it later.
-
-If you delete the original default network and create your own network named "default", that network will become the default network for the project.
-
-
-[**REF**](https://stackoverflow.com/questions/54611268/how-do-i-delete-and-replace-the-default-gcp-vpc-with-terraform)
+* The org policy sets the default for new projects.
+* `vmdnssetting` is how you implement/control that behavior on an existing project.
+* DNS is *used* on VMs but *controlled* at the project level.
+* You **cannot** set DNS mode per VM individually.

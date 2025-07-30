@@ -12,7 +12,7 @@ Ensure that VM instances do **not** have IP forwarding enabled, which can allow 
       
 ## ✅ Benefits
 
-- Prevents VMs from acting as routers or spoofing traffic
+- Prevents VMs from acting as routers or spoofing(IP spoofing is when a machine sends network packets with a fake (forged) source IP address — pretending to be another system.) traffic
 - Reduces attack surface by disabling unnecessary IP forwarding
 - Enforces least privilege and secure defaults
 - Catches misconfigurations early in CI/CD

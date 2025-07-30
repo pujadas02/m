@@ -2,7 +2,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP-Disable-Global-Access-to-VM-Serial-Ports
+    - 10-GCP-Disable-Global-Access-to-VM-Serial-Ports
     paths: 
     - main.tf
     - custom/checks.yml

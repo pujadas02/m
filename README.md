@@ -5,9 +5,9 @@ Ensure that VM instances do **not** have IP forwarding enabled, which can allow 
  
 ***Why would you use it?***
    If the VM is acting as:
-     A gateway
-     A NAT instance
-     A firewall proxy
+     - A gateway
+     - A NAT instance
+     - A firewall proxy
 
 A custom router
 ## ✅ Benefits

@@ -1,27 +1,30 @@
-# **Restrict VM IP Forwarding**
-Ensure that VM instances do **not** have IP forwarding enabled, which can allow routing or packet spoofing and poses a security risk.
+# Key points about the default network in GCP and Terraform:
+Default network is automatically created by GCP when you create a new project.
 
-**IP forwarding** is the ability of a VM (or any network device) to receive network traffic and send it out to another destination — effectively routing traffic.
- 
-***Why would you use it?***
-   If the VM is acting as:
-    A gateway,
-      A NAT instance,
-      A firewall proxy,
-      A custom router
-      
-## ✅ Benefits
+The default network is just a network named "default" — no special config beyond the name.
 
-- Prevents VMs from acting as routers or spoofing(IP spoofing is when a machine sends network packets with a fake (forged) source IP address — pretending to be another system.) traffic
-- Reduces attack surface by disabling unnecessary IP forwarding
-- Enforces least privilege and secure defaults
-- Catches misconfigurations early in CI/CD
+## When you create a GCP project via Terraform, you can set:
+```hcl
+auto_create_network = false
+```
+— this attempts to delete the default network immediately after it’s created during project provisioning.
 
-- **Resource Type:** `google_compute_instance`
-- **Condition:** 
-  - Fails if `can_ip_forward = true`
-  - Passes if `can_ip_forward` is:
-    - Not set (defaults to `false`)
-    - Explicitly set to `false`
+This does NOT prevent the default network from being created initially, because:
+
+The network is created automatically by GCP at project creation time.
+
+Terraform cannot prevent GCP from initially creating the default network (Terraform describes desired state but cannot stop backend default resource creation).
+
+What auto_create_network = false does is delete the default network after it’s been created, during Terraform apply.
+
+Because the default network is created first by GCP, Terraform cannot create a new network named default until the original default network is deleted.
+
+To manage or remove the default network with Terraform, you need to:
+
+Import the default network resource into Terraform state (because it exists outside Terraform control initially),
+
+Or rely on auto_create_network = false when creating the project, which deletes it later.
+
+If you delete the original default network and create your own network named "default", that network will become the default network for the project.
 
 

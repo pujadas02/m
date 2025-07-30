@@ -1,15 +1,20 @@
 metadata:
-  name: "CKV_CUSTOM_GCP_SQL_NO_PUBLIC_IP"
-  id: "CKV_CUSTOM_GCP_001"
-  category: "networking"
-  version: "1.0.2"
+  name: "Restrict VM IP Forwarding"
+  id: "CKV_CUSTOM_GCP_010"
+  category: "gcp"
   severity: "HIGH"
-  description: "Ensure public IPv4 access is disabled on Cloud SQL instances."
+  description: "Ensure IP forwarding on VM is disabled to prevent spoofing and unauthorized routing."
 
 definition:
-  cond_type: "attribute"
-  resource_types:
-    - "google_sql_database_instance"
-  attribute: "settings.ip_configuration.ipv4_enabled"
-  operator: "equals"
-  value: false
+  or:
+    - cond_type: "attribute"
+      resource_types:
+        - google_compute_instance
+      attribute: "can_ip_forward"
+      operator: "not_exists"
+    - cond_type: "attribute"
+      resource_types:
+        - google_compute_instance
+      attribute: "can_ip_forward"
+      operator: "equals"
+      value: false

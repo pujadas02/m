@@ -2,7 +2,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP-Disable-BigQuery-Omni-for-Cloud-Azure
+    - 6-GCP-Disable-BigQuery-Omni-for-Cloud-Azure
     paths: 
     - main.tf
     - custom/checks.yml

@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP-Disable-VPC-Internal-IPv6-usage
+    - 18-GCP-Disable-VPC-Internal-IPv6-usage
     paths: 
     - main.tf
     - custom/checks.yml

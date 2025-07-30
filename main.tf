@@ -13,7 +13,7 @@ resource "google_compute_instance" "vm_fail" {
     network = "default"
     access_config {}
   }
-  can_ip_forward = false  
+
 
 }
 

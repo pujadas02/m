@@ -3,7 +3,7 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP-Disable-Audit-Logging-exemption
+    - 4-GCP-Disable-Audit-Logging-exemption
     paths: 
     - main.tf
     - custom/checks.yml

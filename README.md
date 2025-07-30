@@ -7,8 +7,9 @@ Ensure that VM instances do **not** have IP forwarding enabled, which can allow 
    If the VM is acting as:
     A gateway,
       A NAT instance,
-      A firewall proxy
-A custom router
+      A firewall proxy,
+      A custom router
+      
 ## ✅ Benefits
 
 - Prevents VMs from acting as routers or spoofing traffic

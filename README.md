@@ -78,4 +78,5 @@ resource "google_compute_instance" "insecure_vm" {
               
 **Reference:** [main doc](https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata)
 
+https://cloud.google.com/compute/docs/metadata/manage-guest-attributes#enable_attributes
 

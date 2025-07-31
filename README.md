@@ -1,7 +1,18 @@
 ## 🔒 Disable Guest Attributes of Compute Engine Metadata
 
 **Constraint Purpose:**
-Prevent the exposure of runtime metadata from virtual machines by disabling guest attributes on Compute Engine instances.
+Prevent the exposure of runtime metadata from virtual machines by disabling guest attributes on Compute Engine instances.It applies to:
+
+- Google Compute Engine instances (`google_compute_instance`)
+- Project-wide metadata (`google_compute_project_metadata`)
+- Individual project metadata items (`google_compute_project_metadata_item`)
+
+## Policy Logic
+- For `google_compute_instance` and `google_compute_project_metadata`:  
+  The key `enable-guest-attributes` must **either be absent** or explicitly set to `"false"`.
+
+- For `google_compute_project_metadata_item`:  
+  If the `key` is `enable-guest-attributes`, the `value` must be `"false"`.
 
 ### ✅ Why Disable Guest Attributes?
 
@@ -57,3 +68,4 @@ resource "google_compute_instance" "insecure_vm" {
 ### We can Set enable-guest-attributes in project-wide metadata so that it applies to all of the VMs in your project.
 ### WE can also Set enable-guest-attributes in instance metadata .
 ### here its written - https://cloud.google.com/compute/docs/metadata/manage-guest-attributes#enable_attributes
+

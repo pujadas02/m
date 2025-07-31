@@ -1,11 +1,7 @@
-
 ## 🔒 Disable Guest Attributes of Compute Engine Metadata
 
 **Constraint Purpose:**
 Prevent the exposure of runtime metadata from virtual machines by disabling guest attributes on Compute Engine instances.
-
-**Constraint Type:**
-This is a policy that ensures `enable_guest_attributes` is not enabled in VM instances.and if enabled project wide then in vms it should be disabled.
 
 ### ✅ Why Disable Guest Attributes?
 
@@ -17,7 +13,6 @@ This is a policy that ensures `enable_guest_attributes` is not enabled in VM ins
 | ------------------- | ------------------------------------------------------------------------------- | ---------------------- |
 | `false` *(default)*| Disables guest attribute access; protects sensitive runtime metadata.           | ✅ Secure – Compliant   |
 | `true`  | Enables guest attributes, exposing system-level details to the metadata server. | ❌ Risk – Non-compliant |
-
 
 ### ✅ Compliant Configuration (PASS) 
 

@@ -3,11 +3,10 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - GCP-33--Require-OS-Login
-    paths: 
-    - main.tf
+    - 49-GCP-Use-default-service-account-(Cloud-Build)
+    # paths: 
+    # - main.tf
     # - custom/checks.yml
-    - custom/check.py
   pull_request:
     branches:
       - master

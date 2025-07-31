@@ -80,3 +80,5 @@ resource "google_compute_instance" "insecure_vm" {
 
 https://cloud.google.com/compute/docs/metadata/manage-guest-attributes#enable_attributes
 
+### We can Set enable-guest-attributes in project-wide metadata so that it applies to all of the VMs in your project.
+### WE can also Set enable-guest-attributes in instance metadata .

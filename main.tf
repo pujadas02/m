@@ -9,7 +9,8 @@ resource "google_compute_instance" "secure_vm" {
 
 
 resource "google_compute_project_metadata_item" "default" {
-
+  key   = "enble-guest-attributes"
+  value = "true"
 }
 
 resource "google_compute_project_metadata" "default" {

@@ -5,6 +5,7 @@ This policy enforces that VM instances to **not** send their serial port output 
 ## Serial Port Logging & Stackdriver (Cloud Logging)
 Serial port logging refers to the ability of a VM instance to send its serial port output (low-level boot and runtime logs) somewhere for inspection.
 Stackdriver Logging (now called Cloud Logging) is the destination service where logs are collected and stored.
+You can control whether your instances send serial port output to Cloud Logging by setting project- or instance-level metadata
 
 ##  Enforcement Behavior
 

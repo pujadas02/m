@@ -1,25 +1,6 @@
-# What is Require OS Login?
-Require OS Login enforces that users must use OS Login (which ties Linux user accounts to IAM identities) to SSH into VM instances. This improves security by centralizing SSH access control through IAM instead of managing individual SSH keys on each VM.
+# Enforce Default Cloud Build Service Account Policy
 
-## Why enforce it?
-Centralizes and simplifies SSH access management.
-Eliminates manual SSH key distribution.
-Enforces IAM-based access control and audit logging for SSH.
+This policy ensures that all Cloud Build triggers and builds use only the default Cloud Build service account, and do not specify any custom service account. This enforces consistent identity and privilege management, helping reduce risk from misconfigured or over-privileged custom service accounts.
 
-### Enabling OS Login at the Project level (via project metadata enable-oslogin = TRUE) means all VM instances in that project inherit the setting by default.
+### We must ensure that the `service_account` attribute **does not exist** in any `google_cloudbuild_trigger` resource; if it does, it means the trigger uses a custom service account, which is not allowed.
 
-### However, VM instances can override this setting individually by setting instance metadata enable-oslogin = FALSE.
-
-#### so we have to make sure that:
-    Validate that project metadata enable-oslogin is TRUE.
- 
-    Validate that VM instances either do not have the enable-oslogin metadata or have it set to TRUE
-
-### [doc gcp](https://cloud.google.com/compute/docs/oslogin/set-up-oslogin#enable_os_login_during_vm_creation)
-
-
-
-if  google_compute_project_metadata exists - enable oslogin must be true 
-   then check vm if enable os login does not exist that ok, if exists must equals to true.
-
-if google_compute_project_metadata doesnot exist - vm enable os login must exists and must be true

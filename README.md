@@ -15,8 +15,8 @@ This is a policy that ensures `enable_guest_attributes` is not enabled in VM ins
 
 | Setting             | Description                                                                     | Behavior               |
 | ------------------- | ------------------------------------------------------------------------------- | ---------------------- |
-| `false`  | Disables guest attribute access; protects sensitive runtime metadata.           | ✅ Secure – Compliant   |
-| `true` *(default)*    | Enables guest attributes, exposing system-level details to the metadata server. | ❌ Risk – Non-compliant |
+| `false` *(default)*| Disables guest attribute access; protects sensitive runtime metadata.           | ✅ Secure – Compliant   |
+| `true`  | Enables guest attributes, exposing system-level details to the metadata server. | ❌ Risk – Non-compliant |
 
 
 ### ✅ Compliant Configuration (PASS) 
@@ -26,26 +26,23 @@ resource "google_compute_instance" "secure_vm" {
   name         = "secure-vm"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
-
   metadata = {
     enable-guest-attributes = "false"
-  }
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-
-  network_interface {
-    network = "default"
-    access_config {}
   }
 }
 ```
 
-
-
+### ✅ It will also pass:(if attribute doesnot exists)
+```hcl 
+resource "google_compute_instance" "secure_vm" {
+  name         = "secure-vm"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
+  metadata = {
+    
+  }
+}
+```
 ### ❌ Non-Compliant Configuration (FAIL) this or missing attribute will fail
 
 ```hcl
@@ -53,32 +50,15 @@ resource "google_compute_instance" "insecure_vm" {
   name         = "insecure-vm"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
-
   metadata = {
     enable-guest-attributes = "true"
   }
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-
-  network_interface {
-    network = "default"
-    access_config {}
-  }
 }
 ```
-
-
-
 **Reference:** [Manage guest attributes on VMs – GCP Docs](https://cloud.google.com/compute/docs/metadata/manage-guest-attributes)
-             
               
 **Reference:** [main doc](https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata)
 
-https://cloud.google.com/compute/docs/metadata/manage-guest-attributes#enable_attributes
-
 ### We can Set enable-guest-attributes in project-wide metadata so that it applies to all of the VMs in your project.
 ### WE can also Set enable-guest-attributes in instance metadata .
+### here its written - https://cloud.google.com/compute/docs/metadata/manage-guest-attributes#enable_attributes

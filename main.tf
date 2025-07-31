@@ -5,14 +5,15 @@ resource "google_compute_instance" "secure_vm" {
   metadata = {
     enable-guest-attributes = "false"
   }
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
+}
 
-  network_interface {
-    network = "default"
-    access_config {}
+resource "google_compute_project_metadata_item" "default" {
+  key   = "enable-guest-attributes"
+  value = "false"
+}
+
+resource "google_compute_project_metadata" "default" {
+  metadata = {
+    enable-guest-attributes = "false"
   }
 }

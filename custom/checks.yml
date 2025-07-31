@@ -6,16 +6,75 @@ metadata:
   description: "Ensure guest attributes are disabled in VM instances."
 
 definition:
-  or:
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_instance"
-      attribute: "metadata.enable-guest-attributes"
-      operator: "not_exists"
-    - cond_type: "attribute"
-      resource_types:
-        - "google_compute_instance"
-      attribute: "metadata.enable-guest-attributes"
-      operator: "equals"
-      value: false
+   or:
+      - or:
+           - cond_type: "attribute"
+             resource_types:
+                - "google_compute_instance"
+                - "google_compute_project_metadata"
+             attribute: "metadata.enable-guest-attributes"
+             operator: "not_exists"
+           - cond_type: "attribute"
+             resource_types:
+                - "google_compute_instance"
+                - "google_compute_project_metadata"
+             attribute: "metadata.enable-guest-attributes"
+             operator: "equals"
+             value: false
+      - or:
+           - cond_type: "attribute"
+             resource_types:
+                - "google_compute_project_metadata_item"
+             attribute: "key"
+             operator: "not_equals"
+             value: "enable-guest-attributes"
+           - and:
+                - cond_type: "attribute"
+                  resource_types:
+                     - "google_compute_project_metadata_item"
+                  attribute: "key"
+                  operator: "equals"
+                  value: "enable-guest-attributes"
+                - cond_type: "attribute"
+                  resource_types:
+                     - "google_compute_project_metadata_item"
+                  attribute: "value"
+                  operator: "equals"
+                  value: false
+
+# definition:
+#   or:
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_instance"
+#         - "google_compute_project_metadata"
+#       attribute: "metadata.enable-guest-attributes"
+#       operator: "not_exists"
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_instance"
+#         - "google_compute_project_metadata"
+#       attribute: "metadata.enable-guest-attributes"
+#       operator: "equals"
+#       value: false
+#   or:
+#     - cond_type: "attribute"
+#       resource_types:
+#         - "google_compute_project_metadata_item"
+#       attribute: "key"
+#       operator: "not_equals"
+#       value: "enable-guest-attributes"
+#     - and:
+#          - cond_type: "attribute"
+#            resource_types:
+#              - "google_compute_project_metadata_item"
+#             attribute: "key"
+#             operator: "equals"
+#             value: "enable-guest-attributes"
+#           - cond_type: "attribute"
+#             resource_types:
+#               - "google_compute_project_metadata_item"
+#             attribute: "value"
+#             operator: "equals"
+#             value: false
      

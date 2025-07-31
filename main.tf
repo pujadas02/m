@@ -8,12 +8,12 @@ resource "google_compute_instance" "secure_vm" {
 }
 
 resource "google_compute_project_metadata_item" "default" {
-  key   = "serial-port-ging-enable"
+  key   = "serial-port-logging-enable"
   value = "false"
 }
 
 resource "google_compute_project_metadata" "default" {
   metadata = {
-    serial-port-logging-enable = "false"
+    serial-port-logging-enable = "true"
   }
 }

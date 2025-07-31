@@ -20,25 +20,40 @@ If the key is serial-port-logging-enable, the value must be "false".
 | Serial Port Logging to Cloud Logging | `serial-port-logging-enable: "false"` or unset | ❌ Serial port logs **not sent** to Cloud Logging |
 | Serial Port Logging to Cloud Logging | `serial-port-logging-enable: "true"`           | ✅ Serial port logs **sent** to Cloud Logging     |
 
-## ✅ How to enforce disabling serial port logging to Cloud Logging
-
-Ensure that VM instances have the metadata key `serial-port-logging-enable` set to `"false"` or removed entirely.
-
-## Example: Terraform snippet for disabling serial port logging
-
+## ✅ Compliant Configuration (PASS)
 ```hcl
-resource "google_compute_instance" "example" {
-  name         = "example-instance"
-  machine_type = "n1-standard-1"
+resource "google_compute_instance" "secure_vm" {
+  name         = "secure-vm"
+  machine_type = "e2-medium"
   zone         = "us-central1-a"
-
   metadata = {
-    "serial-port-logging-enable" = "false"
+    enable-guest-attributes = "false"
   }
-
-  # other instance configs...
 }
 ```
+## ✅ It will also pass:(if attribute doesnot exists)
+```hcl
+resource "google_compute_instance" "secure_vm" {
+  name         = "secure-vm"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
+  metadata = {
+    
+  }
+}
+```
+## ❌ Non-Compliant Configuration (FAIL) this or missing attribute will fail
+```hcl
+resource "google_compute_instance" "insecure_vm" {
+  name         = "insecure-vm"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
+  metadata = {
+    enable-guest-attributes = "true"
+  }
+}
+```
+
 ## References
 
 [* Serial Port Logging Metadata — Google Cloud Docs](https://cloud.google.com/compute/docs/troubleshooting/viewing-serial-port-output#setting_project_and_instance_metadata)

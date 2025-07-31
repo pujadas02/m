@@ -8,8 +8,8 @@ resource "google_compute_instance" "secure_vm" {
 }
 
 resource "google_compute_project_metadata_item" "default" {
-  key   = "enable-guest-attributes"
-  value = "true"
+  key   = "attributes"
+  value = "false"
 }
 
 

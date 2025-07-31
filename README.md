@@ -7,16 +7,22 @@ Serial port logging refers to the ability of a VM instance to send its serial po
 Stackdriver Logging (now called Cloud Logging) is the destination service where logs are collected and stored.
 You can control whether your instances send serial port output to Cloud Logging by setting project- or instance-level metadata
 
+Policy Logic
+For google_compute_instance and google_compute_project_metadata:
+The key enable-guest-attributes must either be absent or explicitly set to "false".
+
+For google_compute_project_metadata_item:
+If the key is enable-guest-attributes, the value must be "false".
 ##  Enforcement Behavior
 
 | Feature                              | Setting                                        | Behavior                                         |
 | ------------------------------------ | ---------------------------------------------- | ------------------------------------------------ |
-| Serial Port Logging to Cloud Logging | `serial-port-enable-logging: "false"` or unset | ❌ Serial port logs **not sent** to Cloud Logging |
-| Serial Port Logging to Cloud Logging | `serial-port-enable-logging: "true"`           | ✅ Serial port logs **sent** to Cloud Logging     |
+| Serial Port Logging to Cloud Logging | `serial-port-logging-enable: "false"` or unset | ❌ Serial port logs **not sent** to Cloud Logging |
+| Serial Port Logging to Cloud Logging | `serial-port-logging-enable: "true"`           | ✅ Serial port logs **sent** to Cloud Logging     |
 
 ## ✅ How to enforce disabling serial port logging to Cloud Logging
 
-Ensure that VM instances have the metadata key `serial-port-enable-logging` set to `"false"` or removed entirely.
+Ensure that VM instances have the metadata key `serial-port-logging-enable` set to `"false"` or removed entirely.
 
 ## Example: Terraform snippet for disabling serial port logging
 
@@ -27,7 +33,7 @@ resource "google_compute_instance" "example" {
   zone         = "us-central1-a"
 
   metadata = {
-    "serial-port-enable-logging" = "false"
+    "serial-port-logging-enable" = "false"
   }
 
   # other instance configs...

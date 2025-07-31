@@ -17,8 +17,8 @@ Disabling terminal access helps:
 
 | Feature         | Setting                                       | Behavior                                 |
 | --------------- | --------------------------------------------- | ---------------------------------------- |
-| Terminal Access | `notebook-disable-terminal: "true"`           | ❌ Terminal access disabled in JupyterLab |
-| Terminal Access | `notebook-disable-terminal: "false"` or unset | ✅ Terminal access enabled (default)      |
+| Terminal Access | `notebook-disable-terminal: "true"`           |  Terminal access disabled in JupyterLab |
+| Terminal Access | `notebook-disable-terminal: "false"` or unset |  Terminal access enabled (default)      |
 
 ## 📘 References
   [docs](https://cloud.google.com/vertex-ai/docs/workbench/instances/manage-metadata)

@@ -7,12 +7,12 @@ Serial port logging refers to the ability of a VM instance to send its serial po
 Stackdriver Logging (now called Cloud Logging) is the destination service where logs are collected and stored.
 You can control whether your instances send serial port output to Cloud Logging by setting project- or instance-level metadata
 
-Policy Logic
+## Policy Logic
 For google_compute_instance and google_compute_project_metadata:
-The key enable-guest-attributes must either be absent or explicitly set to "false".
+The key serial-port-logging-enable must either be absent or explicitly set to "false".
 
 For google_compute_project_metadata_item:
-If the key is enable-guest-attributes, the value must be "false".
+If the key is serial-port-logging-enable, the value must be "false".
 ##  Enforcement Behavior
 
 | Feature                              | Setting                                        | Behavior                                         |

@@ -1,40 +1,18 @@
 metadata:
-  name: "Require OS Login on GCP Compute Instances and Project"
-  id: "CUSTOM_GCP_ENABLE_OSLOGIN"
+  name: "Disallow Custom Service Account on Cloud Build Triggers"
+  id: "CUSTOM_NO_CUSTOM_SA_CLOUDBUILD_TRIGGER"
   category: "security"
   severity: "HIGH"
-  description: "Ensure OS Login is enabled via project or instance metadata to enforce IAM-based SSH access control."
+  description: "Ensure Cloud Build uses the default service account by disallowing custom service accounts in triggers."
 
 definition:
   or:
-    - and:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "equals_ignore_case"
-          value: "TRUE"
-    - and:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "metadata.enable-oslogin"
-          operator: "equals_ignore_case"
-          value: "TRUE"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "not_exists"
-    - and:
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_instance"
-          attribute: "metadata.enable-oslogin"
-          operator: "equals_ignore_case"
-          value: "TRUE"
-        - cond_type: "attribute"
-          resource_types:
-            - "google_compute_project_metadata"
-          attribute: "metadata.enable-oslogin"
-          operator: "exists"
+    - cond_type: "resource"
+      resource_types:
+        - "google_cloudbuild_trigger"
+      operator: "not_exists"
+    - cond_type: "attribute"
+      resource_types:
+        - "google_cloudbuild_trigger"
+      attribute: "service_account"
+      operator: "not_exists"

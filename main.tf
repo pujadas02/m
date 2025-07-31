@@ -14,6 +14,6 @@ resource "google_compute_project_metadata_item" "default" {
 
 resource "google_compute_project_metadata" "default" {
   metadata = {
-    enable-guest-attributes = "false"
+    enable-guest-attributes = "true"
   }
 }

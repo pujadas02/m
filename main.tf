@@ -12,8 +12,5 @@ resource "google_compute_project_metadata_item" "default" {
   value = "false"
 }
 
-resource "google_compute_project_metadata" "default" {
-  metadata = {
-    
-  }
+
 }

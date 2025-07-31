@@ -5,7 +5,7 @@
 Prevent the exposure of runtime metadata from virtual machines by disabling guest attributes on Compute Engine instances.
 
 **Constraint Type:**
-This is a configuration-based best practice (not a GCP org policy constraint) that ensures `enable_guest_attributes` is not enabled in VM instances.and if enabled project wide then in vms it should be disabled.
+This is a policy that ensures `enable_guest_attributes` is not enabled in VM instances.and if enabled project wide then in vms it should be disabled.
 
 ### ✅ Why Disable Guest Attributes?
 

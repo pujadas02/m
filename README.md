@@ -32,4 +32,5 @@ resource "google_compute_instance" "secure_vm" {
   }
 }
 ```
+### enable_nested_virtualization - (Optional) Defines whether the instance should have nested virtualization enabled. Defaults to false.
 **REF** [doc](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance#enable_nested_virtualization-1)

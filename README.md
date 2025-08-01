@@ -1,32 +1,18 @@
-# Restrict Public IP access on Cloud SQL instances
-This Checkov custom policy ensures that Google Cloud SQL instances do **not** have public IPv4 addresses assigned. It helps prevent unintended public exposure of database instances.
+# Disable VM Nested Virtualization
 
-## Benefits
-- **Enhances Security:** Prevents Cloud SQL instances from being publicly accessible, reducing attack surface.
-- **Blocks Implicit Defaults:** Catches cases where the `ip_configuration` block is missing and a public IP would be assigned by default.
-- **Ensures Consistency:** Standardizes secure Cloud SQL configurations across infrastructure.
-- **Supports Compliance:** Aligns with security best practices and regulatory requirements.
-- **Integrates with CI/CD:** Enables automated checks in deployment pipelines to catch misconfigurations early.
+This policy ensures that all virtual machines (VMs) created in Google Cloud Platform (GCP) have nested virtualization explicitly disabled unless required. This prevents potential misuse of virtualized environments within VMs, which can increase your attack surface or lead to resource management challenges.
 
-## Why This Matters
+### Nested Virtualization Inheritance Summary
 
-If you omit ip_configuration entirely, public IPv4 access defaults to true, matching GCP’s default behavior.
+Nested virtualization in GCP is a per-VM setting that allows a virtual machine to run nested hypervisors. This setting can be explicitly enabled or disabled when creating a VM.
 
-However, if an ip_configuration block is present but ipv4_enabled isn't explicitly set, Terraform will default it to false, which can cause failures for 2nd‑gen instances without a private_network. 
+However, **nested virtualization can also be inherited indirectly from the custom image used to create the VM**. If a custom image is created from a VM that had nested virtualization enabled, any new VM launched from that image may inherit the nested virtualization capability unless it is explicitly disabled in the VM configuration.
 
-By default, GCP assigns a public IPv4 address if no ip_configuration is defined.
+**Key points:**
 
-## ensure that:
-**Resource type checked:**  
-- `google_sql_database_instance`
+* Nested virtualization is **not controlled at the project level** in GCP.
+* It is configured **per VM instance** via the `advanced_machine_features` setting.
+* Custom images **carry the nested virtualization flag** from their source VM.
+* To prevent unintended inheritance, always explicitly disable nested virtualization on new VMs regardless of the image.
 
-**Check passes if:**  
-- The `ip_configuration` block must be present and `ipv4_enabled` attribute must set to **false**
-
-```hcl
-ip_configuration {
-  ipv4_enabled = false
-}
-```
-
-**REF** [doc](https://github.com/hashicorp/terraform-provider-google/issues/6012)
+**REF** [doc](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance#enable_nested_virtualization-1)

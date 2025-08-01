@@ -15,4 +15,21 @@ However, **nested virtualization can also be inherited indirectly from the custo
 * Custom images **carry the nested virtualization flag** from their source VM.
 * To prevent unintended inheritance, always explicitly disable nested virtualization on new VMs regardless of the image.
 
+```hcl
+resource "google_compute_instance" "secure_vm" {
+  name         = "secure-vm"
+  machine_type = "e2-standard-2"
+  zone         = "us-central1-a"
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
+    }
+  }
+
+  advanced_machine_features {
+    enable_nested_virtualization = false
+  }
+}
+```
 **REF** [doc](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance#enable_nested_virtualization-1)

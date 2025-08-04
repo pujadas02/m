@@ -3,4 +3,9 @@ https://docs.prowler.com/checks/gcp/google-cloud-public-policies/ensure-gcp-vert
 
 
 
+
+
 https://github.com/teamdatatonic/terraform-google-secure-vertex-workbench/blob/b6b887bdaf746bc78c2e23d2fd42c03f223fff0b/notebooks.tf#L20
+
+
+

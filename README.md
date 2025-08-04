@@ -21,7 +21,7 @@ so we have to make sure in google_workbench_instance resource disable-public-ip 
 
 
 
-
+**search google_workbench_instance in mars to see how they use**
 
 
 

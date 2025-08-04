@@ -4,9 +4,9 @@ on:
   push:
     branches:
     - 21-GCP-Restrict-public-IP-access-on-new-Vertex-AI-Workbench-notebooks-and-instances
-    # paths: 
-    # - main.tf
-    # - custom/checks.yml
+    paths: 
+    - main.tf
+    - custom/checks.yml
   pull_request:
     branches:
       - master

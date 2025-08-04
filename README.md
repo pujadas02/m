@@ -28,3 +28,8 @@ Overrides the project-level setting for that particular VM.
 
 Useful if you want specific VMs to use different DNS behavior than the project default.
 
+
+
+**Iam confused which is default dns for mars** 
+
+**[default DNS type according to this which one ?](https://cloud.google.com/compute/docs/internal-dns#instance-fully-qualified-domain-names).**

@@ -6,9 +6,15 @@ metadata:
   description: "Ensure that Google Cloud KMS key versions are set to `DISABLED` before being destroyed."
 
 definition:
-  cond_type: "attribute"
-  resource_types:
-    - "google_kms_crypto_key_version"
-  attribute: "state"
-  operator: "equals"
-  value: "DISABLED"
+  and:
+    - cond_type: "attribute"
+      resource_types:
+        - "google_workbench_instance"
+      attribute: "access_configs"
+      operator: "not_exists"
+    - cond_type: "attribute"
+      resource_types:
+        - "google_workbench_instance"
+      attribute: "disable_public_ip"
+      operator: "equals"
+      value: true

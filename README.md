@@ -1,39 +1,20 @@
-# Why We Cannot Manage or Fully Check Cross-Project Service Account (XPSA) Liens Like Custom User Liens:
+# Why Terraform and Checkov cannot fully track default service accounts’ broad roles (Editor/Owner) even if imported:
 
-## 1 Cross-Project Service Account Liens are System-Managed
+## Terraform state includes the resource info, but not the full IAM bindings unless explicitly managed
 
-These liens are automatically created and removed by GCP when you grant or remove IAM roles to a service account from another project.
+Importing a service account brings the SA resource into state.
 
-You cannot create or delete these liens manually via Terraform or API.
+But Terraform does NOT automatically import or know about IAM bindings/roles granted outside Terraform (like Editor or Owner granted via console or other means).
 
-## 2 Custom User Liens Are User-Managed
+IAM bindings must be managed explicitly in Terraform (google_project_iam_binding, google_service_account_iam_member, etc.).
 
-Custom liens can be created and deleted explicitly by users (via Terraform or API).
+## Most default service account Editor/Owner roles are assigned automatically by GCP, not via Terraform
 
-This means you can track, control, and check them directly.
+So these broad roles often exist only in GCP’s live IAM policies, not in Terraform code or state.
 
-## 3 Because XPSA Liens Are Automatic & Hidden:
+## Checkov only scans Terraform code/resources, not live GCP IAM state
 
-You cannot manage XPSA liens directly in Terraform or any tool.
+Checkov cannot detect permissions granted outside Terraform code.
 
-You only manage the IAM bindings that cause those liens to exist or be removed.
+So it cannot warn about Editor/Owner roles assigned to default service accounts unless those are explicitly managed in the Terraform files.
 
-The actual lien removal happens after you remove the IAM binding.
-
-## 4 Why This Makes Detection of Removal Hard
-
-Terraform and Checkov see only the desired Terraform config, not the live current state.
-
-If a binding disappears from your Terraform code, you don’t know if it’s a removal or just not added yet.
-
-Without comparing previous state vs current state or live IAM policies, you cannot know if the binding is being removed (which triggers lien removal).
-
-
-
-## but we can do this- (it might not work also)
-## Use Terraform Plan Output with External Scripts
-Use terraform plan to get a diff of what will be added/removed.
-
-Parse the plan to detect removal of cross-project IAM bindings.
-
-Integrate that as a guard or pre-commit hook or CI step.

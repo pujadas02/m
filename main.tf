@@ -24,9 +24,10 @@ resource "google_workbench_instance" "example_fail2" {
   gce_setup {
     disable_public_ip = true
     network_interfaces {
-      network = "default"
       access_config {  
       }
+      network = "default"
+
     }
   }
 }

@@ -1,16 +1,47 @@
-resource "google_project_iam_audit_config" "iap-audit-logging" {
-  service = "iap.googleapis.com"
-  audit_log_config {
-    log_type = "DATA_READ"
+resource "google_workbench_instance" "example_pass" {
+  name = "workbench-instance-pass"
+  gce_setup {
+    disable_public_ip = true
+    network_interfaces {
+      network = "default"
+    }
   }
-  audit_log_config {
-    log_type = "DATA_WRITE"
-  }
-  audit_log_config {
-    log_type = "ADMIN_READ"
-  }
-
 }
+
+resource "google_workbench_instance" "example_fail1" {
+  name = "workbench-instance-fail1"
+  gce_setup {
+    disable_public_ip = false
+    network_interfaces {
+      network = "default"
+    }
+  }
+}
+
+resource "google_workbench_instance" "example_fail2" {
+  name = "workbench-instance-fail2"
+  gce_setup {
+    disable_public_ip = true
+    network_interfaces {
+      network = "default"
+      access_config {  
+      }
+    }
+  }
+}
+
+resource "google_workbench_instance" "example_fail3" {
+  name = "workbench-instance-fail3"
+  gce_setup {
+    disable_public_ip = false
+    network_interfaces {
+      network = "default"
+      access_config {
+      }
+    }
+  }
+}
+
 
 
 resource "google_compute_network" "vpc_network" {

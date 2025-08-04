@@ -1,6 +1,7 @@
 resource "google_workbench_instance" "example_pass" {
   name = "workbench-instance-pass"
   gce_setup {
+    hi = hi
     disable_public_ip = true
     network_interfaces {
       network = "default"

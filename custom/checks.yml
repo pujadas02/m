@@ -1,9 +1,9 @@
 metadata:
-  name: "Require Disabled Key Versions Before Destruction"
-  id: "CCOE_GCP_KMS_DISABLE_BEFORE_DESTROY"
-  category: "encryption"
+  name: "Restrict Public IP Access on Vertex AI Workbench Notebooks and Instances"
+  id: "CCOE_GCP_VERTEXAI_RESTRICT_PUBLIC_IP"
+  category: "networking"
   severity: "HIGH"
-  description: "Ensure that Google Cloud KMS key versions are set to `DISABLED` before being destroyed."
+  description: "Ensure Vertex AI Workbench instances have public IP access disabled by setting disable_public_ip to true and removing any access_config blocks."
 
 definition:
   and:

@@ -22,12 +22,12 @@ resource "google_workbench_instance" "example_fail1" {
 resource "google_workbench_instance" "example_fail2" {
   name = "workbench-instance-fail2"
   gce_setup {
+    hi = hi
     disable_public_ip = true
     network_interfaces {
+      network = "default"
       access_configs {  
       }
-      network = "default"
-
     }
   }
 }

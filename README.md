@@ -18,3 +18,10 @@ Checkov cannot detect permissions granted outside Terraform code.
 
 So it cannot warn about Editor/Owner roles assigned to default service accounts unless those are explicitly managed in the Terraform files.
 
+
+
+
+
+Note: The default Compute Engine and App Engine service accounts are granted the Editor role (roles/editor) on the project when they are created. To improve security, we highly recommend that you disable this behavior by disabling automatic role grants for default service accounts. For more information, see Default service accounts.
+
+[from official doc](https://cloud.google.com/iam/docs/service-account-overview#default_service_accounts)

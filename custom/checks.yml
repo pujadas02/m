@@ -10,7 +10,7 @@ definition:
     - cond_type: "attribute"
       resource_types:
         - "google_workbench_instance"
-      attribute: "gce_setup.network_interfaces.access_configs"
+      attribute: "gce_setup.*.network_interfaces.*.access_configs"
       operator: "not_exists"
     - cond_type: "attribute"
       resource_types:

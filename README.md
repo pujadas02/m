@@ -1,6 +1,6 @@
 # Restrict public IP access on new Vertex AI Workbench notebooks and instances	
 
-This boolean constraint, when enforced, restricts public IP access to newly created Vertex AI Workbench notebooks and instances. By default, public IPs can access Vertex AI Workbench notebooks and instances.
+This boolean constraint, when enforced, restricts public IP access to newly created Vertex AI Workbench notebooks and instances. **By default, public IPs can access Vertex AI Workbench notebooks and instances.**
 constraints/ainotebooks.restrictPublicIp  
 
 
@@ -16,10 +16,7 @@ so to mimic this logic in checkov -
 
 
 
-so we have to make sure in google_workbench_instance resource disable-public-ip = true and no access config is mentioned.
-
-
-
+### so we have to make sure in google_workbench_instance resource disable-public-ip = true and no access config is mentioned.
 
 **search google_workbench_instance in mars to see how they use**
 

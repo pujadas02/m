@@ -1,25 +1,39 @@
-# What is Require OS Login?
-Require OS Login enforces that users must use OS Login (which ties Linux user accounts to IAM identities) to SSH into VM instances. This improves security by centralizing SSH access control through IAM instead of managing individual SSH keys on each VM.
+# Why We Cannot Manage or Fully Check Cross-Project Service Account (XPSA) Liens Like Custom User Liens:
 
-## Why enforce it?
-Centralizes and simplifies SSH access management.
-Eliminates manual SSH key distribution.
-Enforces IAM-based access control and audit logging for SSH.
+## 1 Cross-Project Service Account Liens are System-Managed
 
-### Enabling OS Login at the Project level (via project metadata enable-oslogin = TRUE) means all VM instances in that project inherit the setting by default.
+These liens are automatically created and removed by GCP when you grant or remove IAM roles to a service account from another project.
 
-### However, VM instances can override this setting individually by setting instance metadata enable-oslogin = FALSE.
+You cannot create or delete these liens manually via Terraform or API.
 
-#### so we have to make sure that:
-    Validate that project metadata enable-oslogin is TRUE.
- 
-    Validate that VM instances either do not have the enable-oslogin metadata or have it set to TRUE
+## 2 Custom User Liens Are User-Managed
 
-### [doc gcp](https://cloud.google.com/compute/docs/oslogin/set-up-oslogin#enable_os_login_during_vm_creation)
+Custom liens can be created and deleted explicitly by users (via Terraform or API).
+
+This means you can track, control, and check them directly.
+
+## 3 Because XPSA Liens Are Automatic & Hidden:
+
+You cannot manage XPSA liens directly in Terraform or any tool.
+
+You only manage the IAM bindings that cause those liens to exist or be removed.
+
+The actual lien removal happens after you remove the IAM binding.
+
+## 4 Why This Makes Detection of Removal Hard
+
+Terraform and Checkov see only the desired Terraform config, not the live current state.
+
+If a binding disappears from your Terraform code, you don’t know if it’s a removal or just not added yet.
+
+Without comparing previous state vs current state or live IAM policies, you cannot know if the binding is being removed (which triggers lien removal).
 
 
 
-if  google_compute_project_metadata exists - enable oslogin must be true 
-   then check vm if enable os login does not exist that ok, if exists must equals to true.
+## but we can do this- (it might not work also)
+## Use Terraform Plan Output with External Scripts
+Use terraform plan to get a diff of what will be added/removed.
 
-if google_compute_project_metadata doesnot exist - vm enable os login must exists and must be true
+Parse the plan to detect removal of cross-project IAM bindings.
+
+Integrate that as a guard or pre-commit hook or CI step.

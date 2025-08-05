@@ -1,3 +1,4 @@
+# **Skip default network creation**
 # Key points about the default network in GCP and Terraform:
 Default network is automatically created by GCP when you create a new project.
 

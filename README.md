@@ -30,3 +30,5 @@ If you delete the original default network and create your own network named "de
 
 
 [**REF**](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project)
+
+search auto_create_network in mars to see

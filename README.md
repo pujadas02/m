@@ -1,67 +1,97 @@
-## tf resource - https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_preview_feature
+### **Approach 1: Using a Simple Script to Track `terraform plan` Output**
 
-## Use google_compute_preview_feature in Terraform to block known project-level features.
-  
-   These are explicit GCE preview features you can toggle on/off at the project level.
-  
-```hcl
-resource "google_compute_preview_feature" "block_ipv6" {
-  project = "your-project-id"
-  name    = "ENABLE_IPV6"
-  enabled = false
-}
-```
-Use this to block features like:
-       ENABLE_HYPERDISK
+You can write a script that **runs `terraform plan`**, looks for any resource deletions (specifically for the `google_resource_manager_lien`), and then **fails the plan** if it detects that the lien is going to be destroyed.
 
-  ENABLE_IPV6
+Here's a sample **bash script** that checks the output of `terraform plan`:
 
-   ENABLE_NETLB_IPV6
+#### Example Script to Check `terraform plan` Output
 
-- Effect: This prevents GCP from allowing preview access to those features at the Compute API level.
+```bash
+#!/bin/bash
 
+# Run terraform plan and capture the output
+PLAN_OUTPUT=$(terraform plan -no-color)
 
+# Check if a lien is being destroyed in the plan output
+if echo "$PLAN_OUTPUT" | grep -q "google_resource_manager_lien.shared_vpc_lien.*Destroy"; then
+  echo "Error: Lien resource is being destroyed in the plan!"
+  exit 1  # Fail the script (and thus the CI/CD process)
+fi
 
-## Use Checkov or custom scanners to detect:
-
-
-## Detect:
-Use of the google-beta provider — indicates opt-in to preview.
-
-Use of preview-only fields, e.g.:
-
-enable_nested_virtualization
-
-advanced_machine_features
-
-reservation_affinity
-
-**-Effect: Prevents usage of Terraform constructs that tap into preview functionality, even if the project allows it.**
-
-## Enforce org-wide guidance via documentation or CI/CD pipelines.
-
-search beta feature in mars
-
-### To Disable Multiple Preview Features
-```hcl
-resource "google_compute_preview_feature" "disable_alpha_api_access" {
-  provider          = google-beta
-  name              = "alpha-api-access"
-  activation_status = "DISABLED"
-}
-
-resource "google_compute_preview_feature" "disable_beta_api_access" {
-  provider          = google-beta
-  name              = "beta-api-access"
-  activation_status = "DISABLED"
-}
-
-resource "google_compute_preview_feature" "disable_other_alpha_feature" {
-  provider          = google-beta
-  name              = "another-alpha-feature"
-  activation_status = "DISABLED"
-}
+echo "No lien deletion detected. Proceeding with terraform apply."
 ```
 
-but we dont know how many features are there so how can we block all preview features, or else we can ask if there is any certain one they want to block.
-also i want doc file of this one policy(as its not a gcp ogr policy)
+#### **How It Works**:
+
+* This script runs `terraform plan` and captures its output.
+* It then checks the output for any line that indicates a **lien resource** (`google_resource_manager_lien.shared_vpc_lien`) is marked for **destruction**.
+* If a lien is being destroyed, the script exits with a non-zero status (`exit 1`), which causes the process to fail.
+* If no lien is being destroyed, it allows the process to proceed normally.
+
+#### **Steps to Use the Script**:
+
+1. Save the script as `check_lien_removal.sh`.
+
+2. Ensure that it's executable:
+
+   ```bash
+   chmod +x check_lien_removal.sh
+   ```
+
+3. Run the script instead of directly running `terraform plan`:
+
+   ```bash
+   ./check_lien_removal.sh
+   ```
+
+This will **fail the Terraform apply** if the lien resource is being removed, as it forces a `terraform plan` failure when it detects that the lien is marked for destruction.
+
+### **Approach: Using `terraform plan` JSON Output for More Structured Detection**
+
+If you prefer a **more structured approach** (e.g., for parsing plan output programmatically), you can use the `terraform plan -out=plan.tfplan` command, which saves the plan in a binary format. Then, you can use `terraform show` to get a JSON representation of the plan and check for any removals of the lien resource.
+
+Here’s how you can do it:
+
+#### Example Script Using `terraform plan -out`:
+
+```bash
+#!/bin/bash
+
+# Run terraform plan and output the plan to a file
+terraform plan -out=plan.tfplan
+
+# Convert the binary plan to a JSON format
+terraform show -json plan.tfplan > plan.json
+
+# Check if the lien resource is being removed
+if jq '.resource_changes[] | select(.type == "google_resource_manager_lien" and .change.actions | index("destroy"))' plan.json > /dev/null; then
+  echo "Error: Lien resource is being destroyed in the plan!"
+  exit 1
+fi
+
+echo "No lien deletion detected. Proceeding with terraform apply."
+```
+
+#### How It Works:
+
+1. `terraform plan -out=plan.tfplan` creates a plan in binary format.
+2. `terraform show -json plan.tfplan` converts the binary plan into a JSON format for easier processing.
+3. The script uses `jq` (a command-line JSON processor) to check if any `google_resource_manager_lien` resource is set for **destruction**.
+4. If a lien resource is found to be destroyed, it exits with an error.
+
+**Note**: You need to have `jq` installed on the system running the script. On most systems, you can install it via a package manager:
+
+```bash
+# For Ubuntu/Debian:
+sudo apt-get install jq
+```
+
+### **Conclusion**
+
+* You can definitely use `terraform plan` to detect if a **lien** is being removed and fail the plan if necessary.
+* Using a simple **bash script** or a more structured approach with **JSON output** and `jq` allows you to inspect the plan and **abort the apply** if the lien is being destroyed.
+* This can be integrated into a **CI/CD pipeline** to automatically enforce this check.
+
+By using these methods, you can ensure that **Shared VPC host projects** with **liens** are **protected from accidental deletion** and prevent changes that might violate your organization's policies.
+
+Let me know if you need further help or more detailed examples!

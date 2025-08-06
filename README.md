@@ -35,4 +35,24 @@ resource "google_compute_instance" "secure_vm" {
 ### enable_nested_virtualization - (Optional) Defines whether the instance should have nested virtualization enabled. Defaults to false.
 **REF** [doc](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/compute_instance#enable_nested_virtualization-1)
 
+## Terraform / advanced_machine_features default (enable_nested_virtualization = false)
+
+When you create a VM via Terraform without specifying enable_nested_virtualization, it defaults to false — nested virtualization is disabled.
+
+So Terraform is explicit in how it configures the VM at creation.
+
+## GCP organization-level boolean constraint (“Disable VM nested virtualization”)
+
+This is a policy at the GCP Org/Project/Folder level, independent of Terraform defaults.
+
+By default, if a user creates a VM via the GCP console, gcloud, or API, nested virtualization is allowed on Intel Haswell or newer CPUs. That’s what the “allowed by default” line refers to — GCP’s platform default, not Terraform.
+
+The boolean constraint ensures that even if someone tries to enable it manually, it will be blocked — it’s an enforcement mechanism across the whole organization.
+
+### Key difference:
+
+Terraform default: disables nested virtualization unless you set it true.
+
+GCP platform default: allows nested virtualization unless an org-level policy disables it.
+
 **In gcp-app-terraform-modules repo variable.tf file we have value is false but the resource is something else so i will check enable_nested_virtualization must be false**

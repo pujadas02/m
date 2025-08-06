@@ -10,9 +10,7 @@ resource "google_compute_instance" "secure_vm" {
     }
   }
 
-  advanced_machine_features {
-    enable_nested_virtualization = false
-  }
+  
 }
 
 resource "google_compute_network_attachment" "default" {

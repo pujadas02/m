@@ -3,10 +3,10 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - 59-Restrict-VM-IP-Forwarding 
-    paths: 
-    - main.tf
-    - custom/checks.yml
+    - 38-GCP-Skip-default-network-creation
+    # paths: 
+    # - main.tf
+    # - custom/checks.yml
   pull_request:
     branches:
       - master

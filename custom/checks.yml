@@ -1,15 +1,14 @@
 metadata:
-  name: "CKV_CUSTOM_GCP_SQL_NO_PUBLIC_IP"
-  id: "CKV_CUSTOM_GCP_001"
-  category: "networking"
-  version: "1.0.2"
+  name: "CKV_CUSTOM_GCP_VM_NO_NESTED_VIRTUALIZATION"
+  id: "CKV_CUSTOM_GCP_002"
+  category: "compute"
   severity: "HIGH"
-  description: "Ensure public IPv4 access is disabled on Cloud SQL instances."
+  description: "Ensure nested virtualization is disabled on VM instances."
 
 definition:
   cond_type: "attribute"
   resource_types:
-    - "google_sql_database_instance"
-  attribute: "settings.ip_configuration.ipv4_enabled"
+    - "google_compute_instance"
+  attribute: "advanced_machine_features.enable_nested_virtualization"
   operator: "equals"
   value: false

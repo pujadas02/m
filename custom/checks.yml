@@ -1,20 +1,20 @@
 metadata:
-  name: "Restrict VM IP Forwarding"
-  id: "CKV_CUSTOM_GCP_010"
+  name: "Skip Default Network Creation"
+  id: "CKV_CUSTOM_GCP_011"
   category: "gcp"
   severity: "HIGH"
-  description: "Ensure IP forwarding on VM is disabled to prevent spoofing and unauthorized routing."
+  description: "Ensure the default network is not created."
 
 definition:
   or:
     - cond_type: "attribute"
       resource_types:
-        - google_compute_instance
-      attribute: "can_ip_forward"
+        - "google_project"
+      attribute: "auto_create_network"
       operator: "not_exists"
     - cond_type: "attribute"
       resource_types:
-        - google_compute_instance
-      attribute: "can_ip_forward"
+        - "google_project"
+      attribute: "auto_create_network"
       operator: "equals"
       value: false

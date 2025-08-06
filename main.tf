@@ -1,23 +1,18 @@
-resource "google_sql_database_instance" "main" {
-  name             = "psc-enabled-main-instance"
-  database_version = "MYSQL_8_0"
-  settings {
-    tier    = "db-f1-micro"
-    ip_configuration {
-      psc_config {
-        psc_enabled = true
-        allowed_consumer_projects = ["allowed-consumer-project-name"]
-      }
-      ipv4_enabled = false
+
+resource "google_compute_instance" "secure_vm" {
+  name         = "secure-vm"
+  machine_type = "e2-standard-2"
+  zone         = "us-central1-a"
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-11"
     }
-    backup_configuration {
-      enabled = true
-      binary_log_enabled = true
-    }
-    availability_type = "REGIONAL"
   }
 
-
+  advanced_machine_features {
+    enable_nested_virtualization = false
+  }
 }
 
 resource "google_compute_network_attachment" "default" {

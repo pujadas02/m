@@ -1,20 +1,8 @@
-resource "google_compute_instance" "vm_fail" {
-  name         = "vm-fail"
-  machine_type = "n1-standard-1"
-  zone         = "us-central1-a"
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-9"
-    }
-  }
-
-  network_interface {
-    network = "default"
-    access_config {}
-  }
-  can_ip_forward = true  
-
+resource "google_project" "my_project" {
+  name       = "My Project"
+  project_id = "your-project-id"
+  org_id     = "1234567"
+  auto_create_network = false
 }
 
 

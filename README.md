@@ -30,5 +30,6 @@ If you delete the original default network and create your own network named "de
 
 
 [**REF**](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/google_project)
-
-search auto_create_network in mars to see
+**by default a default network and supporting resources are automatically created when creating a Project resource.**
+**but in mars modules we have auto_create_network= false**
+**so need to check in repos that auto_create_network must not exists or if exists must be equal to false**

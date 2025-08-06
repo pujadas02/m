@@ -9,7 +9,9 @@ resource "google_compute_instance" "secure_vm" {
       image = "debian-cloud/debian-11"
     }
   }
-
+ advanced_machine_features {
+    enable_nested_virtualization = false
+  }
   
 }
 

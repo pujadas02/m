@@ -36,3 +36,13 @@ resource "google_compute_instance" "vm_static" {
     }
   }
 }
+
+resource "google_compute_instance" "vm_static" {
+  name         = "disallowed-vm-1"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
+  network_interface {
+    network = "default"
+    
+  }
+}

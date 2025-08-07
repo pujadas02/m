@@ -1,43 +1,53 @@
 from __future__ import annotations
+
 from typing import Any
 from checkov.common.models.enums import CheckResult, CheckCategories
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
-class AllowedExternalIPv4VMCheck(BaseResourceCheck):
-    def __init__(self):
-        super().__init__(
-            name="Ensure external IPv4 only allowed for specified VM instances",
-            id="CUSTOM_GCP_001",
-            categories=[CheckCategories.NETWORKING],
-            supported_resources=["google_compute_instance"],
-        )
-        # Allowed VM instance names - customize as needed
-        self.allowed_vms = {"allowed-vm-1", "allowed-vm-2"}
+class AllowedExternalIPv4ForVMCheck(BaseResourceCheck):
+    def __init__(self) -> None:
+        name = "Ensure external IPv4 only allowed for specified VM instances"
+        id = "CUSTOM_GCP_001"
+        supported_resources = ['google_compute_instance']
+        categories = [CheckCategories.NETWORKING]
+        super().__init__(name=name, id=id, categories=categories, supported_resources=supported_resources)
 
-    def scan_resource_conf(self, conf):
-        # Get the VM name; conf attributes are lists in Checkov's parsed format
-        vm_name = conf.get("name", [None])[0]
-        if not vm_name:
-            # No name: cannot verify, pass to avoid false positives
+        # Define allowed VM instance names exactly as they appear in Terraform 'name'
+        self.allowed_vms: set[str] = {"allowed-vm-1", "allowed-vm-2"}
+
+    def scan_resource_conf(self, conf: dict[str, list[Any]]) -> CheckResult:
+        # The VM 'name' attribute is parsed by Checkov as a list (with one str element)
+        vm_names = conf.get("name")
+        if not vm_names or not isinstance(vm_names, list) or not vm_names[0]:
+            # No VM name, unable to validate external IP usage reliably; pass
             return CheckResult.PASSED
+        vm_name = vm_names[0]
 
-        # Get list of network_interface blocks
+        # 'network_interface' is a list of blocks (each usually a list with a dict)
         network_interfaces = conf.get("network_interface", [])
         for ni in network_interfaces:
-            # Each network_interface could be list (due to HCL parsing), flatten it
-            if isinstance(ni, list):
+            if isinstance(ni, list) and len(ni) > 0:
                 ni = ni[0]
-            # Check if access_config block(s) exist => external IPv4 assigned
-            if "access_config" in ni and ni["access_config"]:
-                # VM has external IP, check if allowed
+            # Check if access_config block is present and non-empty, meaning external IPv4 enabled
+            access_config = ni.get("access_config")
+            if access_config:
+                # access_config block exists (ephemeral or static IP assigned)
+                # Check if VM's name is in allowed list
                 if vm_name in self.allowed_vms:
                     return CheckResult.PASSED
                 else:
                     return CheckResult.FAILED
-        # No external IP assigned; safe to pass
+
+        # No access_config found on any network interface => no external IPv4 assigned => pass
         return CheckResult.PASSED
 
-check = AllowedExternalIPv4VMCheck()
+check = AllowedExternalIPv4ForVMCheck()
+
+
+# from __future__ import annotations
+# from typing import Any
+# from checkov.common.models.enums import CheckResult, CheckCategories
+# from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
 
 # class AllowedExternalIPv4ForVMCheck(BaseResourceCheck):
 #     def __init__(self):

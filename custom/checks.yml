@@ -1,16 +1,16 @@
-metadata:
-  name: "Disable Guest Attributes of Compute Engine metadata"
-  id: "CCOE_GCP_DISABLE_GUEST_ATTRIBUTES"
-  category: "security"
-  severity: "HIGH"
-  description: "Ensure guest attributes are disabled in VM instances."
+# metadata:
+#   name: "Disable Guest Attributes of Compute Engine metadata"
+#   id: "CCOE_GCP_DISABLE_GUEST_ATTRIBUTES"
+#   category: "security"
+#   severity: "HIGH"
+#   description: "Ensure guest attributes are disabled in VM instances."
 
-definition:
-  cond_type: "attribute"
-  resource_types:
-    - "google_compute_instance" 
-  attribute: "metadata.enable-guest-attributes"
-  operator: "equals"
-  value: false
+# definition:
+#   cond_type: "attribute"
+#   resource_types:
+#     - "google_compute_instance" 
+#   attribute: "metadata.enable-guest-attributes"
+#   operator: "equals"
+#   value: false
 
      

@@ -2,11 +2,11 @@ name: Terraform Security Checks
 on:
   push:
     branches:
-    - 12-GCP-Disable-Hybrid-Cloud-IPv6-usage
-    paths: 
-    - main.tf
-    - custom/checks.yml
-    - custom/checks.py
+    - 23-GCP-Define-allowed-external-IPs-for-VM-instances
+    # paths: 
+    # - main.tf
+    # - custom/checks.yml
+    # - custom/checks.py
   pull_request:
     branches:
       - master

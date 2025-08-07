@@ -6,6 +6,7 @@ The appengine.disableCodeDownload constraint in GCP only prevents source code do
 In other words, once this constraint is enforced, users cannot download the deployed source code via any official App Engine platform method regardless of their IAM roles. This ensures the source code is protected and cannot be extracted through App Engine's standard download mechanisms.
 
 
+The appengine.disableCodeDownload constraint enforces a runtime platform-level behavior that disables downloading deployed source code via App Engine APIs or UI. It is not represented or enforceable inside Terraform code itself.
 
 https://stackoverflow.com/questions/72640342/how-to-manage-source-code-and-infra-seprately-with-terraform 
 

@@ -1,6 +1,9 @@
-from checkov.terraform.checks.resource.base_resource_check import BaseResourceValueCheck
-from checkov.common.models.enums import CheckCategories, CheckResult
-class AllowedExternalIPv4ForVMCheck(BaseResourceValueCheck):
+from __future__ import annotations
+from typing import Any
+from checkov.common.models.enums import CheckResult, CheckCategories
+from checkov.terraform.checks.resource.base_resource_check import BaseResourceCheck
+
+class AllowedExternalIPv4ForVMCheck(BaseResourceCheck):
     def __init__(self):
         super().__init__(
             name="Allowed external IPv4 only for specific VM instances",

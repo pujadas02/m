@@ -1,6 +1,5 @@
 from checkov.terraform.checks.resource.base_resource_check import BaseResourceValueCheck
 from checkov.common.models.enums import CheckCategories, CheckResult
-
 class AllowedExternalIPv4ForVMCheck(BaseResourceValueCheck):
     def __init__(self):
         super().__init__(

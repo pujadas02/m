@@ -6,6 +6,7 @@ on:
     paths: 
     - main.tf
     - custom/checks.yml
+    - custom/checks.py
   pull_request:
     branches:
       - master

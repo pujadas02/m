@@ -20,7 +20,7 @@ class AllowedExternalIPv4ForVMCheck(BaseResourceCheck):
                 ni = ni[0]
             if "access_config" in ni and ni["access_config"]:
                 return CheckResult.PASSED if vm_name in self.allowed_vms else CheckResult.FAILED
-        return CheckResult.PASSED
+        return CheckResult.SKIPPED
 check = AllowedExternalIPv4ForVMCheck()
 
 

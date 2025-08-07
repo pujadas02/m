@@ -17,7 +17,7 @@ resource "google_compute_address" "static_ip" {
   region = "us-central1"
 }
 resource "google_compute_instance" "vm_ephemeral" {
-  name         = "allowed-vm-1"
+  name         = "allowed-vm-2"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
   network_interface {

@@ -4,10 +4,9 @@ on:
   push:
     branches:
     - 29-GCP-Domain-restricted-contacts
-    # paths: 
-    # - main.tf
-    # - custom/checks.yml
-    # - custom/check.py
+    paths: 
+    - main.tf
+    - custom/checks.yml
   pull_request:
     branches:
       - master

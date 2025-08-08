@@ -1,25 +1,9 @@
-# What is Require OS Login?
-Require OS Login enforces that users must use OS Login (which ties Linux user accounts to IAM identities) to SSH into VM instances. This improves security by centralizing SSH access control through IAM instead of managing individual SSH keys on each VM.
+## Domain restricted contacts
 
-## Why enforce it?
-Centralizes and simplifies SSH access management.
-Eliminates manual SSH key distribution.
-Enforces IAM-based access control and audit logging for SSH.
+Domain Restricted Contacts is an organization policy to restrict email domains allowed for Essential Contacts.
 
-### Enabling OS Login at the Project level (via project metadata enable-oslogin = TRUE) means all VM instances in that project inherit the setting by default.
+Only emails from approved domains (e.g., @example.com) can be added as new Essential Contacts.
 
-### However, VM instances can override this setting individually by setting instance metadata enable-oslogin = FALSE.
+This policy increases security by preventing unauthorized or external email contacts.
 
-#### so we have to make sure that:
-    Validate that project metadata enable-oslogin is TRUE.
- 
-    Validate that VM instances either do not have the enable-oslogin metadata or have it set to TRUE
-
-### [doc gcp](https://cloud.google.com/compute/docs/oslogin/set-up-oslogin#enable_os_login_during_vm_creation)
-
-
-
-if  google_compute_project_metadata exists - enable oslogin must be true 
-   then check vm if enable os login does not exist that ok, if exists must equals to true.
-
-if google_compute_project_metadata doesnot exist - vm enable os login must exists and must be true
+Checkov can be used to pre-validate Terraform code to ensure contact emails conform to this domain restriction before deployment.

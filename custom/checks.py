@@ -13,7 +13,7 @@ class AllowedExternalIPv4ForVMCheck(BaseResourceCheck):
     def scan_resource_conf(self, conf):
         vm_name = conf.get("name", [None])[0]
         if not vm_name:
-            return CheckResult.PASSED
+            return CheckResult.SKIPPED
         interfaces = conf.get("network_interface", [])
         for ni in interfaces:
             if isinstance(ni, list):

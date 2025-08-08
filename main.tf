@@ -21,9 +21,6 @@ resource "google_essential_contacts_contact" "contact3" {
   notification_category_subscriptions = ["BILLING", "SECURITY"]
 }
 
-resource "google_project" "hy"{
-}
-
 
 resource "google_compute_network_attachment" "default" {
     name = "basic-network-attachment"

@@ -1,21 +1,30 @@
-resource "google_datastream_private_connection" "private_conn" {
-  name     = "private-connection"
+resource "google_cloud_run_v2_service" "default" {
+  provider = google-beta
+  name     = "cloudrun-iap-service"
   location = "us-central1"
-}
-resource "google_datastream_connection_profile" "postgres_private" {
-  name                 = "postgres-private-profile"
-  location             = "us-central1"
-  connection_profile_id = "pg-private-profile"
+  deletion_protection = false
+  ingress = "INGRESS_TRAFFIC_ALL"
+  launch_stage = "BETA"
+  iap_enabled = true
 
-  postgresql_profile {
-    hostname = "10.0.0.5"
-    port     = 5432
-    username = "pg_user"
-    password = "pg_password"
-    database = "postgres_db"
+  template {
+    containers {
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
+    }
   }
+}
+resource "google_cloud_run_v2_service" "second" {
+  provider = google-beta
+  name     = "cloudrun-iap-service"
+  location = "us-central1"
+  deletion_protection = false
+  ingress = var.ingress
+  launch_stage = "BETA"
+  iap_enabled = true
 
-  private_connectivity {
-    private_connection = google_datastream_private_connection.private_conn.id
+  template {
+    containers {
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
+    }
   }
 }

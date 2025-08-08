@@ -13,7 +13,7 @@ resource "google_compute_instance" "allowed_vm" {
   can_ip_forward = true
 }
 
-resource "google_compute_instance" "allowed_vm" {
+resource "google_compute_instance" "allowed_vmm" {
   name         = "allowed-vm"
   machine_type = "e2-medium"
   zone         = "us-central1-a"

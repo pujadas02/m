@@ -3,10 +3,10 @@ on:
   push:
     branches:
     - 59-GCP-Restrict-VM-IP-Forwarding
-    # paths: 
-    # - main.tf
-    # - custom/checks.yml
-    # - custom/checks.py
+    paths: 
+    - main.tf
+    - custom/checks.yml
+    - custom/checks.py
   pull_request:
     branches:
       - master

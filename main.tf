@@ -4,6 +4,12 @@ resource "google_compute_instance" "secure_vm" {
   zone         = "us-central1-a"
   can_ip_forward = true
 }
+resource "google_compute_instance" "secure" {
+  name         = "allowed-vm-1"
+  machine_type = "e2-medium"
+  zone         = "us-central1-a"
+  can_ip_forward = false
+}
 
 
 resource "google_compute_instance" "allowed_vm" {

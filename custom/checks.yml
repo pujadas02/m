@@ -12,18 +12,13 @@ definition:
         - "google_essential_contacts_contact"
       attribute: "email"
       operator: "ending_with"
-      value: "@example.com"
+      value: "@effem.com"
     - cond_type: "attribute"
       resource_types: 
         - "google_essential_contacts_contact"
       attribute: "email"
       operator: "ending_with"
-      value: "@acc.com"
-    - cond_type: "attribute"
-      resource_types: 
-        - "google_essential_contacts_contact"
-      attribute: "email"
-      operator: "ending_with"
-      value: "@toggle.com"
+      value: "@kindsnacking.com"
+
 
 

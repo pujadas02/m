@@ -1,6 +1,6 @@
 resource "google_essential_contacts_contact" "contact1" {
   parent = "organizations/123456789012"  
-  email  = "alerts@example.com"          
+  email  = "alerts@effem.com"          
   language_tag = "en-US"
   notification_category_subscriptions = ["BILLING", "SECURITY"]
 }
@@ -16,7 +16,7 @@ resource "google_essential_contacts_contact" "contact2" {
 
 resource "google_essential_contacts_contact" "contact3" {
   parent = "organizations/123456789012"  
-  email  = "alerts@toggle.com"          
+  email  = "alerts@kindsnacking.com"          
   language_tag = "en-US"
   notification_category_subscriptions = ["BILLING", "SECURITY"]
 }

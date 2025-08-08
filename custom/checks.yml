@@ -27,11 +27,3 @@ definition:
       value: "@toggle.com"
 
 
-##i can use this below but ending with supports single value so i have to combine...
-  # cond_type: "attribute"
-  # resource_types:
-  #  - "google_essential_contacts_contact"
-  # attribute: "email"
-  # operator: "ending_with"
-  # value: "@example.com"
- 

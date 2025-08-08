@@ -1,4 +1,4 @@
-resource "google_essential_contacts_contact" "contact" {
+resource "google_essential_contacts_contact" "contact1" {
   parent = "organizations/123456789012"  
   email  = "alerts@example.com"          
   language_tag = "en-US"
@@ -6,8 +6,20 @@ resource "google_essential_contacts_contact" "contact" {
 }
 
 
+resource "google_essential_contacts_contact" "contact2" {
+  parent = "organizations/123456789012"  
+  email  = "alerts@xample.com"          
+  language_tag = "en-US"
+  notification_category_subscriptions = ["BILLING", "SECURITY"]
+}
 
 
+resource "google_essential_contacts_contact" "contact3" {
+  parent = "organizations/123456789012"  
+  email  = "alerts@toggle.com"          
+  language_tag = "en-US"
+  notification_category_subscriptions = ["BILLING", "SECURITY"]
+}
 
 
 

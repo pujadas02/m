@@ -11,6 +11,5 @@ definition:
    - "google_essential_contacts_contact"
   attribute: "email"
   operator: "ending_with"
-  value: 
-     - "@example.com"
-     - "@hy.com"
+  value: "@example.com"
+ 

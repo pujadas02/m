@@ -1,30 +1,9 @@
-resource "google_compute_project_metadata" "default" {
-  metadata = {
-    enable-oslogin = "TRUE"
-  }
+resource "google_essential_contacts_contact" "contact" {
+  parent = "organizations/123456789012"  
+  email  = "alerts@example.com"          
+  language_tag = "en-US"
+  notification_category_subscriptions = ["BILLING", "SECURITY"]
 }
-
-resource "google_compute_instance" "oslogin_instance" {
-  name         = "oslogin-instance-name"
-  machine_type = "f1-micro"
-  zone         = "us-central1-c"
-  metadata = {
-
-  }
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-11"
-    }
-  }
-  network_interface {
-    # A default network is created for all GCP projects
-    network = "default"
-    access_config {
-    }
-  }
-}
-
-
 
 
 

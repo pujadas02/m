@@ -2,47 +2,26 @@ resource "google_compute_instance" "secure_vm" {
   name         = "allowed-vm-1"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
-  network_interface {
-    network = "default"
-    access_config {}
-  }
+  can_ip_forward = true
 }
-provider "google" {
-  project = "your-project-id"
-  region  = "us-central1"
-  zone    = "us-central1-a"
-}
-resource "google_compute_address" "static_ip" {
-  name   = "my-static-ip"
-  region = "us-central1"
-}
-resource "google_compute_instance" "vm_ephemeral" {
-  name         = "allowed-vm-2"
+
+
+resource "google_compute_instance" "allowed_vm" {
+  name         = "allowed-vm"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
-  network_interface {
-    network = "default"
-    access_config {}
-  }
+  can_ip_forward = true
 }
-resource "google_compute_instance" "vm_static" {
-  name         = "disallowed-vm-1"
-  machine_type = "e2-medium"
-  zone         = "us-central1-a"
-  network_interface {
-    network = "default"
-    access_config {
-      nat_ip = google_compute_address.static_ip.address 
-    }
-  }
-}
+
 
 resource "google_compute_instance" "vm_static" {
   name         = "disallowed-vm-1"
   machine_type = "e2-medium"
   zone         = "us-central1-a"
-  network_interface {
-    network = "default"
-    
-  }
+ 
+}
+
+
+resource"google_project" "hy" {
+
 }

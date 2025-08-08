@@ -1,13 +1,16 @@
 metadata:
-  name: "Datastream - Block Public Connectivity Methods"
-  id: "CCOE_GCP_DATASTREAM_1"
+  name: "Allowed Ingress Settings (Cloud Run)"
+  id: "CCOE_GCP_CLOUDRUN_INGRESS_1"
   category: "security"
   severity: "HIGH"
-  description: "Ensure Datastream connection profiles use private connectivity to block public connectivity methods."
+  description: "Ensure Cloud Run services use restricted ingress settings, allowing only internal traffic or internal plus load balancing."
 
 definition:
   cond_type: "attribute"
   resource_types:
-    - "google_datastream_connection_profile"
-  attribute: "private_connectivity"
-  operator: "exists"
+    - "google_cloud_run_v2_service"
+  attribute: "ingress"
+  operator: "within"
+  value:
+    - "INGRESS_TRAFFIC_INTERNAL_ONLY"
+    - "INGRESS_TRAFFIC_INTERNAL_LOAD_BALANCER"
